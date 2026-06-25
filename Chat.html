@@ -6,9 +6,9 @@
  <body>
  <h1>AI Chat</h1>
  <p> Welcome to AI Chat</p>
- <input type="text" placeholder="Type your message">
+ <input type="text" id="message"placeholder="Type your message">
   <p id="output"></p>
-  <button onclick="document.getElementById('output').innerHTML=document.querySelector('input').valu">Send</button>
+  <button onclick="document.getElementById('output').innerHTML=document.getElementById('message').value">Send</button>
  </body>
  </html>
   
