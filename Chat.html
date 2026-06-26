@@ -8,7 +8,7 @@
  <p> Welcome to AI Chat</p>
  <input type="text" id="message"placeholder="Type your message">
  <p id="output"></p>
- <button onclick="var msg=document.getElementById('message').value;document.getElementById('output').innerHTML='AI: '+msg;">Send</button>
+ <button onclick="var msg=document.getElementById('message').value;if(msg=='Hello'){document('output').innerHTML='AI: Hello Om Bhai!';}else if(msg=='Kaise ho'){document.getElementById('output').innerHTML'AI: Main badhiya hoon!';}else if(msg=='tumhara name Kya hai'){document.getElementById('output').innerHTML'AI: Mear name Vision AI Pro hai.';}else if(msg=='Bye'){document.getElementById('output').innerHTML'AI: Bya Om Bhai! Phir milenge.';}else{document.getElementById('output').innerHTML='AI: '+msg;};">Send</button>
   </body>
   </html>
   
