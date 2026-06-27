@@ -8,16 +8,23 @@
  <p> Welcome to AI Chat</p>
  <input type="text" id="message"placeholder="Type your message">
  <p id="output"></p>
-  <scripty>
+  <script>
   function reply(){
-  var msg=document.getElementById("message").value+ toLowerCase().trim();
-  if(msg=="hello"){documentElementById("output").innerHTML="AI:Hello Om Bhai!";}
-  else if(msg=="kaise ho"){document.getElementById("output").innnerHTML="AI: Main badhiya hoon!":}
-  elseif(msg=="Tumhare name kya hai"){document.getElementById("output").innerHTML="AI: Mera name Vision AI hai.";}
-  else{document.getElementById("output").innerHTML="AI: "+msg;}
-   }
-   </script>
-   </body>
-   </html>
+  var msg=docunent.getElementById("message").value.toLowerCase().trim();
+  if(msg=="hello"){
+  document.getElementById("output").innnerHTML="AI: Hello Om Bhai!";
+  }
+  else if(msg=="kaise ho"){
+  document.getElementById("output").innerHTML="AI: Main badhiya hoon!";
+  }
+  else if(msg=="tumhara name kya hai"){
+  document.getElementById("output").innerHTML="AI: Mera name Vision AI Pro hai.";
+  }
+  else{
+  document.getElementById("output").innerHTML="AI:"+msg;
+  }
+ </script>
+ </body>
+</html>
   
  
