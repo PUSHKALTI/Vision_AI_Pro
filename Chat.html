@@ -8,6 +8,7 @@
  <p> Welcome to AI Chat</p>
  <input type="text" id="message"placeholder="Type your message">
  <p id="output"></p>
+  <button onclick="reply()">Send</button>
   <script>
   function reply(){
   var msg=docunent.getElementById("message").value.toLowerCase().trim();
@@ -23,7 +24,6 @@
   else{
   document.getElementById("output").innerHTML="AI:"+msg;
   }
-  <button onclick="reply()">Send</button>
  </script>
  </body>
 </html>
