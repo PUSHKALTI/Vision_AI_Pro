@@ -7,15 +7,15 @@
  <h1>AI Chat</h1>
  <p> Welcome to AI Chat</p>
  <input type="text" id="message"placeholder="Type your message">
- <button onclick="reply()">Send</buuton> 
+ <button onclick="reply()">Send</button> 
   <p id="output"></p>
   <script>
-  functionreply(){
+  function reply () {
   var msg=document.getElementById("message").value.toLowerCase().trim();
-  if(msg=="hello"){
+  if(msg==="hello"){
   document.getElementById("output").innerHTML="AI: Hello Om Bhai!";
   }
-  else if(msg=="kaise ho"){
+  else if(msg==="kaise ho"){
   document.getElementById("output").innerHTML="AI: Main badhiya hoon!";
   }
   else if(msg=="tumhara name kya hai"){
