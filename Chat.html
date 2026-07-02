@@ -9,7 +9,7 @@
  <input type="text" id="message"placeholder="Type your message">
  <button onclick="reply()">Send</button> 
   <p id="output"></p>
-
+  <script>
   function reply() {
 var msg = document.getElementById("message").value.toLowerCase().trim();
   if (msg === "hello") {
@@ -21,9 +21,15 @@ var msg = document.getElementById("message").value.toLowerCase().trim();
    else if (msg === "tumhara name kya hai") {
    document.getElementById("output").innerHTML = "AI: Mera name Vision AI Pro hai.";
     }
-    else {
-    document.getElementById("output").innerHTML = "AI: " + msg;
+    else if(msg==="bye"){
+    document.getElementById("output").innerHTML = "AI:Bye Om Bhai!";
     }
+   else {
+   document.getElementById("output").innerHTML ="AI: " + msg; 
+    }
+</script>
+</body>
+</html>
   
   
                           
