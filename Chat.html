@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
- <head>
- <title>AI Chat</title>
- </head>
- <body>
- <h1>AI Chat</h1>
- <p> Welcome to AI Chat</p>
- <input type="text" id="message"placeholder="Type your message">
- <button onclick="reply()">Send</button> 
- <p id="output"></p>
+<head>
+<title>AI Chat</title>
+</head>
+<body>
+<h1>AI Chat</h1>
+<p>Welcome to AI Chat</p>
+<input type="text" id="message" placeholder="Type your message">
+<button onclick="reply()">Send</button>
+<p id="output"></p>
 <script>
 function reply() {
 var msg = document.getElementById("message").value.toLowerCase().trim();
@@ -23,7 +23,7 @@ document.getElementById("output").innerHTML = "AI: Mera name Vision AI Pro hai."
 }
 else if (msg == "bye") {
 document.getElementById("output").innerHTML = "AI: Bye Om Bhai!";
- }
+}
 else {
 document.getElementById("output").innerHTML = "AI: " + msg;
 }
