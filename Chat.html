@@ -12,18 +12,28 @@
 <script>
 function reply() {
 var msg = document.getElementById("message").value.toLowerCase().trim();
-if (msg == "hello") {
+if (msg === "hello") {
 document.getElementById("output").innerHTML = "AI: Hello Om Bhai!";
 }
-else if (msg == "kaise ho") {
+else if (msg === "kaise ho") {
 document.getElementById("output").innerHTML = "AI: Main badhiya hoon!";
 }
-else if (msg == "tumhara name kya hai") {
+else if (msg === "tumhara name kya hai") {
 document.getElementById("output").innerHTML = "AI: Mera name Vision AI Pro hai.";
 }
-else if (msg == "bye") {
+else if(msg==="bye"){
 document.getElementById("output").innerHTML = "AI: Bye Om Bhai!";
 }
+else if (msg == "thanks") {
+document.getElementById("output").innerHTML = "AI: Welcome Om Bhai!";
+}
+else {
+document.getElementById("output").innerHTML = "AI: " + msg;
+}
+}
+</script>
+</body>
+</html>
 
   
   
