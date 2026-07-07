@@ -1,40 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>AI Chat</title>
+<title>Vision AI Pro</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>AI Chat</h1>
-<p>Welcome to AI Chat</p>
+<h1>🤖 Vision AI Pro</h1>
+<p>Welcome to Vision AI Pro</p>
+<div id="output" class="chat-box"></div>
 <input type="text" id="message" placeholder="Type your message">
 <button onclick="reply()">Send</button>
-<div id="output" class="chat-box"></div>
 <script>
 function reply() {
-var msg = document.getElementById("message").value.toLowerCase().trim();
+var msg = 
+document.getElementById("message").value.toLow
+erCase().trim();
 if (msg === "hello") {
-document.getElementById("output").innerHTM ="<div class='ai-msg'> Vision AI Pro<br>Hello Om Bhai!</div>";
+document.getElementById("output").innerHTML = "<div class='ai-msg'>🤖 Vision AI Pro<br>Hello 
+  Om Bhai!</div>";
 }
 else if (msg === "kaise ho") {
-document.getElemeById("output").innerHTML ="<div class='ai-msg'> Vision AI Pro<br>Main badhiya hoon!</div>";
+document.getElementById("output").innerHTML = 
+"<div class='ai-msg'>🤖 Vision AI Pro<br>Main 
+badhiya hoon!</div>";
 }
 else if (msg === "tumhara name kya hai") {
-document.getElementById("output").innerHTML ="<div class='ai-msg'> Vision AI Pro<br>Mera name Vision AI Pro hai.</div>";
+document.getElementById("output").innerHTML = 
+"<div class='ai-msg'>🤖 Vision AI Pro<br>Mera 
+name Vision AI Pro hai.</div>";
 }
-else if(msg==="bye"){
-document.getElementById("output").innerHTML ="<div class='ai-msg'> Vision AI Pro<br> Bye Om Bhai!</div>";
+else if (msg === "thanks") {
+document.getElementById("output").innerHTML = 
+"<div class='ai-msg'>🤖 Vision AI Pro<br>Welcome Om Bhai!</div>";
 }
-else if (msg == "thanks") {
-document.getElementById("output").innerHTML ="<div class='ai-msg'> Vision AI Pro<br> Welcome Om Bhai!</div>":
+else if (msg === "bye") {
+document.getElementById("output").innerHTML = 
+"<div class='ai-msg'>🤖 Vision AI Pro<br>Bye 
+Om Bhai!</div>";
 }
 else {
-document.getElementById("output").innerHTML = "AI: " + msg;
+document.getElementById("output").innerHTML = 
+"<div class='ai-msg'>🤖 Vision AI Pro<br>AI: " 
++ msg + "</div>";
 }
 }
 </script>
 </body>
 </html>
+
 
   
   
