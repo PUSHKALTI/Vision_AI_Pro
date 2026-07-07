@@ -12,36 +12,24 @@
 <button onclick="reply()">Send</button>
 <script>
 function reply() {
-var msg = 
-document.getElementById("message").value.toLow
-erCase().trim();
+var msg = document.getElementById("message").value.toLowerCase().trim();
 if (msg === "hello") {
-document.getElementById("output").innerHTML = "<div class='ai-msg'>🤖 Vision AI Pro<br>Hello 
-  Om Bhai!</div>";
+document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>Hello Om Bhai!</div>";
 }
 else if (msg === "kaise ho") {
-document.getElementById("output").innerHTML = 
-"<div class='ai-msg'>🤖 Vision AI Pro<br>Main 
-badhiya hoon!</div>";
+document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>Main badhiya hoon!</div>";
 }
 else if (msg === "tumhara name kya hai") {
-document.getElementById("output").innerHTML = 
-"<div class='ai-msg'>🤖 Vision AI Pro<br>Mera 
-name Vision AI Pro hai.</div>";
+document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>Mera name Vision AI Pro hai.</div>";
 }
 else if (msg === "thanks") {
-document.getElementById("output").innerHTML = 
-"<div class='ai-msg'>🤖 Vision AI Pro<br>Welcome Om Bhai!</div>";
+document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>Welcome Om Bhai!</div>";
 }
 else if (msg === "bye") {
-document.getElementById("output").innerHTML = 
-"<div class='ai-msg'>🤖 Vision AI Pro<br>Bye 
-Om Bhai!</div>";
+document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>Bye Om Bhai!</div>";
 }
 else {
-document.getElementById("output").innerHTML = 
-"<div class='ai-msg'>🤖 Vision AI Pro<br>AI: " 
-+ msg + "</div>";
+document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>AI: " + msg + "</div>";
 }
 }
 </script>
