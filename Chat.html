@@ -9,7 +9,7 @@
 <p>Welcome to AI Chat</p>
 <input type="text" id="message" placeholder="Type your message">
 <button onclick="reply()">Send</button>
-<p id="output"></p>
+<div id="output" class="chat-box"></div>
 <script>
 function reply() {
 var msg = document.getElementById("message").value.toLowerCase().trim();
