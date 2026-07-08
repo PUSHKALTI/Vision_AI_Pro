@@ -37,6 +37,17 @@ else {
 document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>AI: " + msg + "</div>";
 }
 }
+document.getElementById("photo").addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+ const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = document.getElementById("preview");
+    img.src = e.target.result;
+    img.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+});  
 </script>
 </body>
 </html>
