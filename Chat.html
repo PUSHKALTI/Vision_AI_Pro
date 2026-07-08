@@ -3,6 +3,7 @@
 <head>
 <title>Vision AI Pro</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
 <h1>🤖 Vision AI Pro</h1>
@@ -12,6 +13,7 @@
 <input type="file" id="photo"accept="image/*">
 <br><br>
 <img id="preview" width="300"style="display:none; border-radius:10px;">
+<div id="ocrResult"></div>
 <input type="text" id="message" placeholder="Type your message">
 <button onclick="reply()">Send</button>
 <script>
