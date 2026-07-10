@@ -17,6 +17,13 @@
 <input type="text" id="message" placeholder="Type your message">
 <button onclick="reply()">Send</button>
 <script>
+document.getElementById("photo").addEventListener("change", async function () {
+const file = this.files[0];
+ if (!file) return;
+document.getElementById("ocrResult").innerText = "Reading text...";
+const result = await Tesseract.recognize(file, "eng");
+ document.getElementById("ocrResult").innerText = result.data.text;
+});
 function reply() {
 var msg = document.getElementById("message").value.toLowerCase().trim();
 if (msg === "hello") {
