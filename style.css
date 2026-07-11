@@ -57,4 +57,11 @@ button:hover {
     border-radius: 8px;
     background: #f8f9fa;
 }
+#solutionBox{
+    margin-top:10px;
+    padding:10px;
+    border:1px solid #4caf50;
+    border-radius:8px;
+    background:#f6fff6;
+}
 
