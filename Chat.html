@@ -15,13 +15,14 @@
 <img id="preview" width="300"style="display:none; border-radius:10px;">
 <div id="ocrResult"></div>
  <button id="explainBtn">Explain</button>
+ <div id="explanation"></div>
 <input type="text" id="message" placeholder="Type your message">
 <button onclick="reply()">Send</button>
 <script>
  document.getElementById("explainBtn").onclick = function () {
  const text = document.getElementById("ocrResult").innerText.trim();
   if (text) {
-  alert("Demo Explanation:\nOCR ne yeh text padha hai:\n" + text);
+  alert("Demo Explana
   } else {
   alert("Pehle ek photo upload karke OCR chalao.");
    }
