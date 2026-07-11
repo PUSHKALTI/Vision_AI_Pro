@@ -22,7 +22,8 @@
  document.getElementById("explainBtn").onclick = function () {
  const text = document.getElementById("ocrResult").innerText.trim();
   if (text) {
-  alert("Demo Explana
+  document.getElementById("explanation").innerText =
+    "Explanation: OCR ne yeh text padha hai: " + text;
   } else {
   alert("Pehle ek photo upload karke OCR chalao.");
    }
