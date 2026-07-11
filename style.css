@@ -50,4 +50,11 @@ button:hover {
     box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
     font-size: 18px;
 }
+#explanation {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
 
