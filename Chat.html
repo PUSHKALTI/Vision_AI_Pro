@@ -23,8 +23,10 @@
  document.getElementById("explainBtn").onclick = function () {
  const text = document.getElementById("ocrResult").innerText.trim();
   if (text) {
+  document.getElementById("solutionBox").innerText =
   document.getElementById("explanation").innerText =
-    "Explanation: OCR ne yeh text padha hai: " + text;
+   "Step-by-step solution (Demo):\n1. Question read.\n2. OCR completed.\n3. AI explanation generated.";
+   "Explanation: OCR ne yeh text padha hai: " + text;
   } else {
   alert("Pehle ek photo upload karke OCR chalao.");
    }
