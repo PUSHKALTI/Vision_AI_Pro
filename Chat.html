@@ -27,9 +27,9 @@
  <h3> AI Progress Tracker</h3>
  <progress value="0" max="100"></progress>
  <p>Progress: o%</p>
- <input type="text"placeholder="Enter sudject or topic to plan">
- <button>Make Study Plan</button>
- <div id="studyPlanBox"></div>
+ <input type="text"placeholder="Enter sudject or topic to plan>
+ <button id="studyPlanBtn=>Make study Plan</button>
+ <p> id="progressText">Progress: 0%</p>
  <p>Voice mode coming soon</p>
 <button onclick="reply()">Send</button>
 <script>
@@ -84,6 +84,20 @@ document.getElementById("photo").addEventListener("change", function () {
 });
  document.getElementById("generateBtn").onclick = function () {
   alert("AI Image Generator Demo Ready!");
+};document.getElementById("studyPlanBtn").onclick = function () {
+let subject = document.querySelector('input[placeholder="Enter subject or topic to plan"]').value;
+if (subject.trim() === "") {
+ alert("Please enter a subject.");
+ return;
+  }
+ document.getElementById("studyPlanBox").innerHTML =
+  "<b>📚 Study Plan for:</b> " + subject +
+  "<br><br>✅ Read Chapter" +
+  "<br>✅ Practice Questions" +
+   "<br>✅ Revise Notes" +
+   "<br>✅ Take Test";
+ document.querySelector("progress").value = 25;
+ document.getElementById("progressText").innerHTML = "Progress: 25%";
 };
 </script>
 </body>
