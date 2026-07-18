@@ -91,15 +91,14 @@ if (subject.trim() === "") {
  alert("Please enter a subject.");
  return;
   }
- document.getElementById("studyPlanBox").innerHTML =
-  "<b>📚 Study Plan for:</b> " + subject +
-   input type="<br><'checkbox'
-  class='task'> Read Chapter" +
- "<br><input type='checkbox'
-  class='task'>Parctice Question"+
-  "<br><input type='checkbox'
-  class='task'> Revise Notes"+
-  "<br><input type=' checkbox'
+  document.getElementById("studyPlanBox").ierHTML =
+"<b>📖 Study Plan for:</b> " + subject +
+"<br><input type='checkbox' class='task'> Read Chapter" +
+"<br><input type='checkbox' class='task'> Practice Questions" +
+"<br><input type='checkbox' class='task'> Revise Notes" +
+"<br><input type='checkbox' class='task'> Take Test";
+document.querySelector("progress").value = 50;
+document.getElementById("progressText").innerHTML = "Progress: 50%";
   class='task'> Take Test";
  document.querySelector("progress").value = 50;
 document.getElementById("progressText").innerHTML = "Progress: 50%";let tasks = document.querySelectorAll(".task");
