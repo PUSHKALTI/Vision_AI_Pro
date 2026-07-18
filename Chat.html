@@ -93,12 +93,15 @@ if (subject.trim() === "") {
   }
  document.getElementById("studyPlanBox").innerHTML =
   "<b>📚 Study Plan for:</b> " + subject +
-   "<br><input type='checkbox'
+   input type="<br><'checkbox'
   class='task'> Read Chapter" +
-"<br><input type='checkbox' 
- class='task'> Practice Questions" +
-"<br><input type='checkbox' class='task'> Revise Notes" +
-"<br><input type='checkbox' class='task'> Take Test";
+ "<br><input type='checkbox'
+  class='task'>Parctice Question"+
+  "<br><input type='checkbox'
+  class='task'> Revise Notes"+
+  "<br><input type=' checkbox'
+  class='task'> Take Test";
+ 
  document.querySelector("progress").value = 50;
 document.getElementById("progressText").innerHTML = "Progress: 50%";let tasks = document.querySelectorAll(".task");
 tasks.forEach(function(task) {
