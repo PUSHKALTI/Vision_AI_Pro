@@ -84,13 +84,14 @@ document.getElementById("photo").addEventListener("change", function () {
 });
  document.getElementById("generateBtn").onclick = function () {
   alert("AI Image Generator Demo Ready!");
-};document.getElementById("studyPlanBtn").onclick = function () {
+  };
+ document.getElementById("studyPlanBtn").onclick = function () {
 let subject = document.querySelector('input[placeholder="Enter subject or topic to plan"]').value;
 if (subject.trim() === "") {
  alert("Please enter a subject.");
  return;
   }
-  document.getElementById("studyPlanBox").ierHTML =
+  document.getElementById("studyPlanBox").innerHTML =
 "<b>📖 Study Plan for:</b> " + subject +
 "<br><input type='checkbox' 
    class='task'> Read Chapter" +
