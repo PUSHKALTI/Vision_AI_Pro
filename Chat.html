@@ -116,6 +116,18 @@ document.querySelector("progress").value = progress;
     }
 });
 };
+ document.getElementById("teacherBtn").onclick = function () {
+    let question = document.getElementById("teacherInput").value.trim();
+
+    if (question === "") {
+        alert("Please enter a question.");
+        return;
+    }
+document.getElementById("teacherAnswer").innerHTML =
+   "<b>AI Teacher:</b><br>" +
+    "Question: " + question + "<br><br>" +
+     "This is a demo answer. Real AI answer will come after API connection.";
+};
 </script>
 </body>
 </html>
