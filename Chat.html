@@ -149,6 +149,9 @@ recognition.onresult = function(event) {
     <option>Math</option>
     <option>Science</option>
     <option>English</option>
+ </select>
+<button id="startQuizBtn">Start Quiz</button>
+<div id=quizeBox"></div>
  document.getElementById("startQuizBtn").onclick = function () {
     document.getElementById("quizBox").innerHTML =
     "<h3>Math Quiz</h3>" +
@@ -156,9 +159,7 @@ recognition.onresult = function(event) {
     "<button>4</button> " +
     "<button>5</button>";
 };
-</select>
-<button id="startQuizBtn">Start Quiz</button>
-<div id="quizBox"></div>
+</script> 
 </body>
 </html>
 
