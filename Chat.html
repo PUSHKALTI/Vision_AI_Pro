@@ -143,16 +143,7 @@ recognition.onresult = function(event) {
             event.results[0][0].transcript;
   };
 };
-</script>
- <h3>🏆 AI Quiz Battle</h3>
-<select id="quizSubject">
-    <option>Math</option>
-    <option>Science</option>
-    <option>English</option>
- </select>
-<button id="startQuizBtn">Start Quiz</button>
-<div id=quizeBox"></div>
- document.getElementById("startQuizBtn").onclick = function () {
+  document.getElementById("startQuizBtn").onclick = function () {
     document.getElementById("quizBox").innerHTML =
     "<h3>Math Quiz</h3>" +
     "<p>Question 1: 2 + 2 = ?</p>" +
@@ -160,6 +151,14 @@ recognition.onresult = function(event) {
     "<button>5</button>";
 };
 </script> 
+<h3>🏆 AI Quiz Battle</h3>
+<select id="quizSubject">
+    <option>Math</option>
+    <option>Science</option>
+    <option>English</option>
+ </select>
+<button id="startQuizBtn">Start Quiz</button>
+<div id=quizeBox"></div>
 </body>
 </html>
 
