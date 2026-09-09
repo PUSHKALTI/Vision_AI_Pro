@@ -152,7 +152,17 @@ recognition.onresult = function(event) {
    </select>
  <button id="startQuizBtn">Start Quiz</button>
 <div id=quizBox"></div>
-
+script>
+window.onload = function () {
+document.getElementById("startQuizBtn").onclick = function () {
+document.getElementById("quizBox").innerHTML =
+"<h3>Math Quiz</h3>" +
+"<p>Question 1: 2 + 2 = ?</p>" +
+"<button>4</button>" +
+"<button>5</button>";
+};
+};
+</script>
 </body>
 </html>
 
