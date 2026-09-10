@@ -8,11 +8,14 @@
 <body>
 <h1>🤖 Vision AI Pro</h1>
 <p>Welcome to Vision AI Pro</p>
+ <section id="imageSection>
  <h2>AI Image Generator</h2>
  <input type="text" id="imgPrompt" placeholder="Describe the image you want">
  <button id="generateBtn">Generate Image</button>
 <div id="output" class="chat-box"></div>
+ </section>
 <br><br>
+ <section id="photoSolverSection">
 <input type="file" id="photo"accept ="image/*">
 <br><br>
 <img id="preview" width="300" style="display:none; border-radius:10px;">
@@ -20,6 +23,8 @@
  <button id="explainBtn">Explain</button>
  <div id="solutionBox"></div>
  <div id="explanation"></div>
+ </section>
+  <section id="chatSection">
 <input type="text" id="message" placeholder="Type your message">
  <button id="micBtn"> mic</button>
  <h3>Voice Assistant</h3>
@@ -36,6 +41,7 @@
  <p id="progressText">Progress: 0%</p>
  <p>Voice mode coming soon</p>
 <button onclick="reply()">Send</button>
+  </section>
 <script>
  document.getElementById("explainBtn").onclick = function () {
  const text = document.getElementById("ocrResult").innerText.trim();
@@ -145,7 +151,7 @@ recognition.onresult = function(event) {
 };
 </script>
  <section id="quizSection">
-  <h3>🏆 AI Quiz Battle</h3>
+  <h2>🏆 AI Quiz Battle</h2>
 <select id="quizSubject">
     <option>Math</option>
     <option>Science</option>
