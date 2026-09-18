@@ -18,10 +18,13 @@ function startQuiz(subject) {
   document.getElementById("quizArea").innerHTML =
     "<h2>" + subject + " Quiz</h2>" +
     "<p>Question 1: 5 + 3 = ?</p>" +
-    "<button>6</button>" +
-    "<button>7</button>" +
-    "<button>8</button>" +
-    "<button>9</button>";
+    <button onclick="checkAnswer(6)">6</button>
+<button onclick="checkAnswer(7)">7</button>
+<button onclick="checkAnswer(8)">8</button>
+<button onclick="checkAnswer(9)">9</button>
+
+<p id="result"></p>
+<button id="nextBtn" onclick="nextQuestion()" style="display:none;">➡️ Next Question</button>
 }
 </script>
 </body>
