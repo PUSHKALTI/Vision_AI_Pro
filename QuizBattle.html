@@ -13,5 +13,16 @@
 <button>🌍 SST</button>
 <a href="index.html"><button>🏠 Home</button></a>
   <div id="quizArea"></div>
+  <script>
+function startQuiz(subject) {
+  document.getElementById("quizArea").innerHTML =
+    "<h2>" + subject + " Quiz</h2>" +
+    "<p>Question 1: 5 + 3 = ?</p>" +
+    "<button>6</button>" +
+    "<button>7</button>" +
+    "<button>8</button>" +
+    "<button>9</button>";
+}
+</script>
 </body>
 </html>
