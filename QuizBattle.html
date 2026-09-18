@@ -26,6 +26,15 @@ function startQuiz(subject) {
 <p id="result"></p>
 <button id="nextBtn" onclick="nextQuestion()" style="display:none;">➡️ Next Question</button>
 }
+    function checkAnswer(answer) {
+  if (answer === 8) {
+    document.getElementById("result").innerHTML = "Correct! ✅";
+  } else {
+    document.getElementById("result").innerHTML = "Wrong! ❌";
+  }
+
+  document.getElementById("nextBtn").style.display = "inline-block";
+}
 </script>
 </body>
 </html>
