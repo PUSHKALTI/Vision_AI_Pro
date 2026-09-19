@@ -1,207 +1,260 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Vision AI Pro</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<title>AI Chat - Vision AI Pro</title>
+
+<style>
+body {
+  background-color: #e8f4ff;
+  text-align: center;
+  font-family: Arial;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #173b63;
+}
+
+#chatBox {
+  width: 90%;
+  max-width: 700px;
+  height: 380px;
+  margin: 20px auto;
+  padding: 15px;
+  background-color: white;
+  border: 2px solid #4b8cc5;
+  border-radius: 12px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.userMsg {
+  background-color: #d8f5d0;
+  padding: 10px;
+  margin: 8px;
+  border-radius: 10px;
+  text-align: right;
+}
+
+.aiMsg {
+  background-color: #e5e5ff;
+  padding: 10px;
+  margin: 8px;
+  border-radius: 10px;
+  text-align: left;
+}
+
+#message {
+  width: 65%;
+  padding: 12px;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 16px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #777;
+}
+
+#language {
+  padding: 10px;
+  margin: 5px;
+}
+
+.featureBox {
+  margin: 10px auto;
+  max-width: 700px;
+}
+</style>
 </head>
+
 <body>
- <section id="homeSection">
-<h2>🏠 Vision-AI-Pro</h2>
-<div style="display:flex; flex-wrap:wrap; gap:10px;">
-<a href="javascript:void(0)"
- onclick="showSection('chatSection')"
- style="text-decoration:none;">
-<button>💬 AI Chat</button>
-</a>
-<a href="#chatSection"style="text-decoration:none;">
-<button>📷 Photo Solver</button>
-</a>
- <a href="#quizSection'
-  style="text-decoration:none;">
-  <button>Quiz Battle</button>
- </a>
-<a href="#imageSection" style="text-decoration:none;">
-<button>🖼️ Image</button>
-</a>
+
+<h1>🤖 Vision AI Pro - AI Chat</h1>
+
+<p>Ask your question and chat with your AI Teacher.</p>
+
+<div class="featureBox">
+
+<select id="language">
+  <option value="English">English</option>
+  <option value="Hindi">Hindi</option>
+  <option value="Hinglish">Hinglish</option>
+</select>
+
+<button onclick="startVoice()">🎤 Voice</button>
+<button onclick="clearChat()">🗑️ Clear</button>
+
 </div>
-</Section>
-<h1>🤖 Vision AI Pro</h1>
-<p>Welcome to Vision AI Pro</p>
- <section id="imageSection">
- <h2>AI Image Generator</h2>
-  <a href="#quizSection"
-   style="text-decoration:none;">
-   <button> Quiz Battle</button>
-  </a>
- <input type="text" id="imgPrompt" placeholder="Describe the image you want">
- <button id="generateBtn">Generate Image</button>
-<div id="output" class="chat-box"></div>
- </section>
-<br><br>
- <section id="photoSolverSection">
-<input type="file" id="photo"accept ="image/*">
-<br><br>
-<img id="preview" width="300" style="display:none; border-radius:10px;">
-<div id="ocrResult"></div>
- <button id="explainBtn">Explain</button>
- <div id="solutionBox"></div>
- <div id="explanation"></div>
- </section>
-  <section id="chatSection">
-<input type="text" id="message" placeholder="Type your message">
- <button id="micBtn"> mic</button>
- <h3>Voice Assistant</h3>
- <h3>🌍 Hindi / Hinglish AI Teacher</h3>
-<input type="text" id="teacherInput" placeholder="Ask any question">
-<button id="teacherBtn">Explain</button>
-<div id="teacherAnswer"></div>
- <h3>Study Planner & Revision Reminders</h3>
-<h3>AI Progress Tracker</h3>
-<progress value="0" max="100"></progress>
-<input type="text" id="studyInput" placeholder="Enter subject or topic to plan">
-<button id="studyPlanBtn">Make Study Plan</button>
-<div id="studyPlanBox"></div>
- <p id="progressText">Progress: 0%</p>
- <p>Voice mode coming soon</p>
-<button onclick="reply()">Send</button>
-  </section>
+
+<div id="chatBox">
+  <div class="aiMsg">
+    🤖 <b>AI Teacher:</b> Hello! Ask me a question. 😊
+  </div>
+</div>
+
+<input id="message" type="text" placeholder="Type your question here...">
+
+<button onclick="sendMessage()">📤 Send</button>
+
+<br>
+
+<div class="featureBox">
+  <button onclick="teacherMode()">👨‍🏫 AI Teacher</button>
+  <button onclick="studyPlanner()">📅 Study Planner</button>
+  <button onclick="progressTracker()">📊 Progress</button>
+</div>
+
+<br>
+
+<a href="index.html">
+  <button>🏠 Home</button>
+</a>
+
 <script>
- document.getElementById("explainBtn").onclick = function () {
- const text = document.getElementById("ocrResult").innerText.trim();
-  if (text) {
-  document.getElementById("solutionBox").innerText =
-  document.getElementById("explanation").innerText =
-  "Step-by-step solution (Demo):\n1. Question read.\n2. OCR completed.\n3. AI explanation generated.";  
-  } else {
-  alert("Pehle ek photo upload karke OCR chalao.");
-   }
-   };
-document.getElementById("photo").addEventListener("change", async function () {
-const file = this.files[0];
- if (!file) return;
-document.getElementById("ocrResult").innerText = "Reading text...";
-const result = await Tesseract.recognize(file, "eng");
- document.getElementById("ocrResult").innerText = result.data.text;
-});
-function reply() {
-var msg = document.getElementById("message").value.toLowerCase().trim();
-if (msg === "hello") {
-document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>Hello Om Bhai!</div>";
-}
-else if (msg === "kaise ho") {
-document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>Main badhiya hoon!</div>";
-}
-else if (msg === "tumhara name kya hai") {
-document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>Mera name Vision AI Pro hai.</div>";
-}
-else if (msg === "thanks") {
-document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>Welcome Om Bhai!</div>";
-}
-else if (msg === "bye") {
-document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>Bye Om Bhai!</div>";
-}
-else {
-document.getElementById("output").innerHTML = "<div class='ai-msg'> Vision AI Pro<br>AI: " + msg + "</div>";
-}
-}
-document.getElementById("photo").addEventListener("change", function () {
-  const file = this.files[0];
-  if (!file) return;
- const reader = new FileReader();
-  reader.onload = function (e) {
-    const img = document.getElementById("preview");
-    img.src = e.target.result;
-    img.style.display = "block";
-   };
-  reader.readAsDataURL(file);
-});
- document.getElementById("generateBtn").onclick = function () {
-  alert("AI Image Generator Demo Ready!");
-  };
- document.getElementById("studyPlanBtn").onclick = function () {
-let subject = document.querySelector('input[placeholder="Enter subject or topic to plan"]').value;
-if (subject.trim() === "") {
- alert("Please enter a subject.");
- return;
+
+function sendMessage() {
+
+  let input = document.getElementById("message");
+  let text = input.value.trim();
+
+  if (text === "") {
+    return;
   }
-  document.getElementById("studyPlanBox").innerHTML =
-"<b>📖 Study Plan for:</b> " + subject +
-  "<br><input type='checkbox'class='task'> Read Chapter"+
-   "<br><input type='checkbox'class='task'> Practice Questions"+
-   "<br><input type='checkbox'class='task'> Revise Notes";
- document.getElementById("progressText").innerHTML = "Progress: 50%";
-document.querySelector("progress").value = 50;
-let tasks =document.querySelectorAll(".task");
-tasks.forEach(function(task) {
-   task.onchange = function() {
-      let checked = document.querySelectorAll(".task:checked").length;
-        let progress = checked * 25;
-document.querySelector("progress").value = progress;
-        document.getElementById("progressText").innerHTML =
-        "Progress: " + progress + "%";
-   if(progress == 100){
-     alert("🎉 Congratulations! Study Completed.");
-        }
-    }
-});
-};
- document.getElementById("teacherBtn").onclick = function () {
-    let question = document.getElementById("teacherInput").value.trim();
 
-    if (question === "") {
-        alert("Please enter a question.");
-        return;
-    }
-document.getElementById("teacherAnswer").innerHTML =
-   "<b>AI Teacher:</b><br>" +
-    "Question: " + question + "<br><br>" +
-     "This is a demo answer. Real AI answer will come after API connection.";
-};
- // Voice Assistant
-document.getElementById("micBtn").onclick = function () {
+  addUserMessage(text);
 
-    if (!('webkitSpeechRecognition' in window)) {
-        alert("Voice Recognition is not supported in this browser.");
-        return;
-    }
-const recognition = new webkitSpeechRecognition();
-    recognition.lang = "en-IN";
-    recognition.start();
-recognition.onresult = function(event) {
-        document.getElementById("message").value =
-            event.results[0][0].transcript;
+  input.value = "";
+
+  setTimeout(function() {
+    let answer = getDemoAnswer(text);
+    addAIMessage(answer);
+  }, 500);
+}
+
+
+function addUserMessage(text) {
+
+  let box = document.getElementById("chatBox");
+
+  box.innerHTML +=
+    "<div class='userMsg'>👤 <b>You:</b> " +
+    text +
+    "</div>";
+
+  box.scrollTop = box.scrollHeight;
+}
+
+
+function addAIMessage(text) {
+
+  let box = document.getElementById("chatBox");
+
+  box.innerHTML +=
+    "<div class='aiMsg'>🤖 <b>AI Teacher:</b> " +
+    text +
+    "</div>";
+
+  box.scrollTop = box.scrollHeight;
+}
+
+
+function getDemoAnswer(text) {
+
+  let lower = text.toLowerCase();
+
+  if (lower.includes("hello") || lower.includes("hi")) {
+    return "Hello! 😊 I am your Vision AI Pro teacher.";
+  }
+
+  if (lower.includes("math")) {
+    return "Sure! 📚 Send me the Maths question and I will help you step by step.";
+  }
+
+  if (lower.includes("science")) {
+    return "Sure! 🔬 Send me the Science question and I will explain it simply.";
+  }
+
+  if (lower.includes("english")) {
+    return "Sure! 📖 Send me your English question and I will help you.";
+  }
+
+  if (lower.includes("sst")) {
+    return "Sure! 🌍 Send me your SST question and I will explain it.";
+  }
+
+  return "I received your question. 🤖 In the next stage, we can connect a real AI API so Vision AI Pro can give real AI answers.";
+}
+
+
+function startVoice() {
+
+  if (!("webkitSpeechRecognition" in window)) {
+    alert("Voice input is not supported in this browser.");
+    return;
+  }
+
+  let recognition = new webkitSpeechRecognition();
+
+  recognition.lang = "en-IN";
+  recognition.start();
+
+  recognition.onresult = function(event) {
+
+    document.getElementById("message").value =
+      event.results[0][0].transcript;
   };
-};
+}
+
+
+function clearChat() {
+
+  document.getElementById("chatBox").innerHTML =
+    "<div class='aiMsg'>🤖 <b>AI Teacher:</b> Chat cleared. Ask me something new! 😊</div>";
+}
+
+
+function teacherMode() {
+
+  addAIMessage(
+    "👨‍🏫 AI Teacher Mode is ready. Ask your school question and I will explain it step by step."
+  );
+}
+
+
+function studyPlanner() {
+
+  addAIMessage(
+    "📅 Study Planner: In the next step we can add subjects, study time, daily targets and a simple timetable."
+  );
+}
+
+
+function progressTracker() {
+
+  addAIMessage(
+    "📊 Progress Tracker: In the next step we can save completed quizzes, questions solved and study progress."
+  );
+}
+
+
+document.getElementById("message").addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+
+  }
+);
+
 </script>
- <section id="quizSection">
-  <h2>🏆 AI Quiz Battle</h2>
-<select id="quizSubject">
-    <option>Math</option>
-    <option>Science</option>
-    <option>English</option>
-   </select>
- <button id="startQuizBtn">Start Quiz</button>
-<div id=quizBox"></div>
-script>
-window.onload = function () {
-document.getElementById("startQuizBtn").onclick = function () {
-document.getElementById("quizBox").innerHTML =
-"<h3>Math Quiz</h3>" +
-"<p>Question 1: 2 + 2 = ?</p>" +
-"<button>4</button>" +
-"<button>5</button>";
-};
-};
-</section>
-</script>
+
 </body>
 </html>
-
-
-  
-  
-  
-                          
   
  
