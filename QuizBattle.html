@@ -15,25 +15,28 @@
   <div id="quizArea"></div>
   <script>
 function startQuiz(subject) {
-  document.getElementById("quizArea").innerHTML =
-    "<h2>" + subject + " Quiz</h2>" +
-    "<p>Question 1: 5 + 3 = ?</p>" +
-    <button onclick="checkAnswer(6)">6</button>
-<button onclick="checkAnswer(7)">7</button>
-<button onclick="checkAnswer(8)">8</button>
-<button onclick="checkAnswer(9)">9</button>
 
-<p id="result"></p>
-<button id="nextBtn" onclick="nextQuestion()" style="display:none;">➡️ Next Question</button>
+document.getElementById("quizArea").innerHTML = 
+"<h2>" + subject + " Quiz</h2>" + 
+"<p>Question 1: 5 + 3 = ?</p>" + 
+"<button onclick='checkAnswer(6)'>6</button>" + 
+"<button onclick='checkAnswer(7)'>7</button>" + 
+"<button onclick='checkAnswer(8)'>8</button>" + 
+"<button onclick='checkAnswer(9)'>9</button>" + 
+"<p id='result'></p>" + 
+"<button id='nextBtn' onclick='nextQuestion()' style='display: none;'>➡️ Next Question</button>";
 }
-    function checkAnswer(answer) {
-  if (answer === 8) {
-    document.getElementById("result").innerHTML = "Correct! ✅";
-  } else {
-    document.getElementById("result").innerHTML = "Wrong! ❌";
-  }
 
-  document.getElementById("nextBtn").style.display = "inline-block";
+function checkAnswer(answer) {
+if (answer === 8) {
+
+document.getElementById("result").innerHTML = "Correct! ✅";
+} else {
+
+document.getElementById("result").innerHTML = "Wrong! ❌";
+}
+
+document.getElementById("nextBtn").style.display = "inline-block";
 }
 </script>
 </body>
