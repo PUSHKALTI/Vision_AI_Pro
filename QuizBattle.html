@@ -2,42 +2,160 @@
 <html>
 <head>
 <title>Quiz Battle</title>
+<style>
+body {
+  background-color: lightblue;
+  text-align: center;
+  font-family: Arial;
+}
+button {
+  padding: 10px 18px;
+  margin: 5px;
+  cursor: pointer;
+}
+#quizArea { margin-top: 25px; }
+#timer { font-size: 20px; font-weight: bold; }
+#score { font-size: 18px; font-weight: bold; }
+#result { font-size: 22px; font-weight: bold; }
+</style>
 </head>
-<body style="background-color:lightblue;text-align:center;">
+<body>
+
 <h1>🏆 Quiz Battle</h1>
 <p>Welcome to Quiz Battle!</p>
-  <h2>Select Subject</h2>
-<button onClick="startQuiz('Math')">Math</button>
-<button>🔬 Science</button>
-<button>📖 English</button>
-<button>🌍 SST</button>
+
+<h2>Select Subject</h2>
+<button onclick="startQuiz('Maths')">🧮 Maths</button>
+<button onclick="startQuiz('Science')">🔬 Science</button>
+<button onclick="startQuiz('English')">📚 English</button>
+<button onclick="startQuiz('SST')">🌍 SST</button>
+<br>
 <a href="index.html"><button>🏠 Home</button></a>
-  <div id="quizArea"></div>
-  <script>
-function startQuiz(subject) {
 
-document.getElementById("quizArea").innerHTML = 
-"<h2>" + subject + " Quiz</h2>" + 
-"<p>Question 1: 5 + 3 = ?</p>" + 
-"<button onclick='checkAnswer(6)'>6</button>" + 
-"<button onclick='checkAnswer(7)'>7</button>" + 
-"<button onclick='checkAnswer(8)'>8</button>" + 
-"<button onclick='checkAnswer(9)'>9</button>" + 
-"<p id='result'></p>" + 
-"<button id='nextBtn' onclick='nextQuestion()' style='display: none;'>➡️ Next Question</button>";
+<div id="quizArea"></div>
+
+<script>
+const quizzes = {
+Maths: [
+{q:"5 + 3 = ?",o:[6,7,8,9],a:8},
+{q:"12 - 5 = ?",o:[5,6,7,8],a:7},
+{q:"6 × 4 = ?",o:[20,22,24,26],a:24},
+{q:"36 ÷ 6 = ?",o:[4,5,6,7],a:6},
+{q:"10² = ?",o:[20,50,100,200],a:100}
+],
+Science: [
+{q:"Which organ pumps blood in our body?",o:["Lungs","Heart","Brain","Kidney"],a:"Heart"},
+{q:"What is the basic unit of life?",o:["Tissue","Organ","Cell","Atom"],a:"Cell"},
+{q:"Which gas do plants use for photosynthesis?",o:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],a:"Carbon dioxide"},
+{q:"What force pulls objects towards Earth?",o:["Friction","Gravity","Magnetism","Pressure"],a:"Gravity"},
+{q:"Which planet is known as the Red Planet?",o:["Earth","Mars","Jupiter","Venus"],a:"Mars"}
+],
+English: [
+{q:"What is the opposite of 'hot'?",o:["Warm","Cold","Big","Fast"],a:"Cold"},
+{q:"What is the plural of 'child'?",o:["Childs","Childes","Children","Childrens"],a:"Children"},
+{q:"Which word is a noun?",o:["Run","Beautiful","School","Quickly"],a:"School"},
+{q:"What is the past tense of 'go'?",o:["Goed","Gone","Went","Going"],a:"Went"},
+{q:"Choose the correct article: ___ apple",o:["A","An","Thee","No article"],a:"An"}
+],
+SST: [
+{q:"What is the capital of India?",o:["Mumbai","Kolkata","New Delhi","Chennai"],a:"New Delhi"},
+{q:"How many states are there in India?",o:[26,27,28,29],a:28},
+{q:"Which is the largest continent?",o:["Africa","Asia","Europe","Australia"],a:"Asia"},
+{q:"India is located in which continent?",o:["Asia","Europe","Africa","South America"],a:"Asia"},
+{q:"What is the national currency of India?",o:["Dollar","Rupee","Pound","Euro"],a:"Rupee"}
+]
+};
+
+let subject="";
+let question=0;
+let score=0;
+let timer;
+let time=15;
+
+function startQuiz(s) {
+  subject=s;
+  question=0;
+  score=0;
+  showQuestion();
 }
 
-function checkAnswer(answer) {
-if (answer === 8) {
+function showQuestion() {
+  clearInterval(timer);
+  let quiz=quizzes[subject][question];
+  let html="<h2>"+subject+" Quiz</h2>";
+  html+="<p id='score'>🏆 Score: "+score+"</p>";
+  html+="<p id='timer'>⏱️ Time: 15</p>";
+  html+="<h3>Question "+(question+1)+" of "+quizzes[subject].length+"</h3>";
+  html+="<p>"+quiz.q+"</p>";
 
-document.getElementById("result").innerHTML = "Correct! ✅";
-} else {
+  for(let i=0;i<quiz.o.length;i++) {
+    html+="<button onclick='checkAnswer("+i+")'>"+quiz.o[i]+"</button>";
+  }
 
-document.getElementById("result").innerHTML = "Wrong! ❌";
+  html+="<p id='result'></p>";
+  html+="<button id='next' onclick='nextQuestion()' style='display:none;'>➡️ Next Question</button>";
+  document.getElementById("quizArea").innerHTML=html;
+  startTimer();
 }
 
-document.getElementById("nextBtn").style.display = "inline-block";
+function checkAnswer(i) {
+  clearInterval(timer);
+  let quiz=quizzes[subject][question];
+
+  if(quiz.o[i]===quiz.a) {
+    score++;
+    document.getElementById("result").innerHTML="Correct! ✅";
+  } else {
+    document.getElementById("result").innerHTML="Wrong! ❌<br>Correct Answer: "+quiz.a;
+  }
+
+  document.getElementById("score").innerHTML="🏆 Score: "+score;
+  document.getElementById("next").style.display="inline-block";
+}
+
+function startTimer() {
+  time=15;
+
+  timer=setInterval(function() {
+    document.getElementById("timer").innerHTML="⏱️ Time: "+time;
+    time--;
+
+    if(time<0) {
+      clearInterval(timer);
+      document.getElementById("result").innerHTML=
+      "⏰ Time Up!<br>Correct Answer: "+
+      quizzes[subject][question].a;
+      document.getElementById("next").style.display="inline-block";
+    }
+  },1000);
+}
+
+function nextQuestion() {
+  question++;
+
+  if(question<quizzes[subject].length) {
+    showQuestion();
+  } else {
+    finalResult();
+  }
+}
+
+function finalResult() {
+  clearInterval(timer);
+  let total=quizzes[subject].length;
+  let percentage=Math.round((score/total)*100);
+
+  document.getElementById("quizArea").innerHTML=
+  "<h2>🎉 Quiz Completed!</h2>"+
+  "<h3>"+subject+" Quiz</h3>"+
+  "<p id='result'>🏆 Your Score: "+score+" / "+total+"</p>"+
+  "<p>📊 Percentage: "+percentage+"%</p>"+
+  "<button onclick='startQuiz(subject)'>🔄 Play Again</button>"+
+  "<br>"+
+  "<a href='index.html'><button>🏠 Home</button></a>";
 }
 </script>
+
 </body>
 </html>
+
