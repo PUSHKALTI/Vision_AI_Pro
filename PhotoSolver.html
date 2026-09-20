@@ -5,13 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vision-AI-Pro - Photo Solver</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#07152f,#075985,#0e7490);color:#fff;min-height:100vh}.header{text-align:center;padding:24px 15px;background:rgba(0,0,0,.25)}.header h1{margin:0;font-size:30px}.header p{margin:7px 0;color:#d9f7ff}.container{max-width:850px;margin:auto;padding:20px}.card{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 12px 35px rgba(0,0,0,.25)}.card h2{margin-top:0}.buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}button,.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:bold;font-size:15px;cursor:pointer;text-decoration:none;display:inline-block}.blue{background:#22d3ee;color:#06202c}.white{background:#fff;color:#123}.green{background:#34d399;color:#063}.yellow{background:#facc15;color:#422}.red{background:#fb7185;color:#450}.preview{display:none;width:100%;max-height:380px;object-fit:contain;background:rgba(0,0,0,.4);border-radius:14px;margin-top:15px}video{width:100%;max-height:360px;background:#000;border-radius:14px}#cameraBox{display:none;margin-top:15px}textarea,select{width:100%;padding:13px;border:0;border-radius:12px;font-size:16px;margin-top:8px}textarea{min-height:120px;resize:vertical}.result{display:none;background:rgba(0,0,0,.3);border-radius:14px;padding:17px;line-height:1.65}.small{font-size:13px;color:#cceff6}.footer{text-align:center;padding:18px;color:#cceff6;font-size:13px}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,
+  #07152f,#075985,#0e7490);color:#fff;min-height:100vh}.header{text-align:center;padding:24px 15px;background:rgba
+  (0,0,0,.25)}.header h1{margin:0;font-size:30px}.header p{margin:7px 0;color:#d9f7ff}.container
+  {max-width:850px;margin:auto;padding:20px}.card{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.
+        border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 12px 35px rgba(0,0,0,.25)}.card h2{margin-top:0}.buttons
+  {display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  button,.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:bold;font-size:15px;cursor:pointer;text-decoration:
+    none;display:inline-block}.blue{background:#22d3ee;color:#06202c}.white{background:#fff;color:#123}.
+  green{background:#34d399;color:#063}.yellow{background:#facc15;color:#422}.red{background:#fb7185;color:#450}.preview
+  {display:none;width:100%;max-height:380px;object-fit:contain;background:rgba(0,0,0,.4);border-radius:14px;margin-top:15px}
+  video{width:100%;max-height:360px;background:#000;border-radius:14px}#cameraBox{display:none;margin-top:15px}
+  textarea,select{width:100%;padding:13px;border:0;border-radius:12px;font-size:16px;margin-top:8px}textarea
+  {min-height:120px;resize:vertical}.result{display:none;background:rgba(0,0,0,.3);
+        border-radius:14px;padding:17px;line-height:1.65}.small{font-size:13px;color:#cceff6}.footer{text-align:center;padding:
+    18px;color:#cceff6;font-size:13px}
 </style>
 </head>
 <body>
 <header class="header"><h1>📷 Vision-AI-Pro</h1><p>Photo Solver • Question Reader • Step-by-Step Learning</p></header>
 <main class="container">
-<section class="card"><h2>📸 1. Add Your Question</h2><p class="small">Upload a question image or capture one with your camera.</p><div class="buttons"><label class="btn blue" for="photoInput">📁 Upload Photo</label><button class="white" onclick="openCamera()">📷 Camera</button></div><input id="photoInput" type="file" accept="image/*" style="display:none"><div id="cameraBox"><video id="video" autoplay playsinline></video><div class="buttons"><button class="green" onclick="takePhoto()">📸 Capture</button><button class="red" onclick="closeCamera()">✖ Close</button></div><canvas id="canvas" style="display:none"></canvas></div><img id="preview" class="preview" alt="Question preview"><p id="status"></p></section>
+<section class="card"><h2>📸 1. Add Your Question</h2><p class="small">
+  Upload a question image or capture one with your camera.</p><div class="buttons"><label class="btn blue" for="photoInput">
+    📁 Upload Photo</label><button class="white" onclick="openCamera()">📷 Camera</button></div><input id="photoInput"
+    type="file" accept="image/*" style="display:none"><div id="cameraBox"><video id="video" autoplay playsinline></video><div class="buttons"><button class="green" onclick="takePhoto()">📸 Capture</button><button class="red" onclick="closeCamera()">✖ Close</button></div><canvas id="canvas" style="display:none"></canvas></div><img id="preview" class="preview" alt="Question preview"><p id="status"></p></section>
 <section class="card"><h2>📝 2. Question Text</h2><p class="small">You can type or edit the question here. Real OCR and the AI API will be connected before final release.</p><textarea id="questionText" placeholder="Example: Solve 5 + 3 = ?"></textarea><label>🌐 Answer Language</label><select id="language"><option value="English">English</option><option value="Hindi">Hindi</option><option value="Hinglish">Hinglish</option></select><div class="buttons"><button class="blue" onclick="readQuestion()">🔎 Read Question</button><button class="green" onclick="solveQuestion()">🤖 Solve Question</button><button class="red" onclick="clearAll()">🗑️ Clear</button></div></section>
 <section class="card"><h2>🧠 3. AI Explanation</h2><div id="result" class="result"></div></section>
 <section class="card" style="text-align:center"><h2>🏠 Navigation</h2><div class="buttons" style="justify-content:center"><a class="btn white" href="index.html">🏠 Home</a><a class="btn white" href="Chat.html">💬 AI Chat</a><a class="btn yellow" href="QuizBattle.html">🏆 Quiz Battle</a></div></section>
@@ -19,15 +36,30 @@
 <footer class="footer">Vision-AI-Pro • Photo Solver</footer>
 <script>
 let cameraStream=null;
-const photoInput=document.getElementById("photoInput"),preview=document.getElementById("preview"),questionText=document.getElementById("questionText"),result=document.getElementById("result"),statusBox=document.getElementById("status");
-photoInput.addEventListener("change",function(){const file=this.files[0];if(!file)return;preview.src=URL.createObjectURL(file);preview.style.display="block";statusBox.textContent="✅ Photo loaded successfully!";});
-function openCamera(){const cameraBox=document.getElementById("cameraBox"),video=document.getElementById("video");cameraBox.style.display="block";if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){statusBox.textContent="⚠️ Camera is not supported in this browser.";return;}navigator.mediaDevices.getUserMedia({video:true}).then(function(stream){cameraStream=stream;video.srcObject=stream;}).catch(function(){statusBox.textContent="⚠️ Camera permission was not allowed.";});}
-function closeCamera(){if(cameraStream){cameraStream.getTracks().forEach(function(track){track.stop();});cameraStream=null;}document.getElementById("cameraBox").style.display="none";}
-function takePhoto(){const video=document.getElementById("video"),canvas=document.getElementById("canvas"),context=canvas.getContext("2d");canvas.width=video.videoWidth;canvas.height=video.videoHeight;context.drawImage(video,0,0,canvas.width,canvas.height);preview.src=canvas.toDataURL("image/png");preview.style.display="block";statusBox.textContent="📸 Photo captured successfully!";closeCamera();}
-function readQuestion(){const text=questionText.value.trim();result.style.display="block";if(text===""){result.innerHTML="✍️ Please type the question first. Real OCR from the uploaded image will be connected later.";return;}result.innerHTML="<b>🔎 Question detected:</b><br>"+escapeHtml(text)+"<br><br>✅ Now press 🤖 Solve Question.";}
-function solveQuestion(){const text=questionText.value.trim(),language=document.getElementById("language").value;result.style.display="block";if(text===""){result.innerHTML="✍️ Please enter a question first.";return;}if(text.replace(/\s/g,"")==="5+3=?"){if(language==="Hindi"){result.innerHTML="<b>🎯 उत्तर: 8</b><br><br>🔹 Step 1: हमारे पास 5 + 3 है।<br>🔹 Step 2: 5 में 3 जोड़ें।<br>🔹 Step 3: 5 + 3 = 8<br><br>✅ Final Answer: <b>8</b>";}else if(language==="Hinglish"){result.innerHTML="<b>🎯 Answer: 8</b><br><br>🔹 Step 1: Question hai 5 + 3.<br>🔹 Step 2: 5 mein 3 add karo.<br>🔹 Step 3: 5 + 3 = 8<br><br>✅ Final Answer: <b>8</b>";}else{result.innerHTML="<b>🎯 Answer: 8</b><br><br>🔹 Step 1: We have 5 + 3.<br>🔹 Step 2: Add 3 to 5.<br>🔹 Step 3: 5 + 3 = 8<br><br>✅ Final Answer: <b>8</b>";}return;}result.innerHTML="<b>🤖 AI Solver Demo</b><br><br>Question received:<br>"+escapeHtml(text)+"<br><br>⚙️ The real OCR engine and Vision-AI-Pro AI solving API will be connected in the next development stage.<br><br>🚀 After API integration, this page will read the photo, understand the question and generate a complete step-by-step solution.";}
-function clearAll(){questionText.value="";photoInput.value="";preview.src="";preview.style.display="none";result.innerHTML="";result.style.display="none";statusBox.textContent="";closeCamera();}
-function escapeHtml(text){return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
+const photoInput=document.getElementById("photoInput"),preview=document.getElementById("preview"),
+  questionText=document.getElementById("questionText"),result=document.getElementById("result"),
+  statusBox=document.getElementById("status");
+photoInput.addEventListener("change",function(){const file=this.files[0];if(!file)return;preview.src=URL.
+  createObjectURL(file);preview.style.display="block";statusBox.textContent="✅ Photo loaded successfully!";});
+function openCamera(){const cameraBox=document.getElementById("cameraBox"),video=document.getElementById("video");
+            cameraBox.style.display="block";if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)
+  {statusBox.textContent="⚠️ Camera is not supported in this browser.";return;}navigator.mediaDevices.getUserMedia({video:true}).then(function(stream){camera
+  Stream=stream;video.srcObject=stream;}).catch(function(){statusBox.textContent="⚠️
+  Camera permission was not allowed.";});}
+function closeCamera(){if(cameraStream){cameraStream.getTracks().forEach(function(track){track.stop();});
+                                        cameraStream=null;}document.getElementById("cameraBox").style.display="none";}
+function takePhoto(){const video=document.getElementById("video"),canvas=document.getElementById("canvas"),
+  context=canvas.getContext("2d");canvas.width=video.videoWidth;canvas.height=video.videoHeight;context.drawImage(video,0,0,canvas.width,canvas.height);preview.src=canvas.toDataURL("image/png");preview.style.display="block";statusBox.textContent="📸 Photo captured successfully!";closeCamera();}
+function readQuestion(){const text=questionText.value.trim();result.style.display="block";if(text==="")
+{result.innerHTML="✍️ Please type the question first. Real OCR from the uploaded image will be connected later.";return;}result.innerHTML="<b>🔎 Question detected:</b><br>"+escapeHtml(text)+"<br><br>✅ Now press 🤖 Solve Question.";}
+function solveQuestion(){const text=questionText.value.trim(),language=document.getElementById("language").
+  value;result.style.display="block";if(text===""){result.innerHTML="✍️ Please enter a question first.";return;}if
+  (text.replace(/\s/g,"")==="5+3=?"){if(language==="Hindi"){result.innerHTML="<b>🎯 उत्तर: 8</b><br><br>🔹 Step 1: हमारे पास 5 + 3 है।<br>🔹 Step 2: 5 में 3 जोड़ें।<br>🔹 Step 3: 5 + 3 = 8<br><br>✅ Final Answer: <b>8</b>";}else if(language==="Hinglish"){result.innerHTML="<b>🎯 Answer: 8</b><br><br>🔹 Step 1: Question hai 5 + 3.<br>🔹 Step 2: 5 mein 3 add karo.<br>🔹 Step 3: 5 + 3 = 8<br><br>✅ Final Answer: <b>8</b>";}else{result.innerHTML="<b>🎯 Answer: 8</b><br><br>🔹 Step 1: We have 5 + 3.<br>🔹 Step 2: Add 3 to 5.<br>🔹 Step 3: 5 + 3 = 8<br><br>✅ Final Answer: <b>8</b>";}return;}result.innerHTML="<b>🤖 AI Solver Demo</b><br><br>Question received:<br>"+escapeHtml(text)+"<br><br>⚙️ The real OCR engine and Vision-AI-Pro AI solving API will be connected in the next development stage.<br><br>🚀 After API integration, this page will read the photo, understand the question and generate a complete step-by-step solution.";}
+function clearAll(){questionText.value="";photoInput.value="";
+preview.src="";preview.style.display="none";result.innerHTML="";result.style.display="none";statusBox.textContent="";
+                    closeCamera();}
+function escapeHtml(text){return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").
+  replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
 </script>
 </body>
 </html>
