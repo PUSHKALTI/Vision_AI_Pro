@@ -133,8 +133,7 @@
   </style>
 </head>
 <body>
-
-  <header class="header">
+<header class="header">
     <h1>✨ Vision-AI-Pro</h1>
     <p>🎨 Image Generator • ✨ AI Editing • 🎬 Video Generator</p>
   </header>
@@ -191,17 +190,14 @@
         <option>Portrait Enhancement</option>
         <option>Old Photo Restore</option>
       </select>
-
-      <div class="buttons">
+<div class="buttons">
         <button class="cyan" onclick="previewEdit()">👁️ Preview Photo</button>
         <button class="green" onclick="editPhoto()">🪄 Apply AI Edit</button>
       </div>
-
-      <img id="editPreview" class="preview" alt="Photo preview">
+<img id="editPreview" class="preview" alt="Photo preview">
       <div id="editOutput" class="output"></div>
     </section>
-
-    <section class="card">
+<section class="card">
       <h2>🎬 Video Generator</h2>
       <span class="badge">Text → Video</span>
       <span class="badge">9:16</span>
@@ -228,11 +224,9 @@
         <button class="pink" onclick="generateVideo()">🎬 Generate Video</button>
         <button class="yellow" onclick="clearVideo()">🗑️ Clear</button>
       </div>
-
-      <div id="videoOutput" class="output"></div>
+ <div id="videoOutput" class="output"></div>
     </section>
-
-    <section class="card" style="text-align:center">
+<section class="card" style="text-align:center">
       <h2>🏠 Navigation</h2>
       <div class="buttons" style="justify-content:center">
         <a class="btn white" href="index.html">🏠 Home</a>
@@ -241,12 +235,9 @@
         <a class="btn yellow" href="QuizBattle.html">🏆 Quiz Battle</a>
       </div>
     </section>
-
-  </main>
-
-  <footer class="footer">Vision-AI-Pro • Image & Video Generator</footer>
-
-  <script>
+</main>
+<footer class="footer">Vision-AI-Pro • Image & Video Generator</footer>
+<script>
     function generateImage() {
       const prompt = document.getElementById("imagePrompt").value.trim();
       const style = document.getElementById("imageStyle").value;
