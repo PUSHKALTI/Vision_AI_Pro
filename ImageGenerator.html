@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vision-AI-Pro - Image & Video Generator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #7c3aed 0, #172554 42%, #020617 100%);
+    }
+    .header {
+      text-align: center;
+      padding: 28px 15px;
+      background: rgba(0, 0, 0, .28);
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 31px;
+    }
+    .header p {
+      margin: 8px 0;
+      color: #e0e7ff;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255, 255, 255, .10);
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 22px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, .28);
+    }
+    .card h2 {
+      margin-top: 0;
+    }
+    textarea, select, input {
+      width: 100%;
+      padding: 13px;
+      border: 0;
+      border-radius: 12px;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+    textarea {
+      min-height: 115px;
+      resize: vertical;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    button, .btn {
+      border: 0;
+      border-radius: 13px;
+      padding: 12px 17px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .purple {
+      background: #c084fc;
+      color: #26053d;
+    }
+    .cyan {
+      background: #22d3ee;
+      color: #06202c;
+    }
+    .green {
+      background: #34d399;
+      color: #063;
+    }
+    .pink {
+      background: #fb7185;
+      color: #450;
+    }
+    .yellow {
+      background: #facc15;
+      color: #422;
+    }
+    .white {
+      background: #fff;
+      color: #172554;
+    }
+    .output {
+      display: none;
+      margin-top: 17px;
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, .32);
+      line-height: 1.6;
+    }
+    .preview {
+      display: none;
+      width: 100%;
+      max-height: 420px;
+      object-fit: contain;
+      border-radius: 16px;
+      margin-top: 15px;
+      background: #0008;
+    }
+    .badge {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #ffffff18;
+      margin: 4px;
+    }
+    .small {
+      font-size: 13px;
+      color: #dbeafe;
+    }
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>✨ Vision-AI-Pro</h1>
+    <p>🎨 Image Generator • ✨ AI Editing • 🎬 Video Generator</p>
+  </header>
+
+  <main class="container">
+
+    <section class="card">
+      <h2>🎨 Image Generator</h2>
+      <span class="badge">AI Image</span>
+      <span class="badge">Photo Edit</span>
+      <span class="badge">Enhance</span>
+
+      <label>📝 Describe your image</label>
+      <textarea id="imagePrompt" placeholder="Example: A futuristic city at sunset, cinematic style..."></textarea>
+
+      <label>🖼️ Image Style</label>
+      <select id="imageStyle">
+        <option>Realistic</option>
+        <option>Cinematic</option>
+        <option>Anime</option>
+        <option>3D</option>
+        <option>Cartoon</option>
+        <option>Fantasy</option>
+      </select>
+
+      <label>📐 Image Ratio</label>
+      <select id="ratio">
+        <option>1:1 Square</option>
+        <option>16:9 Landscape</option>
+        <option>9:16 Portrait</option>
+        <option>4:3 Classic</option>
+      </select>
+
+      <div class="buttons">
+        <button class="purple" onclick="generateImage()">✨ Generate Image</button>
+        <button class="yellow" onclick="clearImage()">🗑️ Clear</button>
+      </div>
+
+      <img id="imagePreview" class="preview" alt="Generated image preview">
+      <div id="imageOutput" class="output"></div>
+    </section>
+
+    <section class="card">
+      <h2>🪄 Photo Editing & Enhance</h2>
+      <p class="small">Upload a photo, choose an edit, then generate the edited result. Real AI editing API will be connected later.</p>
+
+      <input id="editFile" type="file" accept="image/*">
+
+      <select id="editType">
+        <option>Enhance Quality</option>
+        <option>Remove Background</option>
+        <option>Change Background</option>
+        <option>Color Correction</option>
+        <option>Portrait Enhancement</option>
+        <option>Old Photo Restore</option>
+      </select>
+
+      <div class="buttons">
+        <button class="cyan" onclick="previewEdit()">👁️ Preview Photo</button>
+        <button class="green" onclick="editPhoto()">🪄 Apply AI Edit</button>
+      </div>
+
+      <img id="editPreview" class="preview" alt="Photo preview">
+      <div id="editOutput" class="output"></div>
+    </section>
+
+    <section class="card">
+      <h2>🎬 Video Generator</h2>
+      <span class="badge">Text → Video</span>
+      <span class="badge">9:16</span>
+      <span class="badge">Short Video</span>
+
+      <label>📝 Describe your video</label>
+      <textarea id="videoPrompt" placeholder="Example: A cinematic drone shot over mountains at sunrise..."></textarea>
+
+      <label>🎞️ Video Format</label>
+      <select id="videoRatio">
+        <option>9:16 Vertical</option>
+        <option>16:9 Landscape</option>
+        <option>1:1 Square</option>
+      </select>
+
+      <label>⏱️ Duration</label>
+      <select id="duration">
+        <option>5 seconds</option>
+        <option>10 seconds</option>
+        <option>15 seconds</option>
+      </select>
+
+      <div class="buttons">
+        <button class="pink" onclick="generateVideo()">🎬 Generate Video</button>
+        <button class="yellow" onclick="clearVideo()">🗑️ Clear</button>
+      </div>
+
+      <div id="videoOutput" class="output"></div>
+    </section>
+
+    <section class="card" style="text-align:center">
+      <h2>🏠 Navigation</h2>
+      <div class="buttons" style="justify-content:center">
+        <a class="btn white" href="index.html">🏠 Home</a>
+        <a class="btn white" href="Chat.html">💬 AI Chat</a>
+        <a class="btn cyan" href="PhotoSolver.html">📷 Photo Solver</a>
+        <a class="btn yellow" href="QuizBattle.html">🏆 Quiz Battle</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">Vision-AI-Pro • Image & Video Generator</footer>
+
+  <script>
+    function generateImage() {
+      const prompt = document.getElementById("imagePrompt").value.trim();
+      const style = document.getElementById("imageStyle").value;
+      const ratio = document.getElementById("ratio").value;
+      const out = document.getElementById("imageOutput");
+      out.style.display = "block";
+      if (!prompt) {
+        out.innerHTML = "✍️ Please describe the image first.";
+        return;
+      }
+      out.innerHTML = "<b>✨ Image generation request ready!</b><br><br>" +
+        "Prompt: " + safe(prompt) + "<br>Style: " + style + "<br>Ratio: " + ratio +
+        "<br><br>⚙️ Demo mode: the real image-generation API will be connected here in the API integration stage.";
+    }
+ function clearImage() {
+      document.getElementById("imagePrompt").value = "";
+      document.getElementById("imagePreview").style.display = "none";
+      document.getElementById("imageOutput").style.display = "none";
+    }
+function previewEdit() {
+      const file = document.getElementById("editFile").files[0];
+      const img = document.getElementById("editPreview");
+      const out = document.getElementById("editOutput");
+      if (!file) {
+        out.style.display = "block";
+        out.innerHTML = "📁 Please choose a photo first.";
+        return;
+      }
+      img.src = URL.createObjectURL(file);
+      img.style.display = "block";
+      out.style.display = "block";
+      out.innerHTML = "✅ Photo loaded. Choose an edit and press 🪄 Apply AI Edit.";
+    }
+function editPhoto() {
+      const file = document.getElementById("editFile").files[0];
+      const type = document.getElementById("editType").value;
+      const out = document.getElementById("editOutput");
+      out.style.display = "block";
+      if (!file) {
+        out.innerHTML = "📁 Please choose a photo first.";
+        return;
+      }
+      out.innerHTML = "<b>🪄 AI Edit Request Ready!</b><br><br>Selected edit: " + type +
+        "<br><br>⚙️ Demo mode: real AI photo editing will be connected through the Vision-AI-Pro API later.";
+    }
+ function generateVideo() {
+      const prompt = document.getElementById("videoPrompt").value.trim();
+      const ratio = document.getElementById("videoRatio").value;
+      const duration = document.getElementById("duration").value;
+      const out = document.getElementById("videoOutput");
+      out.style.display = "block";
+      if (!prompt) {
+        out.innerHTML = "✍️ Please describe the video first.";
+        return;
+      }
+      out.innerHTML = "<b>🎬 Video generation request ready!</b><br><br>" +
+        "Prompt: " + safe(prompt) + "<br>Format: " + ratio + "<br>Duration: " + duration +
+        "<br><br>⚙️ Demo mode: the real text-to-video API will be connected in the API integration stage.";
+    }
+function clearVideo() {
+      document.getElementById("videoPrompt").value = "";
+      document.getElementById("videoOutput").style.display = "none";
+    }
+function safe(t) {
+      return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>
