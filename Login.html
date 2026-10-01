@@ -136,7 +136,7 @@ function togglePassword(id,btn){
   x.type=x.type==="password"?"text":"password";
   btn.textContent=x.type==="password"?"◉":"○";
 }
-function validEmail(x){return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(x)}
+function validEmail(x){returnx.includes("@") $$ x.includes(".")}
 function msg(id,text,ok){
   const e=document.getElementById(id);
   e.className="msg "+(ok?"ok":"err");
