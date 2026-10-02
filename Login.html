@@ -2,122 +2,121 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vision-AI-Pro • Login</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="phase5.js"></script>
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;min-height:100vh;font-family:Arial,sans-serif;color:#fff;
-  background:
-    radial-gradient(circle at 15% 15%,#5668ff66,transparent 32%),
-    radial-gradient(circle at 85% 20%,#19d9ff55,transparent 30%),
-    linear-gradient(135deg,#06101f,#101d3b 55%,#071b2e);
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#07152f,#102d64,#07152f);
 }
-.wrap{max-width:520px;margin:auto;padding:38px 18px}
-.brand{text-align:center;margin-bottom:20px}
-.logo{
-  width:72px;height:72px;margin:auto auto 12px;border-radius:22px;
-  display:flex;align-items:center;justify-content:center;font-size:34px;
-  background:linear-gradient(135deg,#6575ff,#2fd5ff);
-  box-shadow:0 15px 45px #21d5ff33
-}
-h1{margin:0;font-size:30px}.tag{color:#aebbd0;margin-top:7px}
 .card{
-  padding:24px;border-radius:24px;background:#0d1a32dd;
-  border:1px solid #ffffff1c;box-shadow:0 25px 70px #0008
+  width:min(430px,92%);
+  padding:28px;
+  border-radius:24px;
+  background:rgba(12,28,62,.88);
+  box-shadow:0 15px 45px rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.12);
 }
-.tabs{display:flex;gap:8px;margin-bottom:20px}
+.logo{
+  width:70px;height:70px;
+  margin:0 auto 12px;
+  border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#1677ff,#22d3ee);
+  font-size:30px;font-weight:bold;
+}
+h1{text-align:center;margin:5px 0;font-size:28px}
+.sub{text-align:center;color:#b9c8e8;margin-bottom:24px}
+.tabs{display:flex;gap:8px;margin-bottom:22px}
 .tabs button{
-  flex:1;padding:12px;border:1px solid #ffffff18;border-radius:12px;
-  background:#ffffff0b;color:#b9c5d8;font-weight:bold;cursor:pointer
+  flex:1;border:0;border-radius:12px;padding:12px;
+  color:white;background:#19345f;cursor:pointer;font-size:15px;
 }
-.tabs .active{background:linear-gradient(135deg,#6575ff,#2fd5ff);color:#fff}
-h2{margin:5px 0}.sub{color:#aebbd0;font-size:14px}
-label{display:block;margin:15px 0 7px;font-size:14px;font-weight:bold}
+.tabs button.active{background:linear-gradient(90deg,#087cff,#16c9ee)}
+h2{margin:5px 0 6px;font-size:25px}
+.desc{color:#b9c8e8;margin-bottom:18px}
+label{display:block;margin:12px 0 6px;font-weight:bold}
 input{
-  width:100%;padding:13px;border-radius:12px;border:1px solid #ffffff1c;
-  background:#ffffff0a;color:#fff;outline:none;font-size:15px
+  width:100%;padding:13px 14px;border-radius:11px;
+  border:1px solid #34527f;background:#0b1d3e;color:white;
+  outline:none;font-size:15px;
 }
-.pass{position:relative}.pass input{padding-right:48px}
+.passwordRow{position:relative}
+.passwordRow input{padding-right:48px}
 .eye{
-  position:absolute;right:6px;top:5px;border:0;background:transparent;
-  color:#cbd7ea;font-size:18px;cursor:pointer;padding:8px
+  position:absolute;right:8px;top:6px;
+  width:38px;height:36px;border:0;border-radius:9px;
+  background:transparent;color:white;cursor:pointer;font-size:16px;
 }
-.main{
-  width:100%;margin-top:20px;padding:14px;border:0;border-radius:13px;
-  background:linear-gradient(135deg,#6575ff,#2fd5ff);
-  color:#fff;font-weight:bold;font-size:15px;cursor:pointer
+.mainBtn{
+  width:100%;margin-top:20px;padding:14px;border:0;
+  border-radius:12px;background:linear-gradient(90deg,#087cff,#16c9ee);
+  color:white;font-weight:bold;font-size:16px;cursor:pointer;
 }
-.main:disabled{opacity:.6}
-.msg{min-height:18px;margin-top:13px;font-size:13px;line-height:1.45}
-.ok,.err{padding:10px 12px;border-radius:10px}
-.ok{color:#8ff1c4;background:#43e0a114;border:1px solid #43e0a133}
-.err{color:#ffabb5;background:#ff6b7a14;border:1px solid #ff6b7a33}
-.home{display:block;text-align:center;color:#bfeaff;text-decoration:none;margin-top:18px}
-.note{margin-top:17px;padding:11px;border-radius:12px;background:#ffffff08;color:#aebbd0;font-size:12px}
+.mainBtn:disabled{opacity:.6}
+.msg{min-height:22px;margin-top:12px;text-align:center;font-size:14px}
+.msg.ok{color:#65f3a4}
+.msg.err{color:#ff8e9e}
+.back{
+  display:block;text-align:center;margin-top:22px;
+  color:#8bdfff;text-decoration:none;
+}
+.footer{text-align:center;color:#8da5ca;font-size:12px;margin-top:18px}
+#signupBox{display:none}
 </style>
 </head>
-
 <body>
-<div class="wrap">
-  <div class="brand">
-    <div class="logo">🤖</div>
-    <h1>Vision-AI-Pro</h1>
-    <div class="tag">Your AI learning companion</div>
+<div class="card">
+  <div class="logo">AI</div>
+  <h1>Vision-AI-Pro</h1>
+  <div class="sub">Your AI learning companion</div>
+  <div class="tabs">
+    <button id="lt" class="active" onclick="showLogin()">Login</button>
+    <button id="st" onclick="showSignup()">Sign-up</button>
   </div>
-
-  <div class="card">
-    <div class="tabs">
-      <button id="lt" class="active" onclick="showLogin()">Login</button>
-      <button id="st" onclick="showSignup()">Sign-up</button>
+  <div id="loginBox">
+    <h2>Welcome back</h2>
+    <div class="desc">Login to continue to Vision-AI-Pro.</div>
+    <label for="loginEmail">Email</label>
+    <input id="loginEmail" type="email" autocomplete="email" placeholder="Enter your email">
+    <label for="loginPassword">Password</label>
+    <div class="passwordRow">
+      <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter your password">
+      <button class="eye" type="button" onclick="togglePassword('loginPassword',this)">◉</button>
     </div>
-
-    <section id="loginBox">
-      <h2>Welcome back</h2>
-      <p class="sub">Login to continue to Vision-AI-Pro.</p>
-
-      <label>Email</label>
-      <input id="loginEmail" type="email" placeholder="Enter your email">
-
-      <label>Password</label>
-      <div class="pass">
-        <input id="loginPassword" type="password" placeholder="Enter your password">
-        <button class="eye" onclick="togglePassword('loginPassword',this)">◉</button>
-      </div>
-
-      <button id="loginBtn" class="main" onclick="loginUser()">Login</button>
-      <div id="loginMsg" class="msg"></div>
-    </section>
-<section id="signupBox" style="display:none">
-      <h2>Create your account</h2>
-      <p class="sub">Create an account to keep your Vision-AI-Pro data.</p>
-
-      <label>Email</label>
-      <input id="signupEmail" type="email" placeholder="Enter your email">
-
-      <label>Password</label>
-      <div class="pass">
-        <input id="signupPassword" type="password" placeholder="Create a password">
-        <button class="eye" onclick="togglePassword('signupPassword',this)">◉</button>
-      </div>
-
-      <label>Confirm password</label>
-      <div class="pass">
-        <input id="signupConfirm" type="password" placeholder="Type password again">
-        <button class="eye" onclick="togglePassword('signupConfirm',this)">◉</button>
-      </div>
-
-      <button id="signupBtn" class="main" onclick="signupUser()">Create account</button>
-      <div id="signupMsg" class="msg"></div>
-    </section>
-
-    <a class="home" href="index.html">← Back to Home</a>
-    <div class="note">🔐 Secure authentication powered by Supabase.</div>
+    <button id="loginBtn" class="mainBtn" type="button" onclick="loginUser()">Login</button>
+    <div id="loginMsg" class="msg"></div>
   </div>
+  <div id="signupBox">
+    <h2>Create account</h2>
+    <div class="desc">Create your Vision-AI-Pro account.</div>
+    <label for="signupEmail">Email</label>
+    <input id="signupEmail" type="email" autocomplete="email" placeholder="Enter your email">
+    <label for="signupPassword">Password</label>
+    <div class="passwordRow">
+      <input id="signupPassword" type="password" autocomplete="new-password" placeholder="At least 6 characters">
+      <button class="eye" type="button" onclick="togglePassword('signupPassword',this)">◉</button>
+    </div>
+    <label for="signupConfirm">Confirm password</label>
+    <div class="passwordRow">
+      <input id="signupConfirm" type="password" autocomplete="new-password" placeholder="Enter password again">
+      <button class="eye" type="button" onclick="togglePassword('signupConfirm',this)">◉</button>
+    </div>
+    <button id="signupBtn" class="mainBtn" type="button" onclick="signupUser()">Create account</button>
+    <div id="signupMsg" class="msg"></div>
+  </div>
+  <a class="back" href="index.html">← Back to Home</a>
+  <div class="footer">Secure authentication powered by Supabase.</div>
 </div>
-
 <script>
 function showLogin(){
   document.getElementById("loginBox").style.display="block";
@@ -136,7 +135,9 @@ function togglePassword(id,btn){
   x.type=x.type==="password"?"text":"password";
   btn.textContent=x.type==="password"?"◉":"○";
 }
-function validEmail(x){return x.includes("@")$$ x.includes("."}   
+function validEmail(x){
+  return x.includes("@") && x.includes(".");
+}
 function msg(id,text,ok){
   const e=document.getElementById(id);
   e.className="msg "+(ok?"ok":"err");
@@ -145,39 +146,83 @@ function msg(id,text,ok){
 async function loginUser(){
   const email=document.getElementById("loginEmail").value.trim();
   const password=document.getElementById("loginPassword").value;
-  if(!window.VAP_SB){msg("loginMsg","Supabase connection is not ready. Check phase5.js.",false);return}
-  if(!validEmail(email)){msg("loginMsg","Please enter a valid email.",false);return}
-  if(!password){msg("loginMsg","Please enter your password.",false);return}
-  const b=document.getElementById("loginBtn");b.disabled=true;b.textContent="Logging in...";
+  if(!window.VAP_SB){
+    msg("loginMsg","Supabase connection is not ready. Check phase5.js.",false);
+    return;
+  }
+  if(!validEmail(email)){
+    msg("loginMsg","Please enter a valid email.",false);
+    return;
+  }
+  if(!password){
+    msg("loginMsg","Please enter your password.",false);
+    return;
+  }
+  const b=document.getElementById("loginBtn");
+  b.disabled=true;
+  b.textContent="Logging in...";
   try{
-    const r=await VAP_SB.auth.signInWithPassword({email,password});
-    if(r.error)throw r.error;
+    const r=await VAP_SB.auth.signInWithPassword({
+      email:email,
+      password:password
+    });
+    if(r.error) throw r.error;
     msg("loginMsg","Login successful. Opening Vision-AI-Pro...",true);
-    setTimeout(()=>location.href="index.html",700);
-  }catch(e){msg("loginMsg",e.message||"Login failed.",false)}
-  finally{b.disabled=false;b.textContent="Login"}
+    setTimeout(function(){
+      location.href="index.html";
+    },700);
+  }catch(e){
+    msg("loginMsg",e.message||"Login failed.",false);
+  }finally{
+    b.disabled=false;
+    b.textContent="Login";
+  }
 }
 async function signupUser(){
   const email=document.getElementById("signupEmail").value.trim();
   const password=document.getElementById("signupPassword").value;
   const confirm=document.getElementById("signupConfirm").value;
-  if(!window.VAP_SB){msg("signupMsg","Supabase connection is not ready. Check phase5.js.",false);return}
-  if(!validEmail(email)){msg("signupMsg","Please enter a valid email.",false);return}
-  if(password.length<6){msg("signupMsg","Password should be at least 6 characters.",false);return}
-  if(password!==confirm){msg("signupMsg","Passwords do not match.",false);return}
-  const b=document.getElementById("signupBtn");b.disabled=true;b.textContent="Creating account...";
+  if(!window.VAP_SB){
+    msg("signupMsg","Supabase connection is not ready. Check phase5.js.",false);
+    return;
+  }
+  if(!validEmail(email)){
+    msg("signupMsg","Please enter a valid email.",false);
+    return;
+  }
+  if(password.length<6){
+    msg("signupMsg","Password should be at least 6 characters.",false);
+    return;
+  }
+  if(password!==confirm){
+    msg("signupMsg","Passwords do not match.",false);
+    return;
+  }
+  const b=document.getElementById("signupBtn");
+  b.disabled=true;
+  b.textContent="Creating account...";
   try{
-    const r=await VAP_SB.auth.signUp({email,password});
-    if(r.error)throw r.error;
+    const r=await VAP_SB.auth.signUp({
+      email:email,
+      password:password
+    });
+    if(r.error) throw r.error;
     if(r.data && r.data.session){
       msg("signupMsg","Account created. Opening Vision-AI-Pro...",true);
-      setTimeout(()=>location.href="index.html",700);
+      setTimeout(function(){
+        location.href="index.html";
+      },700);
     }else{
       msg("signupMsg","Account created. Check your email for confirmation, then login.",true);
     }
-  }catch(e){msg("signupMsg",e.message||"Sign-up failed.",false)}
-  finally{b.disabled=false;b.textContent="Create account"}
+  }catch(e){
+    msg("signupMsg",e.message||"Sign-up failed.",false);
+  }finally{
+    b.disabled=false;
+    b.textContent="Create account";
+  }
 }
+showLogin();
 </script>
 </body>
 </html>
