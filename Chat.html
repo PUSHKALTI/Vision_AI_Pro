@@ -2,7 +2,6 @@
 <html>
 <head>
 <title>AI Chat - Vision AI Pro</title>
-
 <style>
 body {
   background-color: #e8f4ff;
@@ -11,11 +10,9 @@ body {
   margin: 0;
   padding: 20px;
 }
-
 h1 {
   color: #173b63;
 }
-
 #chatBox {
   width: 90%;
   max-width: 700px;
@@ -28,7 +25,6 @@ h1 {
   overflow-y: auto;
   text-align: left;
 }
-
 .userMsg {
   background-color: #d8f5d0;
   padding: 10px;
@@ -36,7 +32,6 @@ h1 {
   border-radius: 10px;
   text-align: right;
 }
-
 .aiMsg {
   background-color: #e5e5ff;
   padding: 10px;
@@ -44,13 +39,11 @@ h1 {
   border-radius: 10px;
   text-align: left;
 }
-
 #message {
   width: 65%;
   padding: 12px;
   font-size: 16px;
 }
-
 button {
   padding: 10px 16px;
   margin: 5px;
@@ -58,12 +51,10 @@ button {
   border-radius: 6px;
   border: 1px solid #777;
 }
-
 #language {
   padding: 10px;
   margin: 5px;
 }
-
 .featureBox {
   margin: 10px auto;
   max-width: 700px;
@@ -79,36 +70,25 @@ const supabaseClient = supabase.createClient(
   );
 </script>
 </head>
-
 <body>
-
 <h1>🤖 Vision AI Pro - AI Chat</h1>
-
 <p>Ask your question and chat with your AI Teacher.</p>
-
 <div class="featureBox">
-
 <select id="language">
   <option value="English">English</option>
   <option value="Hindi">Hindi</option>
   <option value="Hinglish">Hinglish</option>
 </select>
-
 <button onclick="startVoice()">🎤 Voice</button>
 <button onclick="clearChat()">🗑️ Clear</button>
-
 </div>
-
 <div id="chatBox">
   <div class="aiMsg">
     🤖 <b>AI Teacher:</b> Hello! Ask me a question. 😊
   </div>
 </div>
-
 <input id="message" type="text" placeholder="Type your question here...">
-
 <button onclick="sendMessage()">📤 Send</button>
-
 <br>
 
 <div class="featureBox">
@@ -116,53 +96,36 @@ const supabaseClient = supabase.createClient(
   <button onclick="studyPlanner()">📅 Study Planner</button>
   <button onclick="progressTracker()">📊 Progress</button>
 </div>
-
 <br>
-
 <a href="index.html">
   <button>🏠 Home</button>
 </a>
-
 <script>
-
 function sendMessage() {
-
-  let input = document.getElementById("message");
+ let input = document.getElementById("message");
   let text = input.value.trim();
-
-  if (text === "") {
+ if (text === "") {
     return;
   }
-
-  addUserMessage(text);
-
-  input.value = "";
-
-  setTimeout(function() {
+addUserMessage(text);
+ input.value = "";
+ setTimeout(function() {
     let answer = getDemoAnswer(text);
     addAIMessage(answer);
   }, 500);
 }
-
-
 function addUserMessage(text) {
-
-  let box = document.getElementById("chatBox");
+let box = document.getElementById("chatBox");
 
   box.innerHTML +=
     "<div class='userMsg'>👤 <b>You:</b> " +
     text +
     "</div>";
-
   box.scrollTop = box.scrollHeight;
 }
-
-
 function addAIMessage(text) {
-
-  let box = document.getElementById("chatBox");
-
-  box.innerHTML +=
+ let box = document.getElementById("chatBox");
+ box.innerHTML +=
     "<div class='aiMsg'>🤖 <b>AI Teacher:</b> " +
     text +
     "</div>";
@@ -182,87 +145,58 @@ function getDemoAnswer(text) {
   if (lower.includes("math")) {
     return "Sure! 📚 Send me the Maths question and I will help you step by step.";
   }
-
   if (lower.includes("science")) {
     return "Sure! 🔬 Send me the Science question and I will explain it simply.";
   }
-
-  if (lower.includes("english")) {
+if (lower.includes("english")) {
     return "Sure! 📖 Send me your English question and I will help you.";
   }
-
-  if (lower.includes("sst")) {
+ if (lower.includes("sst")) {
     return "Sure! 🌍 Send me your SST question and I will explain it.";
   }
-
-  return "I received your question. 🤖 In the next stage, we can connect a real AI API so Vision AI Pro can give real AI answers.";
+ return "I received your question. 🤖 In the next stage, we can connect a real AI API so Vision AI Pro can give real AI answers.";
 }
-
-
 function startVoice() {
-
-  if (!("webkitSpeechRecognition" in window)) {
+ if (!("webkitSpeechRecognition" in window)) {
     alert("Voice input is not supported in this browser.");
     return;
   }
-
-  let recognition = new webkitSpeechRecognition();
-
-  recognition.lang = "en-IN";
+ let recognition = new webkitSpeechRecognition();
+ recognition.lang = "en-IN";
   recognition.start();
-
-  recognition.onresult = function(event) {
-
-    document.getElementById("message").value =
+recognition.onresult = function(event) {
+ document.getElementById("message").value =
       event.results[0][0].transcript;
   };
 }
-
-
 function clearChat() {
-
-  document.getElementById("chatBox").innerHTML =
+document.getElementById("chatBox").innerHTML =
     "<div class='aiMsg'>🤖 <b>AI Teacher:</b> Chat cleared. Ask me something new! 😊</div>";
 }
-
-
 function teacherMode() {
-
-  addAIMessage(
+addAIMessage(
     "👨‍🏫 AI Teacher Mode is ready. Ask your school question and I will explain it step by step."
   );
 }
-
-
 function studyPlanner() {
-
-  addAIMessage(
+ addAIMessage(
     "📅 Study Planner: In the next step we can add subjects, study time, daily targets and a simple timetable."
   );
 }
-
-
 function progressTracker() {
-
-  addAIMessage(
+addAIMessage(
     "📊 Progress Tracker: In the next step we can save completed quizzes, questions solved and study progress."
   );
 }
-
-
 document.getElementById("message").addEventListener(
   "keydown",
   function(event) {
-
-    if (event.key === "Enter") {
+if (event.key === "Enter") {
       sendMessage();
     }
-
-  }
+ }
 );
-
 </script>
-
 </body>
 </html>
   
