@@ -101,18 +101,40 @@ const supabaseClient = supabase.createClient(
   <button>🏠 Home</button>
 </a>
 <script>
-function sendMessage() {
- let input = document.getElementById("message");
-  let text = input.value.trim();
- if (text === "") {
-    return;
-  }
+async function saveChatMessage(sender, message) {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+        console.log("User is not logged in.");
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("chat_history")
+        .insert({
+            user_id: user.id,
+            sender: sender,
+            message: message
+        });
+
+    if (error) {
+        console.error("Chat history save error:", error);
+    }
+}
+async function sendMessage() {
+    let input = document.getElementById("message");
+    let text = input.value.trim();
+if (text === "") {
+        return;
+    }
 addUserMessage(text);
- input.value = "";
- setTimeout(function() {
-    let answer = getDemoAnswer(text);
-    addAIMessage(answer);
-  }, 500);
+    input.value = "";
+await saveChatMessage("user", text);
+setTimeout(async function() {
+        let answer = getDemoAnswer(text);
+        addAIMessage(answer);
+await saveChatMessage("ai", answer);
+    }, 500);
 }
 function addUserMessage(text) {
 let box = document.getElementById("chatBox");
