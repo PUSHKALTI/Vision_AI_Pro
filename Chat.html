@@ -124,17 +124,20 @@ async function saveChatMessage(sender, message) {
 async function sendMessage() {
     let input = document.getElementById("message");
     let text = input.value.trim();
-if (text === "") {
+
+    if (text === "") {
         return;
     }
 addUserMessage(text);
     input.value = "";
-await saveChatMessage("user", text);
-setTimeout(async function() {
-        let answer = getDemoAnswer(text);
-        addAIMessage(answer);
-await saveChatMessage("ai", answer);
-    }, 500);
+// AI reply first
+    let answer = getDemoAnswer(text);
+    addAIMessage(answer);
+
+    // Save history without blocking the reply
+    saveChatMessage("user", text);
+    saveChatMessage("ai", answer);
+}
 }
 function addUserMessage(text) {
 let box = document.getElementById("chatBox");
