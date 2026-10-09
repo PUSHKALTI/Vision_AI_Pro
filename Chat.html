@@ -63,7 +63,7 @@ button {
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
   const SUPABASE_URL = "https://swyvrgpapuralxngfoxd.supabase.co";
-  "const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7j"
+  "const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7j";
 const supabaseClient = supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
@@ -136,19 +136,15 @@ addUserMessage(text);
 
     // Save history without blocking the reply
     saveChatMessage("user", text);
-    saveChatMessage("ai", answer);
+   function addUserMessage(text) {
+    let box = document.getElementById("chatBox");
+box.innerHTML +=
+        "<div class='userMsg'>👤 <b>You:</b> " +
+        text +
+        "</div>";
+box.scrollTop = box.scrollHeight;
 }
-}
-function addUserMessage(text) {
-let box = document.getElementById("chatBox");
-
-  box.innerHTML +=
-    "<div class='userMsg'>👤 <b>You:</b> " +
-    text +
-    "</div>";
-  box.scrollTop = box.scrollHeight;
-}
-function addAIMessage(text) {
+ function addAIMessage(text) {
  let box = document.getElementById("chatBox");
  box.innerHTML +=
     "<div class='aiMsg'>🤖 <b>AI Teacher:</b> " +
