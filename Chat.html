@@ -1,436 +1,516 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Vision AI Pro - AI Chat</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Chat - Vision AI Pro</title>
+
 <style>
-* {
-box-sizing: border-box;
-}
 body {
-margin: 0;
-padding: 0;
-font-family: Arial, sans-serif;
-background: linear-gradient(135deg, #e8f4ff, #f5f0ff);
-color: #173b63;
+  background: linear-gradient(135deg, #e8f4ff, #f4f8ff);
+  text-align: center;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  color: #173b63;
 }
-.app {
-width: 100%;
-max-width: 760px;
-margin: auto;
-min-height: 100vh;
-padding: 15px;
+
+h1 {
+  margin-bottom: 5px;
 }
-.header {
-text-align: center;
-padding: 12px 5px;
+
+.subtitle {
+  margin-top: 0;
+  color: #555;
 }
-.header h1 {
-margin: 5px 0;
-font-size: 27px;
+
+#chatBox {
+  width: 92%;
+  max-width: 700px;
+  height: 400px;
+  margin: 20px auto;
+  padding: 15px;
+  background-color: white;
+  border: 2px solid #4b8cc5;
+  border-radius: 16px;
+  overflow-y: auto;
+  text-align: left;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
-.header p {
-margin: 8px 0;
-color: #555;
-}
-.topControls {
-display: flex;
-gap: 8px;
-justify-content: center;
-flex-wrap: wrap;
-margin: 10px 0;
-}
-select,
-button,
-input {
-font-family: Arial, sans-serif;
-}
-select {
-padding: 11px;
-border-radius: 10px;
-border: 1px solid #aaa;
-background: white;
-}
-button {
-padding: 11px 15px;
-border: none;
-border-radius: 10px;
-cursor: pointer;
-background: #173b63;
-color: white;
-font-size: 14px;
-}
-button:hover {
-opacity: 0.9;
-}
-.chatBox {
-width: 100%;
-height: 55vh;
-min-height: 350px;
-max-height: 520px;
-background: rgba(255,255,255,0.95);
-border: 2px solid #b8d7ef;
-border-radius: 18px;
-padding: 12px;
-overflow-y: auto;
-box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-}
-.userMsg,
-.aiMsg {
-max-width: 88%;
-padding: 12px 14px;
-margin: 9px 3px;
-border-radius: 15px;
-line-height: 1.45;
-word-wrap: break-word;
-}
+
 .userMsg {
-margin-left: auto;
-background: #d8f5d0;
-text-align: right;
+  background-color: #d8f5d0;
+  padding: 12px;
+  margin: 8px;
+  border-radius: 12px;
+  text-align: right;
+  word-wrap: break-word;
 }
+
 .aiMsg {
-margin-right: auto;
-background: #e8e8ff;
-text-align: left;
+  background-color: #e5e5ff;
+  padding: 12px;
+  margin: 8px;
+  border-radius: 12px;
+  text-align: left;
+  word-wrap: break-word;
 }
-.inputArea {
-display: flex;
-gap: 8px;
-margin-top: 12px;
-}
+
 #message {
-flex: 1;
-min-width: 0;
-padding: 13px;
-border: 1px solid #aaa;
-border-radius: 12px;
-font-size: 16px;
-outline: none;
+  width: 62%;
+  padding: 13px;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  box-sizing: border-box;
 }
-#message:focus {
-border-color: #4b8cc5;
+
+button {
+  padding: 11px 16px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 9px;
+  border: 1px solid #777;
+  background-color: #3f7fc4;
+  color: white;
+  font-weight: bold;
 }
-.sendBtn {
-padding-left: 18px;
-padding-right: 18px;
+
+button:hover {
+  opacity: 0.9;
 }
-.features {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 8px;
-margin-top: 13px;
+
+#language {
+  padding: 11px;
+  margin: 5px;
+  border-radius: 9px;
 }
-.features button {
-background: white;
-color: #173b63;
-border: 1px solid #b8d7ef;
-font-size: 13px;
+
+.featureBox {
+  margin: 10px auto;
+  max-width: 700px;
 }
-.homeArea {
-text-align: center;
-margin-top: 15px;
-}
+
 .homeBtn {
-background: #4b8cc5;
+  margin-top: 15px;
 }
+
 .status {
-text-align: center;
-font-size: 12px;
-color: #777;
-margin-top: 8px;
+  font-size: 13px;
+  color: #666;
+  margin-top: 8px;
 }
+
 @media (max-width: 600px) {
-.app {
-padding: 10px;
-}
-.header h1 {
-font-size: 23px;
-}
-.chatBox {
-height: 54vh;
-min-height: 330px;
-}
-.inputArea {
-gap: 6px;
-}
-#message {
-font-size: 15px;
-}
-.sendBtn {
-padding: 10px 13px;
-}
-.features {
-grid-template-columns: 1fr;
-}
-.features button {
-width: 100%;
-}
+
+  body {
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: 25px;
+  }
+
+  #chatBox {
+    width: 94%;
+    height: 430px;
+    padding: 8px;
+  }
+
+  #message {
+    width: 68%;
+    font-size: 15px;
+  }
+
+  button {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .featureBox {
+    width: 100%;
+  }
 }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://swyvrgpapuralxngfoxd.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_EtL_7J";
+
+const supabaseClient = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+</script>
+
 </head>
+
 <body>
-<div class="app">
-<div class="header">
+
 <h1>🤖 Vision AI Pro</h1>
-<p>AI Teacher • Ask • Learn • Improve 🚀</p>
-</div>
-<div class="topControls">
+
+<p class="subtitle">
+AI Teacher • Ask • Learn • Improve
+</p>
+
+<div class="featureBox">
+
 <select id="language">
-<option value="English">English</option>
-<option value="Hindi">Hindi</option>
-<option value="Hinglish">Hinglish</option>
+  <option value="English">English</option>
+  <option value="Hindi">Hindi</option>
+  <option value="Hinglish">Hinglish</option>
 </select>
+
 <button onclick="startVoice()">🎤 Voice</button>
+
 <button onclick="clearChat()">🗑️ Clear</button>
+
 </div>
-<div id="chatBox" class="chatBox">
+
+<div id="chatBox">
+
 <div class="aiMsg">
-🤖 <b>AI Teacher:</b><br>
-Hello! 👋 Ask me your question.
+🤖 <b>AI Teacher:</b>
+Hello! 😊 Ask me your question.
 </div>
+
 </div>
-<div class="inputArea">
+
 <input
 id="message"
 type="text"
 placeholder="Type your question..."
-autocomplete="off"
 >
-<button class="sendBtn" onclick="sendMessage()">
-📤 Send
-</button>
-</div>
-<div class="features">
+
+<button onclick="sendMessage()">📤 Send</button>
+
+<div class="featureBox">
+
 <button onclick="teacherMode()">
 👨‍🏫 AI Teacher
 </button>
+
 <button onclick="studyPlanner()">
 📅 Study Planner
 </button>
+
 <button onclick="progressTracker()">
 📊 Progress
 </button>
+
 </div>
-<div class="homeArea">
+
+<div class="homeBtn">
+
 <a href="index.html">
-<button class="homeBtn">🏠 Home</button>
+<button>🏠 Home</button>
 </a>
+
 </div>
-<div id="status" class="status">
+
+<div class="status">
 Vision AI Pro • Chat ready
 </div>
-</div>
-<!-- Supabase library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- Phase 5 Supabase setup -->
-<script src="phase5.js"></script>
+
 <script>
-/* ==============================
-   ADD USER MESSAGE
-============================== */
-function addUserMessage(text) {
-let box = document.getElementById("chatBox");
-let div = document.createElement("div");
-div.className = "userMsg";
-div.innerHTML = "👤 <b>You:</b><br>";
-let textNode = document.createTextNode(text);
-div.appendChild(textNode);
-box.appendChild(div);
-box.scrollTop = box.scrollHeight;
-}
-/* ==============================
-   ADD AI MESSAGE
-============================== */
-function addAIMessage(text) {
-let box = document.getElementById("chatBox");
-let div = document.createElement("div");
-div.className = "aiMsg";
-div.innerHTML = "🤖 <b>AI Teacher:</b><br>";
-let textNode = document.createTextNode(text);
-div.appendChild(textNode);
-box.appendChild(div);
-box.scrollTop = box.scrollHeight;
-}
-/* ==============================
-   SAVE CHAT HISTORY
-============================== */
+/* =========================
+   SAVE CHAT MESSAGE
+========================= */
+
 async function saveChatMessage(sender, message) {
-try {
-if (!window.VAP_SB) {
-console.log("Supabase client not available.");
-return;
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if (!user) {
+    console.log("User is not logged in.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("chat_history")
+    .insert({
+      user_id: user.id,
+      sender: sender,
+      message: message
+    });
+
+  if (error) {
+    console.error(
+      "Chat history save error:",
+      error
+    );
+  }
 }
-const {
-data: { user }
-} = await window.VAP_SB.auth.getUser();
-if (!user) {
-console.log("User is not logged in.");
-return;
-}
-const { error } = await window.VAP_SB
-.from("chat_history")
-.insert({
-user_id: user.id,
-sender: sender,
-message: message
-});
-if (error) {
-console.error("Chat history save error:", error);
-}
-} catch (error) {
-console.error("History error:", error);
-}
-}
-/* ==============================
-   LOAD OLD CHAT HISTORY
-============================== */
+
+/* =========================
+   LOAD CHAT HISTORY
+========================= */
+
 async function loadChatHistory() {
-try {
-if (!window.VAP_SB) {
-return;
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if (!user) {
+    console.log("User is not logged in.");
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("chat_history")
+    .select("sender, message, created_at")
+    .eq("user_id", user.id)
+    .order("created_at", {
+      ascending: true
+    });
+
+  if (error) {
+    console.error(
+      "Chat history load error:",
+      error
+    );
+    return;
+  }
+
+  const box = document.getElementById("chatBox");
+
+  if (data && data.length > 0) {
+    box.innerHTML = "";
+
+    data.forEach(function(item) {
+      if (item.sender === "user") {
+        addUserMessage(
+          item.message,
+          false
+        );
+      } else {
+        addAIMessage(
+          item.message,
+          false
+        );
+      }
+    });
+  }
+
+  box.scrollTop = box.scrollHeight;
 }
-const {
-data: { user }
-} = await window.VAP_SB.auth.getUser();
-if (!user) {
-return;
-}
-const { data, error } = await window.VAP_SB
-.from("chat_history")
-.select("sender,message,created_at")
-.eq("user_id", user.id)
-.order("created_at", { ascending: true });
-if (error) {
-console.error("Chat history load error:", error);
-return;
-}
-if (!data || data.length === 0) {
-return;
-}
-let box = document.getElementById("chatBox");
-box.innerHTML = "";
-data.forEach(function(row) {
-if (row.sender === "user") {
-addUserMessage(row.message);
-} else {
-addAIMessage(row.message);
-}
-});
-} catch (error) {
-console.error("History loading error:", error);
-}
-}
-/* ==============================
+
+/* =========================
    SEND MESSAGE
-============================== */
+========================= */
+
 async function sendMessage() {
-let input = document.getElementById("message");
-let text = input.value.trim();
-if (text === "") {
-return;
+  let input = document.getElementById("message");
+  let text = input.value.trim();
+
+  if (text === "") {
+    return;
+  }
+
+  addUserMessage(text);
+  input.value = "";
+
+  await saveChatMessage(
+    "user",
+    text
+  );
+
+  setTimeout(async function() {
+    let answer = getDemoAnswer(text);
+    addAIMessage(answer);
+
+    await saveChatMessage(
+      "ai",
+      answer
+    );
+  }, 500);
 }
-addUserMessage(text);
-input.value = "";
-/* Save user message */
-saveChatMessage("user", text);
-/* Demo AI reply for now */
-setTimeout(function() {
-let answer = getDemoAnswer(text);
-addAIMessage(answer);
-/* Save AI reply */
-saveChatMessage("ai", answer);
-}, 500);
-}
-/* ==============================
-   DEMO AI ANSWERS
-============================== */
-function getDemoAnswer(text) {
-let lower = text.toLowerCase();
-if (
-lower.includes("hello") ||
-lower.includes("hi")
+
+/* =========================
+   USER MESSAGE
+========================= */
+
+function addUserMessage(
+  text,
+  scroll = true
 ) {
-return "Hello bhai! 😊 I am your Vision AI Pro teacher.";
+  let box = document.getElementById("chatBox");
+
+  box.innerHTML +=
+    "<div class='userMsg'>" +
+    "👤 <b>You:</b> " +
+    escapeHTML(text) +
+    "</div>";
+
+  if (scroll) {
+    box.scrollTop = box.scrollHeight;
+  }
 }
-if (lower.includes("math")) {
-return "Sure! 📚 Send me your Maths question and I will help you step by step.";
+
+/* =========================
+   AI MESSAGE
+========================= */
+
+function addAIMessage(
+  text,
+  scroll = true
+) {
+  let box = document.getElementById("chatBox");
+
+  box.innerHTML +=
+    "<div class='aiMsg'>" +
+    "🤖 <b>AI Teacher:</b> " +
+    escapeHTML(text) +
+    "</div>";
+
+  if (scroll) {
+    box.scrollTop = box.scrollHeight;
+  }
 }
-if (lower.includes("science")) {
-return "Sure! 🔬 Send me your Science question and I will explain it simply.";
+
+/* =========================
+   SAFE TEXT
+========================= */
+
+function escapeHTML(text) {
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
-if (lower.includes("english")) {
-return "Sure! 📖 Send me your English question and I will help you.";
+
+/* =========================
+   DEMO AI
+========================= */
+
+function getDemoAnswer(text) {
+  let lower = text.toLowerCase();
+
+  if (
+    lower.includes("hello") ||
+    lower.includes("hi")
+  ) {
+    return "Hello bhai! 😊 I am your Vision AI Pro teacher.";
+  }
+
+  if (lower.includes("math")) {
+    return "Sure! 📚 Send me the Maths question and I will help you step by step.";
+  }
+
+  if (lower.includes("science")) {
+    return "Sure! 🔬 Send me the Science question and I will explain it simply.";
+  }
+
+  if (lower.includes("english")) {
+    return "Sure! 📖 Send me your English question and I will help you.";
+  }
+
+  if (lower.includes("sst")) {
+    return "Sure! 🌍 Send me your SST question and I will explain it.";
+  }
+
+  return "I received your question. 🤖 Real AI answers will be connected in a later stage.";
 }
-if (lower.includes("sst")) {
-return "Sure! 🌍 Send me your SST question and I will explain it.";
-}
-return "I received your question. 🤖 For now I am using the demo teacher. Later we can connect the real Vision AI Pro AI system.";
-}
-/* ==============================
-   VOICE INPUT
-============================== */
+
+/* =========================
+   VOICE
+========================= */
+
 function startVoice() {
-if (!("webkitSpeechRecognition" in window)) {
-alert("Voice input is not supported in this browser.");
-return;
+  if (
+    !("webkitSpeechRecognition" in window)
+  ) {
+    alert(
+      "Voice input is not supported in this browser."
+    );
+    return;
+  }
+
+  let recognition = new webkitSpeechRecognition();
+  recognition.lang = "en-IN";
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    document.getElementById(
+      "message"
+    ).value =
+      event.results[0][0].transcript;
+  };
 }
-let recognition = new webkitSpeechRecognition();
-recognition.lang = "en-IN";
-recognition.start();
-recognition.onresult = function(event) {
-document.getElementById("message").value =
-event.results[0][0].transcript;
-};
-}
-/* ==============================
-   CLEAR CHAT
-============================== */
+
+/* =========================
+   CLEAR CHAT SCREEN
+========================= */
+
 function clearChat() {
-document.getElementById("chatBox").innerHTML =
-"<div class='aiMsg'>🤖 <b>AI Teacher:</b><br>Chat cleared. Ask me something new! 😊</div>";
+  document.getElementById(
+    "chatBox"
+  ).innerHTML =
+    "<div class='aiMsg'>" +
+    "🤖 <b>AI Teacher:</b> " +
+    "Chat cleared. Ask me something new! 😊" +
+    "</div>";
 }
-/* ==============================
+
+/* =========================
    AI TEACHER
-============================== */
+========================= */
+
 function teacherMode() {
-addAIMessage(
-"👨‍🏫 AI Teacher Mode is ready. Ask your school question and I will explain it step by step."
-);
+  addAIMessage(
+    "👨‍🏫 AI Teacher Mode is ready. Ask your school question and I will explain it step by step."
+  );
 }
-/* ==============================
+
+/* =========================
    STUDY PLANNER
-============================== */
+========================= */
+
 function studyPlanner() {
-addAIMessage(
-"📅 Study Planner is ready. Later we can add subjects, study time, daily targets and a timetable."
-);
+  addAIMessage(
+    "📅 Study Planner: In the next step we can add subjects, study time, daily targets and a simple timetable."
+  );
 }
-/* ==============================
+
+/* =========================
    PROGRESS TRACKER
-============================== */
+========================= */
+
 function progressTracker() {
-addAIMessage(
-"📊 Progress Tracker is ready. Later we can save questions solved, quizzes completed and study progress."
-);
+  addAIMessage(
+    "📊 Progress Tracker: In the next step we can save completed quizzes, questions solved and study progress."
+  );
 }
-/* ==============================
+
+/* =========================
    ENTER KEY
-============================== */
-document.getElementById("message").addEventListener(
-"keydown",
-function(event) {
-if (event.key === "Enter") {
-sendMessage();
-}
-}
+========================= */
+
+document.getElementById(
+  "message"
+).addEventListener(
+  "keydown",
+  function(event) {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  }
 );
-/* ==============================
-   LOAD HISTORY WHEN PAGE OPENS
-============================== */
-window.addEventListener("load", function() {
-loadChatHistory();
-});
+
+/* =========================
+   LOAD HISTORY
+========================= */
+
+window.addEventListener(
+  "load",
+  function() {
+    loadChatHistory();
+  }
+);
 </script>
+
 </body>
 </html>
