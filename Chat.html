@@ -170,12 +170,13 @@ Vision AI Pro • Chat ready
    SAVE CHAT MESSAGE
 ========================= */
 async function saveChatMessage(sender, message) {
-  const {
-    data: { user }
-  } = await supabaseClient.auth.getUser();
-  if (!user) {
+ const { data: { session } } =
+    await supabaseClient.auth.getSession();
+if (!session || !session.user) {
     console.log("User is not logged in.");
     return;
+}
+const user = session.user;
   }
   const { error } = await supabaseClient
     .from("chat_history")
@@ -197,11 +198,13 @@ if (error) {
 async function loadChatHistory() {
   const {
     data: { user }
-  } = await supabaseClient.auth.getUser();
- if (!user) {
+const { data: { session } } =
+    await supabaseClient.auth.getSession();
+if (!session || !session.user) {
     console.log("User is not logged in.");
     return;
-  }
+}
+const user = session.user;
 const { data, error } = await supabaseClient
     .from("chat_history")
     .select("sender, message, created_at")
