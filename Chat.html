@@ -352,64 +352,83 @@ function startVoice() {
       event.results[0][0].transcript;
   };
 }
-/* =========================
-   CLEAR CHAT SCREEN
-========================= */
+if (
+    !("webkitSpeechRecognition" in window)
+) {
+    alert(
+        "Voice input is not supported in this browser."
+    );
+    return;
+}
+let recognition = new webkitSpeechRecognition();
+recognition.lang = "en-IN";
+recognition.start();
+
+recognition.onresult = function(event) {
+    document.getElementById(
+        "message"
+    ).value =
+        event.results[0][0].transcript;
+};
+}
+/* ===============================
+    CLEAR CHAT SCREEN
+=============================== */
 function clearChat() {
-  document.getElementById(
-    "chatBox"
-  ).innerHTML =
-    "<div class='aiMsg'>" +
-    "🤖 <b>AI Teacher:</b> " +
-    "Chat cleared. Ask me something new! 😊" +
-    "</div>";
+    document.getElementById(
+        "chatBox"
+    ).innerHTML =
+        "<div class='aiMsg'>" +
+        "<b>AI Teacher:</b> " +
+        "Chat cleared. Ask me something new! 💻" +
+        "</div>";
 }
-/* =========================
-   AI TEACHER
-========================= */
+/* ===============================
+    AI TEACHER
+=============================== */
 function teacherMode() {
-  addAIMessage(
-    "👨‍🏫 AI Teacher Mode is ready. Ask your school question and I will explain it step by step."
-  );
+    addAIMessage(
+        "💻 AI Teacher Mode is ready. Ask your school question and I will explain it step by step."
+    );
 }
-/* =========================
-   STUDY PLANNER
-========================= */
+/* ===============================
+    STUDY PLANNER
+=============================== */
 function studyPlanner() {
-  addAIMessage(
-    "📅 Study Planner: In the next step we can add subjects, study time, daily targets and a simple timetable."
-  );
+    addAIMessage(
+        "💻 Study Planner: In the next step we can add subjects, study time, daily targets and a simple timetable."
+    );
 }
-/* =========================
-   PROGRESS TRACKER
-========================= */
+/* ===============================
+    PROGRESS TRACKER
+=============================== */
 function progressTracker() {
-  addAIMessage(
-    "📊 Progress Tracker: In the next step we can save completed quizzes, questions solved and study progress."
-  );
+    addAIMessage(
+        "💻 Progress Tracker: In the next step we can save completed quizzes, questions solved and study progress."
+    );
 }
-/* =========================
-   ENTER KEY
-========================= */
+/* ===============================
+    ENTER KEY
+=============================== */
 document.getElementById(
-  "message"
+    "message"
 ).addEventListener(
-  "keydown",
-  function(event) {
-    if (event.key === "Enter") {
-      sendMessage();
+    "keydown",
+    function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
     }
-  }
 );
-/* =========================
-   LOAD HISTORY
-========================= */
+/* ===============================
+    LOAD HISTORY
+=============================== */
 
 window.addEventListener(
-  "load",
-  function() {
-    loadChatHistory();
-  }
+    "load",
+    function() {
+        loadChatHistory();
+    }
 );
 </script>
 </body>
