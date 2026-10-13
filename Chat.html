@@ -177,7 +177,6 @@ if (!session || !session.user) {
     return;
 }
 const user = session.user;
-  }
   const { error } = await supabaseClient
     .from("chat_history")
     .insert({
