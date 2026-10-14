@@ -237,10 +237,11 @@ function solveQuestion() {
       if (text.replace(/\s/g, "") === "5+3=?") {
         if (language === "Hindi") {
           result.innerHTML = "<b>🎯 उत्तर: 8</b><br><br>🔹 Step 1: हमारे पास 5 + 3 है।<br>🔹 Step 2: 5 में 3 जोड़ें।<br>🔹 Step 3: 5 + 3 = 8<br><br>✅ Final Answer: <b>8</b>";
-        } else if (language === "Hinglish") {
-          result.innerHTML = "<b>🎯 Answer: 8</b><br><br>🔹 Step 1: Question hai 5 + 3.<br>🔹 Step 2: 5 mein 3 add karo.<br>🔹 Step 3: 5 + 3 = 8<br><br>✅ Final Answer: <b>8</b>";
+} else if (language === "Hinglish") {
+          result.innerHTML = "<b>🎯 Answer: 8</b><br><br>🔹
+            Step 1: Question hai 5 + 3.<br>🔹 Step 2: 5 mein 3 add karo.<br>🔹 Step 3: 5 + 3 = 8<br><br>✅ Final Answer: <b>8</b>";
         } else {
-          result.innerHTML = "<b>🎯 Answer: 8</b><br><br>🔹 Step 1: We have 5 + 3.<br>🔹 Step 2: Add 3 to 5.<br>🔹 Step 3: 5 + 3 = 8<br><br>✅ Final Answer: <b>8</b>";
+  result.innerHTML = "<b>🎯 Answer: 8</b><br><br>🔹 Step 1: We have 5 + 3.<br>🔹 Step 2: Add 3 to 5.<br>🔹 Step 3: 5 + 3 = 8<br> <br>✅ Final Answer: <b>8</b>";
         }
         return;
       }
