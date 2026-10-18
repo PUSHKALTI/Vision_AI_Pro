@@ -3,620 +3,556 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vision-AI-Pro - Photo Solver</title>
+<title>Vision-AI-Pro • Photo Solver</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 *{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#07152f,#075985,#0e7490);
-color:#fff;
-min-height:100vh;
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(135deg,#07152f,#075985,#087f98,#0e7490);
+  color:white;
+  min-height:100vh;
 }
-.header{
-text-align:center;
-padding:24px 15px;
-background:rgba(0,0,0,.25);
+header{
+  padding:22px 15px;
+  text-align:center;
+  background:rgba(0,0,0,0.25);
+  border-bottom:1px solid rgba(255,255,255,0.15);
+  backdrop-filter:blur(10px);
 }
-.header h1{
-margin:0;
-font-size:30px;
-}
-.header p{
-margin:7px 0;
-color:#d9f7ff;
-}
-.container{
-max-width:850px;
-margin:auto;
-padding:20px;
-}
+.logo{font-size:30px;font-weight:800;letter-spacing:1px;}
+.logo span{color:#67e8f9;}
+.subtitle{margin-top:7px;font-size:14px;opacity:.9;}
+.container{width:min(1000px,94%);margin:25px auto 40px;}
 .card{
-background:rgba(255,255,255,.11);
-border:1px solid rgba(255,255,255,.2);
-border-radius:20px;
-padding:20px;
-margin-bottom:16px;
-box-shadow:0 12px 35px rgba(0,0,0,.25);
+  background:rgba(255,255,255,.97);
+  color:#172033;
+  border-radius:22px;
+  padding:22px;
+  margin-bottom:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
 }
-.card h2{
-margin-top:0;
+.card h2{margin-top:0;color:#075985;}
+.section-title{font-size:21px;font-weight:800;margin-bottom:15px;}
+button{
+  border:0;
+  border-radius:12px;
+  padding:12px 18px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  margin:5px;
+  transition:.2s;
 }
-.buttons{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-top:14px;
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 7px 18px rgba(0,0,0,.18);
 }
-button,
-.btn{
-border:0;
-border-radius:12px;
-padding:12px 16px;
-font-weight:bold;
-font-size:15px;
-cursor:pointer;
-text-decoration:none;
-display:inline-block;
+.blue{background:#0284c7;color:white;}
+.green{background:#16a34a;color:white;}
+.yellow{background:#f59e0b;color:white;}
+.red{background:#dc2626;color:white;}
+.dark{background:#172033;color:white;}
+.white{background:white;color:#075985;border:2px solid #bae6fd;}
+input[type="file"]{display:none;}
+.upload-label{
+  display:inline-block;
+  background:#0284c7;
+  color:white;
+  padding:13px 18px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+  margin:5px;
 }
-.blue{
-background:#22d3ee;
-color:#06202c;
+textarea,select{
+  width:100%;
+  border:2px solid #cbd5e1;
+  border-radius:13px;
+  padding:13px;
+  font-size:16px;
+  outline:none;
+  margin-top:8px;
 }
-.white{
-background:#fff;
-color:#123;
+textarea:focus,select:focus{border-color:#0284c7;}
+textarea{min-height:130px;resize:vertical;}
+.preview-box{display:none;margin-top:15px;text-align:center;}
+#imagePreview{
+  max-width:100%;
+  max-height:400px;
+  border-radius:16px;
+  box-shadow:0 8px 25px rgba(0,0,0,.2);
 }
-.green{
-background:#34d399;
-color:#063;
+.camera-box{
+  display:none;
+  margin-top:15px;
+  background:#020617;
+  border-radius:18px;
+  padding:12px;
+  text-align:center;
 }
-.yellow{
-background:#facc15;
-color:#422;
+#video{width:100%;max-height:450px;border-radius:12px;background:#000;}
+#canvas{display:none;}
+.status{
+  padding:12px;
+  border-radius:12px;
+  background:#eff6ff;
+  color:#075985;
+  margin-top:15px;
+  font-weight:600;
+  display:none;
 }
-.red{
-background:#fb7185;
-color:#450;
+.result-box{
+  background:#f8fafc;
+  border:2px solid #e2e8f0;
+  border-radius:16px;
+  padding:18px;
+  line-height:1.7;
+  min-height:80px;
 }
-.preview{
-display:none;
-width:100%;
-max-height:380px;
-object-fit:contain;
-background:rgba(0,0,0,.4);
-border-radius:14px;
-margin-top:15px;
-}
-video{
-width:100%;
-max-height:360px;
-background:#000;
-border-radius:14px;
-}
-#cameraBox{
-display:none;
-margin-top:15px;
-}
-textarea,
-select{
-width:100%;
-padding:13px;
-border:0;
-border-radius:12px;
-font-size:16px;
-margin-top:8px;
-}
-textarea{
-min-height:120px;
-resize:vertical;
-}
-.result{
-display:none;
-background:rgba(0,0,0,.3);
-border-radius:14px;
-padding:17px;
-line-height:1.65;
-}
-.small{
-font-size:13px;
-color:#cceff6;
-}
-.footer{
-text-align:center;
-padding:18px;
-color:#cceff6;
-font-size:13px;
+.result-box h3{color:#075985;margin-top:0;}
+.answer{
+  background:#ecfdf5;
+  border-left:5px solid #16a34a;
+  padding:15px;
+  border-radius:10px;
+  margin-top:10px;
 }
 .history-item{
-background:rgba(255,255,255,.08);
-border:1px solid rgba(255,255,255,.15);
-border-radius:14px;
-padding:15px;
-margin-top:12px;
+  background:#f8fafc;
+  border:1px solid #dbeafe;
+  border-radius:15px;
+  padding:15px;
+  margin-top:12px;
 }
-.history-question{
-font-weight:bold;
-color:#fff;
-margin-bottom:8px;
+.history-question{font-weight:800;color:#075985;margin-bottom:8px;}
+.history-answer{color:#334155;line-height:1.5;}
+.history-time{font-size:12px;color:#64748b;margin-top:8px;}
+.nav-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
+.nav-buttons button{min-width:120px;}
+footer{text-align:center;padding:25px;font-size:13px;opacity:.85;}
+.loader{
+  display:inline-block;
+  width:18px;
+  height:18px;
+  border:3px solid #bae6fd;
+  border-top-color:#0284c7;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  vertical-align:middle;
+  margin-right:8px;
 }
-.history-answer{
-color:#d9f7ff;
-line-height:1.6;
+@keyframes spin{to{transform:rotate(360deg);}}
+@media(max-width:600px){
+  .logo{font-size:25px;}
+  .card{padding:16px;}
+  button,.upload-label{width:100%;margin:5px 0;}
+  .nav-buttons button{width:100%;}
 }
-.history-time{
-font-size:12px;
-color:#b9dce5;
-margin-top:8px;
-}
-.empty-history{
-color:#cceff6;
-text-align:center;
-padding:15px;
-}
-.loading{
-text-align:center;
-color:#cceff6;
-padding:15px;
+.tip{
+  background:#fff7ed;
+  border-left:5px solid #f59e0b;
+  padding:12px;
+  border-radius:10px;
+  margin-top:12px;
+  font-size:14px;
 }
 </style>
 </head>
 <body>
-<header class="header">
-<h1>📷 Vision-AI-Pro</h1>
-<p>Photo Solver • Question Reader • Step-by-Step Learning</p>
+<header>
+<div class="logo">Vision-<span>AI</span>-Pro</div>
+<div class="subtitle">Photo Solver • Question Reader • Step-by-Step Learning</div>
 </header>
 <main class="container">
-<!-- PHOTO SOLVER -->
 <section class="card">
-<h2>📸 1. Add Your Question</h2>
-<p class="small">
-Upload a question image or capture one with your camera.
-</p>
-<div class="buttons">
-<label class="btn blue" for="photoInput">
-📁 Upload Photo
-</label>
-<button class="white" onclick="openCamera()">
-📷 Camera
-</button>
-</div>
-<input
-id="photoInput"
-type="file"
-accept="image/*"
-style="display:none"
->
-<div id="cameraBox">
+<div class="section-title">📷 1. Add Your Question</div>
+<p>Upload a question photo or use your camera.</p>
+<label for="photoInput" class="upload-label">📁 Upload Photo</label>
+<input type="file" id="photoInput" accept="image/*">
+<button class="blue" onclick="openCamera()">📸 Open Camera</button>
+<button class="yellow" onclick="readQuestion()">🔎 Read Question</button>
+<div id="cameraBox" class="camera-box">
 <video id="video" autoplay playsinline></video>
-<div class="buttons">
-<button class="green" onclick="takePhoto()">
-📸 Capture
-</button>
-<button class="red" onclick="closeCamera()">
-✖ Close
-</button>
+<br>
+<button class="green" onclick="capturePhoto()">📸 Capture</button>
+<button class="red" onclick="closeCamera()">✖ Close Camera</button>
+<canvas id="canvas"></canvas>
 </div>
-<canvas id="canvas" style="display:none"></canvas>
+<div id="previewBox" class="preview-box">
+<img id="imagePreview" alt="Question Preview">
 </div>
-<img
-id="preview"
-class="preview"
-alt="Question preview"
->
-<p id="status"></p>
+<div id="status" class="status"></div>
 </section>
-<!-- QUESTION TEXT -->
 <section class="card">
-<h2>📝 2. Question Text</h2>
-<p class="small">
-You can type or edit the question here.
-Real OCR and the AI API will be connected before final release.
-</p>
-<textarea
-id="questionText"
-placeholder="Example: Solve 5 + 3 = ?"
-></textarea>
-<label>🌐 Answer Language</label>
+<div class="section-title">✏️ 2. Question Text</div>
+<label>Question:</label>
+<textarea id="questionText" placeholder="Your question will appear here after reading the photo... You can also type it manually."></textarea>
+<label>Answer Language:</label>
 <select id="language">
-<option value="English">
-English
-</option>
-<option value="Hindi">
-Hindi
-</option>
-<option value="Hinglish">
-Hinglish
-</option>
+<option value="English">English</option>
+<option value="Hindi">Hindi</option>
+<option value="Hinglish">Hinglish</option>
 </select>
-<div class="buttons">
-<button class="blue" onclick="readQuestion()">
-🔎 Read Question
-</button>
-<button class="green" onclick="solveQuestion()">
-🤖 Solve Question
-</button>
-<button class="red" onclick="clearAll()">
-🗑️ Clear
-</button>
-</div>
+<br><br>
+<button class="green" onclick="solveQuestion()">🧠 Solve Question</button>
+<button class="red" onclick="clearAll()">🗑️ Clear</button>
+<div class="tip">💡 Tip: Photo clear rakho aur question ke words/numbers properly visible hone chahiye.</div>
 </section>
-<!-- AI EXPLANATION -->
 <section class="card">
-<h2>🧠 3. AI Explanation</h2>
-<div id="result" class="result"></div>
+<div class="section-title">🧠 3. AI Explanation</div>
+<div id="result" class="result-box">Your solution will appear here.</div>
 </section>
-<!-- PHOTO SOLVER HISTORY -->
 <section class="card">
-<h2>📚 4. Photo Solver History</h2>
-<p class="small">
-Your solved Photo Solver questions will appear here.
-Only your own history is shown.
-</p>
-<div class="buttons">
-<button class="blue" onclick="loadPhotoHistory()">
-🔄 Refresh History
-</button>
-<button class="red" onclick="deleteAllPhotoHistory()">
-🗑️ Delete History
-</button>
-</div>
-<div id="historyList">
-<div class="loading">
-Loading history...
-</div>
-</div>
+<div class="section-title">📚 Photo Solver History</div>
+<button class="red" onclick="deleteAllPhotoHistory()">🗑️ Delete My History</button>
+<div id="historyList"><p>Loading history...</p></div>
 </section>
-<!-- NAVIGATION -->
-<section
-class="card"
-style="text-align:center"
->
-<h2>🏠 Navigation</h2>
-<div
-class="buttons"
-style="justify-content:center"
->
-<a
-class="btn white"
-href="index.html"
->
-🏠 Home
-</a>
-<a
-class="btn white"
-href="Chat.html"
->
-💬 AI Chat
-</a>
-<a
-class="btn yellow"
-href="QuizBattle.html"
->
-🏆 Quiz Battle
-</a>
+<section class="card">
+<div class="section-title">🚀 Vision-AI-Pro</div>
+<div class="nav-buttons">
+<button class="blue" onclick="goHome()">🏠 Home</button>
+<button class="green" onclick="goChat()">💬 AI Chat</button>
+<button class="yellow" onclick="goQuiz()">🏆 Quiz Battle</button>
 </div>
 </section>
 </main>
-<footer class="footer">
-Vision-AI-Pro • Photo Solver
+<footer>
+Vision-AI-Pro © 2026
+<br>
+Learn • Solve • Improve 🚀
 </footer>
-<!-- SUPABASE LIBRARY -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- YOUR EXISTING PHASE 5 SUPABASE CONNECTION -->
-<script src="phase5.js"></script>
 <script>
-let cameraStream = null;
+const SUPABASE_URL = "https://swyvrgpapuralxngfoxd.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
+let supabaseClient = null;
+try{
+  if(
+    SUPABASE_URL !== "PASTE_YOUR_SUPABASE_URL_HERE" && 
+    SUPABASE_PUBLISHABLE_KEY !== "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE"
+  ){
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL, 
+      SUPABASE_PUBLISHABLE_KEY
+    );
+    console.log("✅ Supabase client created.");
+  }else{
+    console.warn("⚠️ Supabase URL / Publishable key has not been added yet.");
+  }
+}catch(error){
+  console.error("Supabase initialization error:", error);
+}
 const photoInput = document.getElementById("photoInput");
-const preview = document.getElementById("preview");
-const questionText = document.getElementById("questionText");
-const result = document.getElementById("result");
-const statusBox = document.getElementById("status");
-/* =========================
-   SUPABASE CLIENT
-========================= */
-function getSupabaseClient(){
-if(window.VAP_SB){
-return window.VAP_SB;
-}
-console.warn(
-"Supabase client is not ready. Check phase5.js."
-);
-return null;
-}
-/* =========================
-   PHOTO UPLOAD
-========================= */
-photoInput.addEventListener(
-"change",
-function(){
-const file = this.files[0];
-if(!file) return;
-preview.src = URL.createObjectURL(file);
-preview.style.display = "block";
-statusBox.textContent = "✅ Photo loaded successfully!";
-}
-);
-/* =========================
-   CAMERA
-========================= */
-function openCamera(){
+const imagePreview = document.getElementById("imagePreview");
+const previewBox = document.getElementById("previewBox");
 const cameraBox = document.getElementById("cameraBox");
 const video = document.getElementById("video");
-cameraBox.style.display = "block";
-if(
-!navigator.mediaDevices ||
-!navigator.mediaDevices.getUserMedia
-){
-statusBox.textContent = "⚠️ Camera is not supported in this browser.";
-return;
-}
-navigator.mediaDevices
-.getUserMedia({ video: true })
-.then(function(stream){
-cameraStream = stream;
-video.srcObject = stream;
-})
-.catch(function(){
-statusBox.textContent = "⚠️ Camera permission was not allowed.";
-});
-}
-function closeCamera(){
-if(cameraStream){
-cameraStream
-.getTracks()
-.forEach(function(track){
-track.stop();
-});
-cameraStream = null;
-}
-document.getElementById(
-"cameraBox"
-).style.display = "none";
-}
-function takePhoto(){
-const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
-const context = canvas.getContext("2d");
-canvas.width = video.videoWidth;
-canvas.height = video.videoHeight;
-context.drawImage(
-video,
-0,
-0,
-canvas.width,
-canvas.height
-);
-preview.src = canvas.toDataURL("image/png");
-preview.style.display = "block";
-statusBox.textContent = "📸 Photo captured successfully!";
-closeCamera();
-}
-/* =========================
-   READ QUESTION
-========================= */
-function readQuestion(){
-const text = questionText.value.trim();
-result.style.display = "block";
-if(text === ""){
-result.innerHTML = "✍️ Please type the question first. Real OCR from the uploaded image will be connected later.";
-return;
-}
-result.innerHTML = "<b>🔎 Question detected:</b><br>" + escapeHtml(text) + "<br><br>✅ Now press 🤖 Solve Question.";
-}
-/* =========================
-   SOLVE QUESTION
-========================= */
-async function solveQuestion(){
-const text = questionText.value.trim();
-const language = document.getElementById("language").value;
-result.style.display = "block";
-if(text === ""){
-result.innerHTML = "✍️ Please enter a question first.";
-return;
-}
-/* DEMO QUESTION */
-if(
-text.replace(/\s/g, "") === "5+3=?"
-){
-let answerHTML = "";
-if(language === "Hindi"){
-answerHTML = "<b>🎯 उत्तर: 8</b><br><br>" + "🔹 Step 1: हमारे पास 5 + 3 है。<br>" + "🔹 Step 2: 5 में 3 जोड़ें。<br>" + "🔹 Step 3: 5 + 3 = 8<br><br>" + "✅ Final Answer: <b>8</b>";
-}
-else if(language === "Hinglish"){
-answerHTML = "<b>🎯 Answer: 8</b><br><br>" + "🔹 Step 1: Question hai 5 + 3.<br>" + "🔹 Step 2: 5 mein 3 add karo.<br>" + "🔹 Step 3: 5 + 3 = 8<br><br>" + "✅ Final Answer: <b>8</b>";
-}
-else{
-answerHTML = "<b>🎯 Answer: 8</b><br><br>" + "🔹 Step 1: We have 5 + 3.<br>" + "🔹 Step 2: Add 3 to 5.<br>" + "🔹 Step 3: 5 + 3 = 8<br><br>" + "✅ Final Answer: <b>8</b>";
-}
-result.innerHTML = answerHTML;
-/* SAVE TO HISTORY */
-await savePhotoHistory(
-text,
-answerHTML,
-language
-);
-return;
-}
-/* OTHER QUESTIONS */
-const answerHTML = "<b>🤖 AI Solver Demo</b><br><br>" + "Question received:<br>" + escapeHtml(text) + "<br><br>" + "⚙️ The real OCR engine and Vision-AI-Pro AI solving API will be connected in the next development stage." + "<br><br>" + "🚀 After API integration, this page will read the photo, understand the question and generate a complete step-by-step solution.";
-result.innerHTML = answerHTML;
-/* SAVE OTHER QUESTION TOO */
-await savePhotoHistory(
-text,
-answerHTML,
-language
-);
-}
-/* =========================
-   SAVE PHOTO HISTORY
-========================= */
-async function savePhotoHistory(
-question,
-answer,
-language
-){
-const supabase = getSupabaseClient();
-if(!supabase){
-console.warn("Supabase not available. History was not saved.");
-return;
-}
-try{
-const {
-data,
-error
-} = await supabase.auth.getUser();
-if(error){
-console.error(error);
-return;
-}
-const user = data.user;
-if(!user){
-console.warn("User is not logged in. History was not saved.");
-return;
-}
-const response = await supabase
-.from("photo_solver_history")
-.insert({
-user_id: user.id,
-question: question,
-answer: answer,
-language: language
-});
-if(response.error){
-console.error("Photo history save error:", response.error);
-return;
-}
-console.log("✅ Photo Solver history saved.");
-loadPhotoHistory();
-}
-catch(error){
-console.error("Photo history error:", error);
-}
-}
-/* =========================
-   LOAD PHOTO HISTORY
-========================= */
-async function loadPhotoHistory(){
+const questionText = document.getElementById("questionText");
+const language = document.getElementById("language");
+const result = document.getElementById("result");
+const statusBox = document.getElementById("status");
 const historyList = document.getElementById("historyList");
-historyList.innerHTML = '<div class="loading">⏳ Loading history...</div>';
-const supabase = getSupabaseClient();
-if(!supabase){
-historyList.innerHTML = '<div class="empty-history">⚠️ Supabase connection is not ready.</div>';
-return;
-}
-try{
-const {
-data,
-error
-} = await supabase.auth.getUser();
-if(error){
-throw error;
-}
-const user = data.user;
-if(!user){
-historyList.innerHTML = '<div class="empty-history">🔐 Please login to see your Photo Solver history.</div>';
-return;
-}
-const response = await supabase
-.from("photo_solver_history")
-.select("*")
-.eq("user_id", user.id)
-.order("created_at", { ascending: false });
-if(response.error){
-throw response.error;
-}
-const rows = response.data || [];
-if(rows.length === 0){
-historyList.innerHTML = '<div class="empty-history">📭 No Photo Solver history yet.</div>';
-return;
-}
-historyList.innerHTML = "";
-rows.forEach(function(item){
-const div = document.createElement("div");
-div.className = "history-item";
-const date = new Date(item.created_at).toLocaleString();
-div.innerHTML = '<div class="history-question">' + "📝 " + escapeHtml(item.question) + "</div>" + '<div class="history-answer">' + item.answer + "</div>" + '<div class="history-time">' + "🌐 " + escapeHtml(item.language) + " • " + escapeHtml(date) + "</div>";
-historyList.appendChild(div);
+let cameraStream = null;
+
+photoInput.addEventListener("change", function(event){
+  const file = event.target.files[0];
+  if(!file){return;}
+  if(!file.type.startsWith("image/")){
+    showStatus("❌ Please select an image file.");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    imagePreview.src = e.target.result;
+    previewBox.style.display = "block";
+    showStatus("✅ Photo selected. Now tap Read Question.");
+  };
+  reader.readAsDataURL(file);
 });
+
+async function openCamera(){
+  try{
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:"environment"},
+      audio:false
+    });
+    video.srcObject = cameraStream;
+    cameraBox.style.display = "block";
+    showStatus("📸 Camera opened. Capture your question.");
+  }catch(error){
+    console.error(error);
+    showStatus("❌ Camera could not be opened. Please allow camera permission or upload a photo.");
+  }
 }
-catch(error){
-console.error("History loading error:", error);
-historyList.innerHTML = '<div class="empty-history">⚠️ History could not be loaded. Check Supabase table and policies.</div>';
+
+function capturePhoto(){
+  if(!cameraStream){return;}
+  const width = video.videoWidth;
+  const height = video.videoHeight;
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext("2d");
+  context.drawImage(video, 0, 0, width, height);
+  const imageData = canvas.toDataURL("image/png");
+  imagePreview.src = imageData;
+  previewBox.style.display = "block";
+  showStatus("✅ Photo captured. Now tap Read Question.");
+  closeCamera();
 }
+
+function closeCamera(){
+  if(cameraStream){
+    cameraStream.getTracks().forEach(track => track.stop());
+    cameraStream = null;
+  }
+  video.srcObject = null;
+  cameraBox.style.display = "none";
 }
-/* =========================
-   DELETE ALL HISTORY
-========================= */
+
+async function readQuestion(){
+  if(!imagePreview.src){
+    showStatus("❌ First upload or capture a question photo.");
+    return;
+  }
+  if(typeof Tesseract === "undefined"){
+    showStatus("❌ OCR library could not load. Please refresh the page.");
+    return;
+  }
+  try{
+    showStatus("🔎 Reading your question... Please wait.");
+    const worker = await Tesseract.createWorker("eng");
+    const resultOCR = await worker.recognize(imagePreview.src);
+    const text = resultOCR.data.text.trim();
+    await worker.terminate();
+    if(!text){
+      showStatus("⚠️ I could not read the question clearly. Please upload a clearer photo or type the question manually.");
+      return;
+    }
+    questionText.value = text;
+    showStatus("✅ Question read successfully. Check the text and tap Solve Question.");
+  }catch(error){
+    console.error("OCR error:", error);
+    showStatus("❌ Question reading failed. Please try a clearer image or type the question manually.");
+  }
+}
+
+async function solveQuestion(){
+  const text = questionText.value.trim();
+  const selectedLanguage = language.value;
+  if(!text){
+    showStatus("❌ Please add a question first.");
+    return;
+  }
+  result.innerHTML = `<div class="answer"><div class="loader"></div>Solving your question...</div>`;
+  const mathResult = solveBasicMath(text);
+  let answerHTML = "";
+  if(mathResult){
+    answerHTML = createMathAnswer(text, mathResult, selectedLanguage);
+  }else{
+    answerHTML = createDemoAnswer(text, selectedLanguage);
+  }
+  result.innerHTML = answerHTML;
+  await savePhotoHistory(text, answerHTML, selectedLanguage);
+}
+
+function solveBasicMath(text){
+  let cleaned = text.replace(/=/g,"").replace(/\?/g,"").trim();
+  const match = cleaned.match(/^\s*(-?\d+(?:\.\d+)?)\s*([\+\-\*x×÷\/])\s*(-?\d+(?:\.\d+)?)\s*$/);
+  if(!match){return null;}
+  const a = Number(match[1]);
+  const operator = match[2];
+  const b = Number(match[3]);
+  let answer;
+  switch(operator){
+    case "+": answer = a+b; break;
+    case "-": answer = a-b; break;
+    case "*": case "x": case "×": answer = a*b; break;
+    case "/": case "÷": if(b===0){return null;} answer = a/b; break;
+    default: return null;
+  }
+  return {a, operator, b, answer};
+}
+
+function createMathAnswer(question, math, selectedLanguage){
+  let heading = "Step-by-Step Solution";
+  let finalText = `Answer = ${math.answer}`;
+  if(selectedLanguage === "Hindi"){
+    heading = "चरण-दर-चरण हल";
+    finalText = `उत्तर = ${math.answer}`;
+  }
+  if(selectedLanguage === "Hinglish"){
+    heading = "Step-by-Step Solution";
+    finalText = `Answer = ${math.answer}`;
+  }
+  return `<h3>🧮 ${heading}</h3>
+<p><strong>Question:</strong> ${escapeHTML(question)}</p>
+<div class="answer">
+<strong>Step 1:</strong><br>${math.a} ${math.operator} ${math.b}<br><br>
+<strong>Step 2:</strong><br>${math.a} ${math.operator} ${math.b} = ${math.answer}<br><br>
+<strong>Final Answer:</strong><br>${finalText}
+</div>`;
+}
+
+function createDemoAnswer(question, selectedLanguage){
+  if(selectedLanguage === "Hindi"){
+    return `<h3>🤖 AI Solver</h3>
+<p><strong>आपका प्रश्न:</strong> ${escapeHTML(question)}</p>
+<div class="answer">इस प्रश्न को प्राप्त कर लिया गया है। 😊<br><br>
+अभी इस Photo Solver में basic mathematical solving और question reading system सक्रिय है।</div>`;
+  }
+  if(selectedLanguage === "Hinglish"){
+    return `<h3>🤖 AI Solver</h3>
+<p><strong>Your Question:</strong> ${escapeHTML(question)}</p>
+<div class="answer">Question successfully receive ho gaya hai. 😊<br><br>
+Abhi Photo Solver mein basic maths solving aur question reading system active hai.</div>`;
+  }
+  return `<h3>🤖 AI Solver</h3>
+<p><strong>Your Question:</strong> ${escapeHTML(question)}</p>
+<div class="answer">Your question was received successfully. 😊<br><br>
+The Photo Solver currently supports question reading and basic mathematical solving.</div>`;
+}
+
+async function savePhotoHistory(question, answer, selectedLanguage){
+  if(!supabaseClient){
+    console.warn("Supabase client is not available.");
+    return;
+  }
+  try{
+    const {data, error} = await supabaseClient.auth.getUser();
+    if(error){console.error("Auth error:", error); return;}
+    const user = data.user;
+    if(!user){
+      console.warn("User is not logged in. Photo history was not saved.");
+      return;
+    }
+    const {error:insertError} = await supabaseClient
+      .from("photo_solver_history")
+      .insert({
+        user_id:user.id,
+        question:question,
+        answer:answer,
+        language:selectedLanguage
+      });
+    if(insertError){
+      console.error("Photo history save error:", insertError);
+      return;
+    }
+    console.log("✅ Photo Solver history saved.");
+    await loadPhotoHistory();
+  }catch(error){
+    console.error("Photo history error:", error);
+  }
+}
+
+async function loadPhotoHistory(){
+  if(!supabaseClient){
+    historyList.innerHTML = `<p>⚠️ Supabase connection is not configured yet.</p>`;
+    return;
+  }
+  try{
+    const {data, error} = await supabaseClient.auth.getUser();
+    if(error){
+      console.error("History auth error:", error);
+      historyList.innerHTML = `<p>⚠️ Could not check login session.</p>`;
+      return;
+    }
+    const user = data.user;
+    if(!user){
+      historyList.innerHTML = `<p>🔐 Please login to see your Photo Solver history.</p>`;
+      return;
+    }
+    const {data:history, error:historyError} = await supabaseClient
+      .from("photo_solver_history")
+      .select("id,question,answer,language,created_at")
+      .eq("user_id", user.id)
+      .order("created_at", {ascending:false});
+    if(historyError){
+      console.error("History load error:", historyError);
+      historyList.innerHTML = `<p>❌ History could not be loaded.</p>`;
+      return;
+    }
+    if(!history || history.length===0){
+      historyList.innerHTML = `<p>📚 No Photo Solver history yet.</p>`;
+      return;
+    }
+    historyList.innerHTML = history.map(item => `
+<div class="history-item">
+<div class="history-question">📷 ${escapeHTML(item.question)}</div>
+<div class="history-answer">${item.answer}</div>
+<div class="history-time">🌐 ${escapeHTML(item.language || "English")}<br>🕒 ${formatDate(item.created_at)}</div>
+</div>`).join("");
+  }catch(error){
+    console.error("History error:", error);
+  }
+}
+
 async function deleteAllPhotoHistory(){
-const supabase = getSupabaseClient();
-if(!supabase){
-alert("Supabase connection is not ready.");
-return;
+  if(!supabaseClient){
+    showStatus("❌ Supabase is not connected.");
+    return;
+  }
+  const confirmDelete = confirm("Are you sure you want to delete your Photo Solver history?");
+  if(!confirmDelete){return;}
+  try{
+    const {data, error} = await supabaseClient.auth.getUser();
+    if(error){console.error(error); return;}
+    const user = data.user;
+    if(!user){showStatus("🔐 Please login first."); return;}
+    const {error:deleteError} = await supabaseClient
+      .from("photo_solver_history")
+      .delete()
+      .eq("user_id", user.id);
+    if(deleteError){
+      console.error("Delete history error:", deleteError);
+      showStatus("❌ History could not be deleted.");
+      return;
+    }
+    showStatus("✅ Your Photo Solver history has been deleted.");
+    await loadPhotoHistory();
+  }catch(error){
+    console.error(error);
+  }
 }
-try{
-const {
-data,
-error
-} = await supabase.auth.getUser();
-if(error){
-throw error;
-}
-const user = data.user;
-if(!user){
-alert("Please login first.");
-return;
-}
-const confirmDelete = confirm("Are you sure you want to delete your Photo Solver history?");
-if(!confirmDelete){
-return;
-}
-const response = await supabase
-.from("photo_solver_history")
-.delete()
-.eq("user_id", user.id);
-if(response.error){
-throw response.error;
-}
-alert("✅ Photo Solver history deleted.");
-loadPhotoHistory();
-}
-catch(error){
-console.error("Delete history error:", error);
-alert("⚠️ History could not be deleted.");
-}
-}
-/* =========================
-   CLEAR SOLVER
-========================= */
+
 function clearAll(){
-questionText.value = "";
-photoInput.value = "";
-preview.src = "";
-preview.style.display = "none";
-result.innerHTML = "";
-result.style.display = "none";
-statusBox.textContent = "";
-closeCamera();
+  questionText.value = "";
+  result.innerHTML = "Your solution will appear here.";
+  statusBox.style.display = "none";
+  photoInput.value = "";
+  imagePreview.src = "";
+  previewBox.style.display = "none";
+  closeCamera();
 }
-/* =========================
-   HTML SECURITY
-========================= */
-function escapeHtml(text){
-return text
-.replace(/&/g, "&amp;")
-.replace(/</g, "&lt;")
-.replace(/>/g, "&gt;")
-.replace(/"/g, "&quot;")
-.replace(/'/g, "&#039;");
+
+function showStatus(message){
+  statusBox.innerHTML = message;
+  statusBox.style.display = "block";
 }
-/* =========================
-   LOAD HISTORY ON PAGE OPEN
-========================= */
-window.addEventListener(
-"load",
-function(){
-setTimeout(loadPhotoHistory, 500);
+
+function escapeHTML(text){
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function formatDate(dateString){
+  try{return new Date(dateString).toLocaleString();}catch(error){return dateString;}
+}
+
+function goHome(){window.location.href = "index.html";}
+function goChat(){window.location.href = "Chat.html";}
+function goQuiz(){window.location.href = "QuizBattle.html";}
+
+window.addEventListener("load", function(){
+  console.log("🚀 Vision-AI-Pro Photo Solver loaded.");
+  loadPhotoHistory();
 });
 </script>
 </body>
