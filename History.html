@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vision-AI-Pro - History</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{
+    box-sizing:border-box;
+}
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:linear-gradient(135deg,#eef7ff,#f8fbff);
+    color:#17324d;
+    min-height:100vh;
+}
+header{
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+header h1{
+    margin:0;
+    font-size:30px;
+}
+header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+.container{
+    width:92%;
+    max-width:900px;
+    margin:25px auto;
+}
+.back{
+    display:inline-block;
+    text-decoration:none;
+    background:white;
+    color:#2563eb;
+    padding:11px 18px;
+    border-radius:12px;
+    font-weight:bold;
+    margin-bottom:18px;
+    box-shadow:0 3px 12px rgba(0,0,0,.10);
+}
+.categories{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin-bottom:20px;
+}
+.category{
+    border:0;
+    border-radius:16px;
+    padding:20px 12px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    background:white;
+    color:#17324d;
+    box-shadow:0 4px 15px rgba(0,0,0,.10);
+}
+.category:hover{
+    transform:translateY(-2px);
+}
+.category.active{
+    background:#2563eb;
+    color:white;
+}
+.history-box{
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+}
+.history-title{
+    margin-top:0;
+    color:#17324d;
+}
+.status{
+    padding:12px;
+    border-radius:10px;
+    background:#f1f5f9;
+    margin-bottom:15px;
+}
+.item{
+    border-left:5px solid #2563eb;
+    background:#f8fafc;
+    padding:15px;
+    margin:12px 0;
+    border-radius:10px;
+}
+.item-question{
+    font-weight:bold;
+    font-size:17px;
+    margin-bottom:8px;
+}
+.item-answer{
+    white-space:pre-wrap;
+    line-height:1.5;
+}
+.item-date{
+    color:#64748b;
+    font-size:12px;
+    margin-top:10px;
+}
+.empty{
+    text-align:center;
+    padding:35px 15px;
+    color:#64748b;
+}
+.loading{
+    text-align:center;
+    padding:25px;
+}
+footer{
+    text-align:center;
+    padding:25px;
+    color:#64748b;
+    font-size:13px;
+}
+@media(max-width:600px){
+    header h1{
+        font-size:24px;
+    }
+    .categories{
+        grid-template-columns:1fr;
+    }
+    .category{
+        padding:17px;
+    }
+    .history-box{
+        padding:15px;
+    }
+}
+</style>
+</head>
+<body>
+<header>
+    <h1>📚 Vision-AI-Pro History</h1>
+    <p>Your activity in one place</p>
+</header>
+<div class="container">
+    <a class="back" href="index.html">← Home</a>
+    <div class="categories">
+        <button class="category active" onclick="showHistory('chat',this)">
+            💬 Chat History
+        </button>
+        <button class="category" onclick="showHistory('photo',this)">
+            📷 Photo Solver History
+        </button>
+        <button class="category" onclick="showHistory('image',this)">
+            🖼️ Image Generator History
+        </button>
+        <button class="category" onclick="showHistory('quiz',this)">
+            🏆 Quiz Battle History
+        </button>
+    </div>
+    <div class="history-box">
+        <h2 class="history-title" id="historyTitle">
+            💬 Chat History
+        </h2>
+        <div id="status" class="status">
+            Loading history...
+        </div>
+        <div id="historyList"></div>
+    </div>
+</div>
+<footer>
+    Vision-AI-Pro ❤️
+</footer>
+<script>
+/* ==============================
+   SUPABASE CONFIG
+   ============================== */
+const SUPABASE_URL =
+"https://swyvrgpapuralxngfoxd.supabase.co";
+/*
+ IMPORTANT:
+ Paste the SAME SUPABASE PUBLISHABLE KEY
+ that is already working in PhotoSolver.html.
+ Do NOT use a secret/service-role key.
+*/
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
+let supabaseClient = null;
+let currentType = "chat";
+try{
+    if(
+        SUPABASE_URL !== "" &&
+        SUPABASE_PUBLISHABLE_KEY !==
+        "PASTE_YOUR_EXISTING_PUBLISHABLE_KEY_HERE"
+    ){
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_PUBLISHABLE_KEY
+            );
+        console.log("✅ Central History Supabase client created.");
+    }
+}catch(error){
+    console.error(
+        "Supabase initialization error:",
+        error
+    );
+}
+/* ==============================
+   SHOW HISTORY
+   ============================== */
+async function showHistory(type,button){
+    currentType = type;
+    document
+        .querySelectorAll(".category")
+        .forEach(btn=>{
+            btn.classList.remove("active");
+        });
+    button.classList.add("active");
+    const titles = {
+        chat:"💬 Chat History",
+        photo:"📷 Photo Solver History",
+        image:"🖼️ Image Generator History",
+        quiz:"🏆 Quiz Battle History"
+    };
+    document.getElementById("historyTitle")
+        .textContent = titles[type];
+    await loadHistory(type);
+}
+/* ==============================
+   LOAD HISTORY
+   ============================== */
+async function loadHistory(type){
+    const status =
+        document.getElementById("status");
+    const list =
+        document.getElementById("historyList");
+    status.textContent =
+        "Loading history...";
+    list.innerHTML = "";
+    if(!supabaseClient){
+        status.textContent =
+            "Supabase connection is not configured yet.";
+        return;
+    }
+    try{
+        const {data,error} =
+            await supabaseClient.auth.getUser();
+        if(error || !data.user){
+            status.textContent =
+                "Please login to view your history.";
+            list.innerHTML = `
+                <div class="empty">
+                    🔐 Please login first.
+                </div>
+            `;
+            return;
+        }
+        const userId =
+            data.user.id;
+        /* ==========================
+           CHAT HISTORY
+           ========================== */
+        if(type === "chat"){
+            const result =
+                await supabaseClient
+                .from("chat_history")
+                .select(
+                    "id,sender,message,created_at"
+                )
+                .eq("user_id",userId)
+                .order(
+                    "created_at",
+                    {ascending:false}
+                );
+            if(result.error)
+                throw result.error;
+            renderChatHistory(result.data || []);
+            return;
+        }
+        /* ==========================
+           PHOTO SOLVER HISTORY
+           ========================== */
+        if(type === "photo"){
+            const result =
+                await supabaseClient
+                .from("photo_solver_history")
+                .select(
+                    "id,question,answer,language,created_at"
+                )
+                .eq("user_id",userId)
+                .order(
+                    "created_at",
+                    {ascending:false}
+                );
+            if(result.error)
+                throw result.error;
+            renderPhotoHistory(result.data || []);
+            return;
+        }
+        /* ==========================
+           FUTURE IMAGE HISTORY
+           ========================== */
+        if(type === "image"){
+            status.textContent =
+                "🖼️ Image Generator History";
+            list.innerHTML = `
+                <div class="empty">
+                    🖼️ Image Generator History
+                    will appear here when the
+                    Image Generator history backend
+                    is connected.
+                </div>
+            `;
+            return;
+        }
+        /* ==========================
+           FUTURE QUIZ HISTORY
+           ========================== */
+        if(type === "quiz"){
+            status.textContent =
+                "🏆 Quiz Battle History";
+            list.innerHTML = `
+                <div class="empty">
+                    🏆 Quiz Battle History
+                    will appear here when the
+                    Quiz History backend
+                    is connected.
+                </div>
+            `;
+            return;
+        }
+    }catch(error){
+        console.error(
+            "Central History error:",
+            error
+        );
+        status.textContent =
+            "Unable to load history.";
+        list.innerHTML = `
+            <div class="empty">
+                ❌ History could not be loaded.
+                <br><br>
+                Check the browser Console.
+            </div>
+        `;
+    }
+}
+/* ==============================
+   RENDER CHAT HISTORY
+   ============================== */
+function renderChatHistory(rows){
+    const status =
+        document.getElementById("status");
+    const list =
+        document.getElementById("historyList");
+    if(!rows.length){
+        status.textContent =
+            "No chat history yet.";
+        list.innerHTML = `
+            <div class="empty">
+                💬 No chats saved yet.
+            </div>
+        `;
+        return;
+    }
+    status.textContent =
+        rows.length + " chat messages found.";
+    rows.forEach(row=>{
+        const item =
+            document.createElement("div");
+        item.className = "item";
+        item.innerHTML = `
+            <div class="item-question">
+                ${escapeHtml(row.sender)}
+            </div>
+            <div class="item-answer">
+                ${escapeHtml(row.message)}
+            </div>
+            <div class="item-date">
+                ${formatDate(row.created_at)}
+            </div>
+        `;
+        list.appendChild(item);
+    });
+}
+/* ==============================
+   RENDER PHOTO HISTORY
+   ============================== */
+function renderPhotoHistory(rows){
+    const status =
+        document.getElementById("status");
+    const list =
+        document.getElementById("historyList");
+    if(!rows.length){
+        status.textContent =
+            "No Photo Solver history yet.";
+        list.innerHTML = `
+            <div class="empty">
+                📷 No Photo Solver history yet.
+            </div>
+        `;
+        return;
+    }
+    status.textContent =
+        rows.length +
+        " Photo Solver records found.";
+    rows.forEach(row=>{
+        const item =
+            document.createElement("div");
+        item.className = "item";
+        item.innerHTML = `
+            <div class="item-question">
+                📷 ${escapeHtml(row.question)}
+            </div>
+            <div class="item-answer">
+                ${escapeHtml(row.answer)}
+            </div>
+            <div class="item-date">
+                Language: ${escapeHtml(row.language)}
+                • ${formatDate(row.created_at)}
+            </div>
+        `;
+        list.appendChild(item);
+    });
+}
+/* ==============================
+   HELPERS
+   ============================== */
+function formatDate(date){
+    if(!date) return "";
+    return new Date(date)
+        .toLocaleString();
+}
+function escapeHtml(value){
+    if(value === null ||
+       value === undefined){
+        return "";
+    }
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+/* ==============================
+   START
+   ============================== */
+loadHistory("chat");
+</script>
+</body>
+</html>
