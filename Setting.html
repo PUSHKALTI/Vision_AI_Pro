@@ -519,28 +519,33 @@
         /* ACCOUNT / PHASE 5 SESSION */
 
         async function checkLoginStatus() {
-            const status = document.getElementById("loginStatus");
+    const status = document.getElementById("loginStatus");
 
-            if (!supabaseClient) {
-                status.textContent = "Login system not connected";
-                return;
-            }
+    if (!supabaseClient) {
+        status.textContent = "Login system not connected";
+        return;
+    }
 
-            try {
-                const { data, error } = await supabaseClient.auth.getUser();
+    try {
+        const { data, error } = await supabaseClient.auth.getSession();
 
-                if (error || !data.user) {
-                    status.textContent = "Not logged in";
-                    return;
-                }
-
-                status.textContent = "Logged in ✅";
-            } catch (error) {
-                console.error("Login status error:", error);
-                status.textContent = "Unable to check status";
-            }
+        if (error) {
+            console.error("Session error:", error);
+            status.textContent = "Unable to check status";
+            return;
         }
 
+        if (data.session && data.session.user) {
+            status.textContent = "Logged in ✅";
+        } else {
+            status.textContent = "Not logged in";
+        }
+
+    } catch (error) {
+        console.error("Login status error:", error);
+        status.textContent = "Unable to check status";
+    }
+}
 
         function openLogin() {
             window.location.href = "Login.html";
