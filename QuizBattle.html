@@ -1,161 +1,560 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Quiz Battle</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vision-AI-Pro • Quiz Battle</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body {
-  background-color: lightblue;
-  text-align: center;
-  font-family: Arial;
+*{
+    box-sizing:border-box;
 }
-button {
-  padding: 10px 18px;
-  margin: 5px;
-  cursor: pointer;
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:linear-gradient(135deg,#eef7ff,#f5f3ff);
+    color:#17324d;
+    min-height:100vh;
 }
-#quizArea { margin-top: 25px; }
-#timer { font-size: 20px; font-weight: bold; }
-#score { font-size: 18px; font-weight: bold; }
-#result { font-size: 22px; font-weight: bold; }
+header{
+    background:linear-gradient(135deg,#2563eb,#6366f1);
+    color:white;
+    text-align:center;
+    padding:28px 15px;
+}
+header h1{
+    margin:0;
+    font-size:30px;
+}
+header p{
+    margin:8px 0 0;
+    font-size:15px;
+}
+.container{
+    width:92%;
+    max-width:850px;
+    margin:25px auto;
+}
+.card{
+    background:white;
+    border-radius:20px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 6px 20px rgba(0,0,0,.10);
+}
+.card h2{
+    margin-top:0;
+}
+.subject-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+}
+.subject-btn{
+    border:0;
+    border-radius:16px;
+    padding:18px 10px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    color:white;
+    transition:.2s;
+}
+.subject-btn:hover{
+    transform:translateY(-2px);
+    opacity:.93;
+}
+.math{
+    background:#2563eb;
+}
+.science{
+    background:#16a34a;
+}
+.english{
+    background:#9333ea;
+}
+.sst{
+    background:#ea580c;
+}
+.home-btn,
+.history-btn{
+    display:inline-block;
+    text-decoration:none;
+    border:0;
+    border-radius:12px;
+    padding:12px 18px;
+    margin:5px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.home-btn{
+    background:#e2e8f0;
+    color:#17324d;
+}
+.history-btn{
+    background:#7c3aed;
+    color:white;
+}
+.top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+.badge{
+    background:#eef2ff;
+    color:#4338ca;
+    padding:8px 12px;
+    border-radius:20px;
+    font-weight:bold;
+}
+.progress-box{
+    background:#e5e7eb;
+    height:10px;
+    border-radius:20px;
+    overflow:hidden;
+    margin:18px 0;
+}
+.progress{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#2563eb,#7c3aed);
+    transition:.3s;
+}
+.timer{
+    color:#dc2626;
+    font-weight:bold;
+}
+.question{
+    font-size:22px;
+    font-weight:bold;
+    line-height:1.4;
+    margin:25px 0;
+}
+.options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+.option{
+    border:2px solid #dbeafe;
+    background:#f8fbff;
+    border-radius:14px;
+    padding:15px;
+    font-size:16px;
+    cursor:pointer;
+    text-align:left;
+    transition:.2s;
+}
+.option:hover{
+    background:#eff6ff;
+    border-color:#60a5fa;
+}
+.option.correct{
+    background:#dcfce7;
+    border-color:#22c55e;
+}
+.option.wrong{
+    background:#fee2e2;
+    border-color:#ef4444;
+}
+.option:disabled{
+    cursor:not-allowed;
+}
+.feedback{
+    margin-top:18px;
+    padding:14px;
+    border-radius:12px;
+    font-weight:bold;
+    display:none;
+}
+.feedback.correct-box{
+    display:block;
+    background:#dcfce7;
+    color:#166534;
+}
+.feedback.wrong-box{
+    display:block;
+    background:#fee2e2;
+    color:#991b1b;
+}
+.next-btn{
+    display:none;
+    width:100%;
+    margin-top:18px;
+    border:0;
+    border-radius:13px;
+    padding:14px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.result-card{
+    text-align:center;
+}
+.score-big{
+    font-size:38px;
+    font-weight:bold;
+    color:#2563eb;
+    margin:15px 0;
+}
+.percentage{
+    font-size:20px;
+    font-weight:bold;
+    color:#7c3aed;
+}
+.result-message{
+    font-size:18px;
+    margin:15px 0 22px;
+}
+.result-btn{
+    border:0;
+    border-radius:12px;
+    padding:13px 18px;
+    margin:5px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.play-again{
+    background:#2563eb;
+    color:white;
+}
+.back-history{
+    background:#7c3aed;
+    color:white;
+}
+.status{
+    text-align:center;
+    margin-top:12px;
+    font-size:14px;
+    color:#64748b;
+}
+.hidden{
+    display:none;
+}
+footer{
+    text-align:center;
+    padding:25px;
+    color:#64748b;
+    font-size:13px;
+}
+@media(max-width:600px){
+    header h1{
+        font-size:25px;
+    }
+    .subject-grid{
+        grid-template-columns:1fr;
+    }
+    .options{
+        grid-template-columns:1fr;
+    }
+    .question{
+        font-size:19px;
+    }
+}
 </style>
 </head>
 <body>
-
+<header>
 <h1>🏆 Quiz Battle</h1>
-<p>Welcome to Quiz Battle!</p>
-
-<h2>Select Subject</h2>
-<button onclick="startQuiz('Maths')">🧮 Maths</button>
-<button onclick="startQuiz('Science')">🔬 Science</button>
-<button onclick="startQuiz('English')">📚 English</button>
-<button onclick="startQuiz('SST')">🌍 SST</button>
+<p>Learn • Play • Challenge Yourself</p>
+</header>
+<div class="container">
+<!-- SUBJECT SCREEN -->
+<div id="subjectScreen" class="card">
+<h2>🎯 Choose Your Subject</h2>
+<p>Pick a subject and start your quiz.</p>
+<div class="subject-grid">
+<button class="subject-btn math" onclick="startQuiz('Maths')">🧮 Maths</button>
+<button class="subject-btn science" onclick="startQuiz('Science')">🔬 Science</button>
+<button class="subject-btn english" onclick="startQuiz('English')">📚 English</button>
+<button class="subject-btn sst" onclick="startQuiz('SST')">🌍 SST</button>
+</div>
+<div style="text-align:center;margin-top:20px;">
+<a href="index.html"><button class="home-btn">🏠 Home</button></a>
+<a href="History.html"><button class="history-btn">📚 History</button></a>
+</div>
+</div>
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="card hidden">
+<div class="top-row">
+<div id="subjectBadge" class="badge">🏆 Quiz</div>
+<div id="scoreBadge" class="badge">Score: 0</div>
+<div class="timer" id="timer">⏱️ 15</div>
+</div>
+<div class="progress-box">
+<div id="progress" class="progress"></div>
+</div>
+<div id="questionNumber">Question 1 of 5</div>
+<div id="questionText" class="question">Question</div>
+<div id="options" class="options"></div>
+<div id="feedback" class="feedback"></div>
+<button id="nextBtn" class="next-btn" onclick="nextQuestion()">➡️ Next Question</button>
+</div>
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="card result-card hidden">
+<h2>🎉 Quiz Completed!</h2>
+<div id="finalScore" class="score-big">0 / 5</div>
+<div id="finalPercentage" class="percentage">0%</div>
+<div id="resultMessage" class="result-message">Great job!</div>
+<button class="result-btn play-again" onclick="playAgain()">🔄 Play Again</button>
+<a href="History.html"><button class="result-btn back-history">📚 View History</button></a>
 <br>
-<a href="index.html"><button>🏠 Home</button></a>
-
-<div id="quizArea"></div>
-
+<a href="index.html"><button class="home-btn">🏠 Home</button></a>
+<div id="saveStatus" class="status"></div>
+</div>
+</div>
+<footer>Vision-AI-Pro ❤️</footer>
 <script>
+/* SUPABASE CONFIG */
+const SUPABASE_URL = "https://swyvrgpapuralxngfoxd.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
+let supabaseClient = null;
+
+try{
+    if(SUPABASE_URL !== "" && SUPABASE_PUBLISHABLE_KEY !== "PASTE_YOUR_EXISTING_PUBLISHABLE_KEY_HERE"){
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+        console.log("✅ Quiz Battle Supabase connected.");
+    }
+}catch(error){
+    console.error("Supabase connection error:", error);
+}
+
+/* QUIZ DATA */
 const quizzes = {
-Maths: [
-{q:"5 + 3 = ?",o:[6,7,8,9],a:8},
-{q:"12 - 5 = ?",o:[5,6,7,8],a:7},
-{q:"6 × 4 = ?",o:[20,22,24,26],a:24},
-{q:"36 ÷ 6 = ?",o:[4,5,6,7],a:6},
-{q:"10² = ?",o:[20,50,100,200],a:100}
+Maths:[
+{q:"5 + 3 = ?",o:["6","7","8","9"],a:"8"},
+{q:"12 - 5 = ?",o:["5","6","7","8"],a:"7"},
+{q:"6 × 4 = ?",o:["20","22","24","26"],a:"24"},
+{q:"36 ÷ 6 = ?",o:["4","5","6","7"],a:"6"},
+{q:"10² = ?",o:["20","50","100","200"],a:"100"}
 ],
-Science: [
+Science:[
 {q:"Which organ pumps blood in our body?",o:["Lungs","Heart","Brain","Kidney"],a:"Heart"},
 {q:"What is the basic unit of life?",o:["Tissue","Organ","Cell","Atom"],a:"Cell"},
 {q:"Which gas do plants use for photosynthesis?",o:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],a:"Carbon dioxide"},
 {q:"What force pulls objects towards Earth?",o:["Friction","Gravity","Magnetism","Pressure"],a:"Gravity"},
 {q:"Which planet is known as the Red Planet?",o:["Earth","Mars","Jupiter","Venus"],a:"Mars"}
 ],
-English: [
+English:[
 {q:"What is the opposite of 'hot'?",o:["Warm","Cold","Big","Fast"],a:"Cold"},
 {q:"What is the plural of 'child'?",o:["Childs","Childes","Children","Childrens"],a:"Children"},
 {q:"Which word is a noun?",o:["Run","Beautiful","School","Quickly"],a:"School"},
 {q:"What is the past tense of 'go'?",o:["Goed","Gone","Went","Going"],a:"Went"},
-{q:"Choose the correct article: ___ apple",o:["A","An","Thee","No article"],a:"An"}
+{q:"Choose the correct article: ___ apple",o:["A","An","The","No article"],a:"An"}
 ],
-SST: [
+SST:[
 {q:"What is the capital of India?",o:["Mumbai","Kolkata","New Delhi","Chennai"],a:"New Delhi"},
-{q:"How many states are there in India?",o:[26,27,28,29],a:28},
+{q:"How many states are there in India?",o:["26","27","28","29"],a:"28"},
 {q:"Which is the largest continent?",o:["Africa","Asia","Europe","Australia"],a:"Asia"},
 {q:"India is located in which continent?",o:["Asia","Europe","Africa","South America"],a:"Asia"},
 {q:"What is the national currency of India?",o:["Dollar","Rupee","Pound","Euro"],a:"Rupee"}
 ]
 };
 
-let subject="";
-let question=0;
-let score=0;
-let timer;
-let time=15;
+/* QUIZ VARIABLES */
+let subject = "";
+let questionIndex = 0;
+let score = 0;
+let timer = null;
+let timeLeft = 15;
+let answered = false;
 
-function startQuiz(s) {
-  subject=s;
-  question=0;
-  score=0;
-  showQuestion();
-}
-
-function showQuestion() {
-  clearInterval(timer);
-  let quiz=quizzes[subject][question];
-  let html="<h2>"+subject+" Quiz</h2>";
-  html+="<p id='score'>🏆 Score: "+score+"</p>";
-  html+="<p id='timer'>⏱️ Time: 15</p>";
-  html+="<h3>Question "+(question+1)+" of "+quizzes[subject].length+"</h3>";
-  html+="<p>"+quiz.q+"</p>";
-
-  for(let i=0;i<quiz.o.length;i++) {
-    html+="<button onclick='checkAnswer("+i+")'>"+quiz.o[i]+"</button>";
-  }
-
-  html+="<p id='result'></p>";
-  html+="<button id='next' onclick='nextQuestion()' style='display:none;'>➡️ Next Question</button>";
-  document.getElementById("quizArea").innerHTML=html;
-  startTimer();
-}
-
-function checkAnswer(i) {
-  clearInterval(timer);
-  let quiz=quizzes[subject][question];
-
-  if(quiz.o[i]===quiz.a) {
-    score++;
-    document.getElementById("result").innerHTML="Correct! ✅";
-  } else {
-    document.getElementById("result").innerHTML="Wrong! ❌<br>Correct Answer: "+quiz.a;
-  }
-
-  document.getElementById("score").innerHTML="🏆 Score: "+score;
-  document.getElementById("next").style.display="inline-block";
-}
-
-function startTimer() {
-  time=15;
-
-  timer=setInterval(function() {
-    document.getElementById("timer").innerHTML="⏱️ Time: "+time;
-    time--;
-
-    if(time<0) {
-      clearInterval(timer);
-      document.getElementById("result").innerHTML=
-      "⏰ Time Up!<br>Correct Answer: "+
-      quizzes[subject][question].a;
-      document.getElementById("next").style.display="inline-block";
-    }
-  },1000);
-}
-
-function nextQuestion() {
-  question++;
-
-  if(question<quizzes[subject].length) {
+/* START QUIZ */
+function startQuiz(selectedSubject){
+    subject = selectedSubject;
+    questionIndex = 0;
+    score = 0;
+    document.getElementById("subjectScreen").classList.add("hidden");
+    document.getElementById("resultScreen").classList.add("hidden");
+    document.getElementById("quizScreen").classList.remove("hidden");
     showQuestion();
-  } else {
-    finalResult();
-  }
 }
 
-function finalResult() {
-  clearInterval(timer);
-  let total=quizzes[subject].length;
-  let percentage=Math.round((score/total)*100);
+/* SHOW QUESTION */
+function showQuestion(){
+    clearInterval(timer);
+    answered = false;
+    const quiz = quizzes[subject][questionIndex];
+    const total = quizzes[subject].length;
 
-  document.getElementById("quizArea").innerHTML=
-  "<h2>🎉 Quiz Completed!</h2>"+
-  "<h3>"+subject+" Quiz</h3>"+
-  "<p id='result'>🏆 Your Score: "+score+" / "+total+"</p>"+
-  "<p>📊 Percentage: "+percentage+"%</p>"+
-  "<button onclick='startQuiz(subject)'>🔄 Play Again</button>"+
-  "<br>"+
-  "<a href='index.html'><button>🏠 Home</button></a>";
+    document.getElementById("subjectBadge").textContent = "🏆 " + subject;
+    document.getElementById("scoreBadge").textContent = "Score: " + score;
+    document.getElementById("questionNumber").textContent = "Question " + (questionIndex + 1) + " of " + total;
+    document.getElementById("questionText").textContent = quiz.q;
+    document.getElementById("progress").style.width = ((questionIndex + 1) / total * 100) + "%";
+
+    const options = document.getElementById("options");
+    options.innerHTML = "";
+
+    quiz.o.forEach(function(option,index){
+        const button = document.createElement("button");
+        button.className = "option";
+        button.textContent = option;
+        button.onclick = function(){ checkAnswer(index, button); };
+        options.appendChild(button);
+    });
+
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback";
+    feedback.textContent = "";
+
+    document.getElementById("nextBtn").style.display = "none";
+    startTimer();
+}
+
+/* CHECK ANSWER */
+function checkAnswer(index,clickedButton){
+    if(answered){ return; }
+    answered = true;
+    clearInterval(timer);
+
+    const quiz = quizzes[subject][questionIndex];
+    const buttons = document.querySelectorAll(".option");
+
+    buttons.forEach(function(button){ button.disabled = true; });
+
+    const selected = quiz.o[index];
+    const feedback = document.getElementById("feedback");
+
+    if(selected === quiz.a){
+        score++;
+        clickedButton.classList.add("correct");
+        feedback.textContent = "Correct! 🎉 Keep going!";
+        feedback.classList.add("correct-box");
+    }else{
+        clickedButton.classList.add("wrong");
+        buttons.forEach(function(button){
+            if(button.textContent === quiz.a){
+                button.classList.add("correct");
+            }
+        });
+        feedback.textContent = "Not quite! 😊 Correct answer: " + quiz.a;
+        feedback.classList.add("wrong-box");
+    }
+
+    document.getElementById("scoreBadge").textContent = "Score: " + score;
+    document.getElementById("nextBtn").style.display = "block";
+}
+
+/* TIMER */
+function startTimer(){
+    timeLeft = 15;
+    document.getElementById("timer").textContent = "⏱️ " + timeLeft;
+    timer = setInterval(function(){
+        timeLeft--;
+        document.getElementById("timer").textContent = "⏱️ " + timeLeft;
+        if(timeLeft <= 0){
+            clearInterval(timer);
+            timeUp();
+        }
+    },1000);
+}
+
+/* TIME UP */
+function timeUp(){
+    if(answered){ return; }
+    answered = true;
+
+    const quiz = quizzes[subject][questionIndex];
+    const buttons = document.querySelectorAll(".option");
+
+    buttons.forEach(function(button){
+        button.disabled = true;
+        if(button.textContent === quiz.a){
+            button.classList.add("correct");
+        }
+    });
+
+    const feedback = document.getElementById("feedback");
+    feedback.textContent = "⏰ Time's up! Correct answer: " + quiz.a;
+    feedback.classList.add("wrong-box");
+    document.getElementById("nextBtn").style.display = "block";
+}
+
+/* NEXT QUESTION */
+function nextQuestion(){
+    questionIndex++;
+    if(questionIndex < quizzes[subject].length){
+        showQuestion();
+    }else{
+        finishQuiz();
+    }
+}
+
+/* FINISH QUIZ */
+async function finishQuiz(){
+    clearInterval(timer);
+    const total = quizzes[subject].length;
+    const percentage = Math.round((score / total) * 100);
+
+    document.getElementById("quizScreen").classList.add("hidden");
+    document.getElementById("resultScreen").classList.remove("hidden");
+
+    document.getElementById("finalScore").textContent = score + " / " + total;
+    document.getElementById("finalPercentage").textContent = percentage + "%";
+
+    let message = "";
+    if(percentage === 100){
+        message = "🏆 Perfect! Amazing work!";
+    }else if(percentage >= 80){
+        message = "🌟 Excellent! Keep it up!";
+    }else if(percentage >= 50){
+        message = "👍 Good job! You can improve even more!";
+    }else{
+        message = "💪 Keep practicing. You will get better!";
+    }
+
+    document.getElementById("resultMessage").textContent = message;
+    await saveQuizHistory(subject, score, total, percentage);
+}
+
+/* SAVE QUIZ HISTORY */
+async function saveQuizHistory(selectedSubject, finalScore, totalQuestions, percentage){
+    const status = document.getElementById("saveStatus");
+
+    if(!supabaseClient){
+        status.textContent = "⚠️ Supabase is not configured.";
+        return;
+    }
+
+    try{
+        const {data,error} = await supabaseClient.auth.getUser();
+        if(error || !data || !data.user){
+            status.textContent = "🔐 Login required to save quiz history.";
+            return;
+        }
+
+        const {error:insertError} = await supabaseClient.from("quiz_history").insert({
+            user_id:data.user.id,
+            subject:selectedSubject,
+            score:finalScore,
+            total_questions:totalQuestions,
+            percentage:percentage
+        });
+
+        if(insertError){
+            console.error("Quiz history save error:", insertError);
+            status.textContent = "⚠️ Quiz completed, but history could not be saved.";
+            return;
+        }
+
+        status.textContent = "✅ Quiz result saved to your History!";
+        console.log("✅ Quiz history saved.");
+    }catch(error){
+        console.error("Quiz history error:", error);
+        status.textContent = "⚠️ Quiz completed, but history could not be saved.";
+    }
+}
+
+/* PLAY AGAIN */
+function playAgain(){
+    document.getElementById("resultScreen").classList.add("hidden");
+    document.getElementById("subjectScreen").classList.remove("hidden");
 }
 </script>
-
 </body>
 </html>
-
