@@ -46,12 +46,34 @@
         .login {
             background-color: #663399;
         }
+        .settings-icon {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    text-decoration: none;
+    font-size: 25px;
+    background: #f1f3ff;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+}
+
+.settings-icon:hover {
+    transform: rotate(20deg);
+}
         .menu-button:hover {
             opacity: 0.9;
         }
     </style>
 </head>
 <body>
+   <a href="Settings.html" class="settings-icon" title="Settings">
+    ⚙️
+</a> 
     <h1>Vision AI Pro</h1>
     <p>Welcome to Vision AI Pro</p>
     <a href="Chat.html">
