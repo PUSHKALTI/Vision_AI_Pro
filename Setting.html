@@ -518,7 +518,7 @@
 
         /* ACCOUNT / PHASE 5 SESSION */
 
-        async function checkLoginStatus() {
+       async function checkLoginStatus() {
     const status = document.getElementById("loginStatus");
 
     if (!supabaseClient) {
@@ -535,6 +535,17 @@
             return;
         }
 
+        if (data.session && data.session.user) {
+            status.textContent = "Logged in ✅";
+        } else {
+            status.textContent = "Not logged in";
+        }
+
+    } catch (error) {
+        console.error("Login status error:", error);
+        status.textContent = "Unable to check status";
+    }
+}
         if (data.session && data.session.user) {
             status.textContent = "Logged in ✅";
         } else {
