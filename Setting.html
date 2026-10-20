@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision-AI-Pro • Settings</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7ff;
+            color: #222;
+            transition: 0.3s;
+        }
+        .header {
+            background: linear-gradient(135deg, #185cff, #6b45e8);
+            color: white;
+            text-align: center;
+            padding: 28px 15px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .header p {
+            margin: 8px 0 0;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 700px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 19px;
+        }
+        .option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 5px;
+            border-bottom: 1px solid #eee;
+            gap: 15px;
+        }
+        .option:last-child {
+            border-bottom: none;
+        }
+        .option-title {
+            font-weight: bold;
+        }
+        .option-text {
+            font-size: 13px;
+            color: #777;
+            margin-top: 4px;
+        }
+        select {
+            padding: 9px 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: white;
+        }
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .toggle {
+            width: 52px;
+            height: 28px;
+            border-radius: 20px;
+            background: #bbb;
+            position: relative;
+            padding: 0;
+        }
+        .toggle span {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            left: 3px;
+            top: 3px;
+            transition: 0.2s;
+        }
+        .toggle.active {
+            background: #286cff;
+        }
+        .toggle.active span {
+            left: 27px;
+        }
+        .action {
+            background: #286cff;
+            color: white;
+        }
+        .back {
+            background: #eee;
+            color: #222;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .danger {
+            background: #e74c3c;
+            color: white;
+        }
+        .about {
+            line-height: 1.6;
+            color: #555;
+        }
+        .creator {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #f1f5ff;
+            color: #286cff;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            color: #777;
+            padding: 10px 15px 25px;
+            font-size: 13px;
+        }
+        /* DARK MODE */
+        body.dark {
+            background: #121212;
+            color: #eee;
+        }
+        body.dark .card {
+            background: #1e1e1e;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.3);
+        }
+        body.dark .option {
+            border-color: #333;
+        }
+        body.dark .option-text {
+            color: #aaa;
+        }
+        body.dark select {
+            background: #292929;
+            color: white;
+            border-color: #555;
+        }
+        body.dark .back {
+            background: #333;
+            color: white;
+        }
+        body.dark .about {
+            color: #ccc;
+        }
+        body.dark .creator {
+            background: #292929;
+            color: #6fa0ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>⚙️ Settings</h1>
+        <p>Customize your Vision-AI-Pro experience</p>
+    </div>
+
+    <div class="container">
+        <!-- APPEARANCE -->
+        <div class="card">
+            <h2>🌙 Appearance</h2>
+            <div class="option">
+                <div>
+                    <div class="option-title">Dark Mode</div>
+                    <div class="option-text">Switch between light and dark mode</div>
+                </div>
+                <button class="toggle" id="darkToggle" onclick="toggleDarkMode()">
+                    <span></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- LANGUAGE -->
+        <div class="card">
+            <h2>🌐 Answer Language</h2>
+            <div class="option">
+                <div>
+                    <div class="option-title">Preferred Language</div>
+                    <div class="option-text">Choose the language for AI answers</div>
+                </div>
+                <select id="languageSelect" onchange="saveLanguage()">
+                    <option value="English">English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Hinglish">Hinglish</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="card">
+            <h2>🔔 Notifications</h2>
+            <div class="option">
+                <div>
+                    <div class="option-title">Notifications</div>
+                    <div class="option-text">Enable or disable notifications</div>
+                </div>
+                <button class="toggle" id="notificationToggle" onclick="toggleNotifications()">
+                    <span></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ACCOUNT -->
+        <div class="card">
+            <h2>👤 Account</h2>
+            <div class="option">
+                <div>
+                    <div class="option-title">Profile / Account</div>
+                    <div class="option-text">Manage your Vision-AI-Pro account</div>
+                </div>
+                <button class="action" onclick="openLogin()">Open</button>
+            </div>
+            <div class="option">
+                <div>
+                    <div class="option-title">Login Status</div>
+                    <div class="option-text" id="loginStatus">Checking...</div>
+                </div>
+            </div>
+            <div class="option">
+                <div>
+                    <div class="option-title">Logout</div>
+                    <div class="option-text">Sign out from your account</div>
+                </div>
+                <button class="danger" onclick="logoutUser()">Logout</button>
+            </div>
+        </div>
+
+        <!-- PRIVACY -->
+        <div class="card">
+            <h2>🔒 Privacy & Security</h2>
+            <div class="option">
+                <div>
+                    <div class="option-title">Privacy Information</div>
+                    <div class="option-text">Learn how your account data is handled</div>
+                </div>
+                <button class="action" onclick="showPrivacy()">View</button>
+            </div>
+            <div class="option">
+                <div>
+                    <div class="option-title">Account Controls</div>
+                    <div class="option-text">Manage account-related options</div>
+                </div>
+                <button class="action" onclick="openLogin()">Manage</button>
+            </div>
+        </div>
+
+        <!-- HISTORY -->
+        <div class="card">
+            <h2>📚 History</h2>
+            <div class="option">
+                <div>
+                    <div class="option-title">Central History</div>
+                    <div class="option-text">View your Chat, Photo Solver, Image and Quiz history</div>
+                </div>
+                <button class="action" onclick="openHistory()">Open</button>
+            </div>
+        </div>
+
+        <!-- ABOUT -->
+        <div class="card">
+            <h2>ℹ️ About Vision-AI-Pro</h2>
+            <div class="option">
+                <div>
+                    <div class="option-title">App Version</div>
+                    <div class="option-text">Version 1.0.0</div>
+                </div>
+            </div>
+            <div class="option">
+                <div>
+                    <div class="option-title">About the App</div>
+                    <div class="about">
+                        Vision-AI-Pro is an AI-powered study app designed to help students with AI Chat, Photo Solver, Quiz Battle and other learning tools.
+                        <div class="creator">🚀 Created by Pushkal Tiwari</div>
+                    </div>
+                </div>
+            </div>
+            <div class="option">
+                <div>
+                    <div class="option-title">Help & Feedback</div>
+                    <div class="option-text">Share suggestions or report a problem</div>
+                </div>
+                <button class="action" onclick="showFeedback()">Help</button>
+            </div>
+        </div>
+
+        <button class="back" onclick="goHome()">🏠 Back to Home</button>
+    </div>
+
+    <div class="footer">Vision-AI-Pro ❤️</div>
+
+    <script>
+        const SUPABASE_URL = "https://swyvrgpapuralxngfoxd.supabase.co";
+        const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_EXISTING_PUBLISHABLE_KEY_HERE";
+
+        let supabaseClient = null;
+
+        if (window.supabase && SUPABASE_PUBLISHABLE_KEY !== "PASTE_YOUR_EXISTING_PUBLISHABLE_KEY_HERE") {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+        }
+
+        /* DARK MODE */
+        function loadDarkMode() {
+            const darkMode = localStorage.getItem("vap_dark_mode") === "true";
+            if (darkMode) {
+                document.body.classList.add("dark");
+                document.getElementById("darkToggle").classList.add("active");
+            }
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.body.classList.toggle("dark");
+            localStorage.setItem("vap_dark_mode", isDark);
+            document.getElementById("darkToggle").classList.toggle("active", isDark);
+        }
+
+        /* LANGUAGE */
+        function loadLanguage() {
+            const savedLanguage = localStorage.getItem("vap_language") || "English";
+            document.getElementById("languageSelect").value = savedLanguage;
+        }
+
+        function saveLanguage() {
+            const language = document.getElementById("languageSelect").value;
+            localStorage.setItem("vap_language", language);
+            alert("Language preference saved: " + language);
+        }
+
+        /* NOTIFICATIONS */
+        function loadNotifications() {
+            const enabled = localStorage.getItem("vap_notifications") !== "false";
+            document.getElementById("notificationToggle").classList.toggle("active", enabled);
+        }
+
+        function toggleNotifications() {
+            const currentlyEnabled = localStorage.getItem("vap_notifications") !== "false";
+            const newValue = !currentlyEnabled;
+            localStorage.setItem("vap_notifications", newValue);
+            document.getElementById("notificationToggle").classList.toggle("active", newValue);
+        }
+
+        /* ACCOUNT */
+        async function checkLoginStatus() {
+            const status = document.getElementById("loginStatus");
+            if (!supabaseClient) {
+                status.textContent = "Login system not connected";
+                return;
+            }
+            try {
+                const { data, error } = await supabaseClient.auth.getUser();
+                if (error || !data.user) {
+                    status.textContent = "Not logged in";
+                } else {
+                    status.textContent = "Logged in ✅";
+                }
+            } catch (error) {
+                status.textContent = "Unable to check status";
+            }
+        }
+
+        function openLogin() {
+            window.location.href = "Login.html";
+        }
+
+        async function logoutUser() {
+            if (!supabaseClient) {
+                alert("Login system is not connected yet.");
+                return;
+            }
+            const { error } = await supabaseClient.auth.signOut();
+            if (error) {
+                alert("Logout failed.");
+                return;
+            }
+            alert("You have been logged out.");
+            window.location.href = "Login.html";
+        }
+
+        /* HISTORY */
+        function openHistory() {
+            window.location.href = "History.html";
+        }
+
+        /* PRIVACY */
+        function showPrivacy() {
+            alert("Vision-AI-Pro uses your account information only for features connected to your account. Your personal data should be handled securely.");
+        }
+
+        /* HELP */
+        function showFeedback() {
+            alert("Help & Feedback will be connected to the Vision-AI-Pro feedback system in a future update.");
+        }
+
+        /* HOME */
+        function goHome() {
+            window.location.href = "index.html";
+        }
+
+        /* START */
+        loadDarkMode();
+        loadLanguage();
+        loadNotifications();
+        checkLoginStatus();
+    </script>
+</body>
+</html>
