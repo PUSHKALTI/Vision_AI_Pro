@@ -318,19 +318,78 @@ async function loadHistory(type){
         /* ==========================
            FUTURE QUIZ HISTORY
            ========================== */
-        if(type === "quiz"){
-            status.textContent =
-                "🏆 Quiz Battle History";
-            list.innerHTML = `
-                <div class="empty">
-                    🏆 Quiz Battle History
-                    will appear here when the
-                    Quiz History backend
-                    is connected.
-                </div>
-            `;
-            return;
-        }
+if(type === "quiz"){
+  status.textContent = "🏆 Quiz Battle History";
+
+  try {
+    const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+
+    if(userError) throw userError;
+
+    if(!userData.user){
+      status.textContent = "Please login to view Quiz History.";
+      list.innerHTML = `
+        <div class="empty">
+          🔐 Please login to view your Quiz Battle History.
+        </div>
+      `;
+      return;
+    }
+
+    const { data, error } = await supabaseClient
+      .from("quiz_history")
+      .select("id, subject, score, total_questions, percentage, created_at")
+      .eq("user_id", userData.user.id)
+      .order("created_at", { ascending: false });
+
+    if(error) throw error;
+
+    if(!data || data.length === 0){
+      status.textContent = "No Quiz Battle history yet.";
+      list.innerHTML = `
+        <div class="empty">
+          🏆 No Quiz Battle history yet.
+        </div>
+      `;
+      return;
+    }
+
+    status.textContent = data.length + " Quiz Battle record(s) found.";
+    list.innerHTML = "";
+
+    data.forEach(row => {
+      const item = document.createElement("div");
+      item.className = "item";
+
+      item.innerHTML = `
+        <div class="item-question">
+          🏆 ${escapeHtml(row.subject)} Quiz
+        </div>
+        <div class="item-answer">
+          Score: ${row.score} / ${row.total_questions}<br>
+          Percentage: ${row.percentage}%
+        </div>
+        <div class="item-date">
+          ${formatDate(row.created_at)}
+        </div>
+      `;
+
+      list.appendChild(item);
+    });
+
+  } catch(error) {
+    console.error("Quiz history error:", error);
+    status.textContent = "Unable to load Quiz History.";
+    list.innerHTML = `
+      <div class="empty">
+        ❌ Could not load Quiz Battle History.
+      </div>
+    `;
+  }
+
+  return;
+}       
+        
     }catch(error){
         console.error(
             "Central History error:",
