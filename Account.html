@@ -3,125 +3,605 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vision-AI-Pro • Account</title>
+
+    <title>Vision-AI-Pro • My Account</title>
+
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Vision-AI-Pro Phase 5 -->
     <script src="phase5.js"></script>
+
     <style>
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: Arial, sans-serif; background: #f5f7ff; color: #222; }
-        .header { background: linear-gradient(135deg, #2878e8, #663399); color: white; text-align: center; padding: 45px 20px 35px; border-radius: 0 0 28px 28px; }
-        .profile-icon { width: 85px; height: 85px; margin: 0 auto 15px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 45px; }
-        .header h1 { margin: 0; font-size: 28px; }
-        .header p { margin: 8px 0 0; opacity: 0.9; }
-        .container { max-width: 650px; margin: 25px auto; padding: 0 16px 30px; }
-        .card { background: white; border-radius: 18px; padding: 22px; margin-bottom: 18px; box-shadow: 0 5px 18px rgba(0,0,0,0.08); }
-        .card h2 { margin: 0 0 18px; font-size: 20px; }
-        .info-row { padding: 14px 0; border-bottom: 1px solid #eee; }
-        .info-row:last-child { border-bottom: none; }
-        .label { font-size: 13px; color: #777; margin-bottom: 5px; }
-        .value { font-size: 16px; font-weight: bold; word-break: break-word; }
-        .status { color: #159447; }
-        .button { width: 100%; border: none; padding: 14px; margin-top: 10px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; color: white; }
-        .history { background: #7b4cc9; }
-        .settings { background: #2878e8; }
-        .logout { background: #e74c4c; }
-        .home { background: #20a85a; }
-        .button:hover { opacity: 0.9; }
-        .message { text-align: center; color: #777; padding: 15px; }
-        @media (max-width: 600px) {
-            .header { padding-top: 35px; }
-            .header h1 { font-size: 24px; }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7ff;
+            color: #222;
+            transition: 0.3s;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #185cff, #7042d8);
+            color: white;
+            text-align: center;
+            padding: 35px 18px 30px;
+            border-radius: 0 0 28px 28px;
+        }
+
+        .profile-icon {
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 14px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            opacity: 0.9;
+            font-size: 15px;
+        }
+
+        /* MAIN */
+
+        .container {
+            max-width: 700px;
+            margin: 24px auto;
+            padding: 0 15px 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 21px;
+            margin-bottom: 17px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        /* ACCOUNT INFORMATION */
+
+        .account-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .account-avatar {
+            width: 55px;
+            height: 55px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #e8efff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .account-details {
+            min-width: 0;
+        }
+
+        .account-label {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .email {
+            font-size: 16px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 9px;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .status.success {
+            background: #e4f8ec;
+            color: #16833e;
+        }
+
+        .status.error {
+            background: #ffe8e6;
+            color: #d93025;
+        }
+
+        .status.loading {
+            background: #eeeeee;
+            color: #666;
+        }
+
+        /* ACTIONS */
+
+        .action-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .action-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .action-info {
+            min-width: 0;
+        }
+
+        .action-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .action-text {
+            margin-top: 4px;
+            font-size: 13px;
+            color: #777;
+            line-height: 1.4;
+        }
+
+        button {
+            border: none;
+            border-radius: 11px;
+            padding: 11px 17px;
+            font-size: 14px;
+            cursor: pointer;
+            color: white;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        .history-btn {
+            background: #7b4dcc;
+        }
+
+        .settings-btn {
+            background: #286cff;
+        }
+
+        .home-btn {
+            background: #20a95a;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+        }
+
+        .login-btn {
+            background: #286cff;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+            padding: 5px 15px 30px;
+        }
+
+        /* DARK MODE */
+
+        body.dark {
+            background: #121212;
+            color: #eeeeee;
+        }
+
+        body.dark .card {
+            background: #1e1e1e;
+            box-init: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        body.dark .account-avatar {
+            background: #292929;
+        }
+
+        body.dark .account-label,
+        body.dark .action-text {
+            color: #aaaaaa;
+        }
+
+        body.dark .action-row {
+            border-color: #333333;
+        }
+
+        body.dark .status.loading {
+            background: #333333;
+            color: #cccccc;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 500px) {
+            .header {
+                padding: 30px 15px 27px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .container {
+                margin-top: 18px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .action-row {
+                align-items: center;
+            }
+
+            button {
+                padding: 10px 14px;
+            }
+
+            .action-title {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
+
 <body>
+
+    <!-- HEADER -->
     <div class="header">
-        <div class="profile-icon">👤</div>
+        <div class="profile-icon">
+            👤
+        </div>
         <h1>My Account</h1>
         <p>Manage your Vision-AI-Pro account</p>
     </div>
+
     <div class="container">
+
+        <!-- ACCOUNT INFORMATION -->
         <div class="card">
-            <h2>👤 Account Information</h2>
-            <div class="info-row">
-                <div class="label">Email</div>
-                <div class="value" id="userEmail">Loading...</div>
+            <div class="card-title">
+                👤 Account Information
             </div>
-            <div class="info-row">
-                <div class="label">Login Status</div>
-                <div class="value status" id="loginStatus">Checking...</div>
+
+            <div class="account-info">
+                <div class="account-avatar">
+                    👤
+                </div>
+
+                <div class="account-details">
+                    <div class="account-label">
+                        Email
+                    </div>
+                    <div class="email" id="userEmail">
+                        Checking account...
+                    </div>
+                    <div class="status loading" id="loginStatus">
+                        Checking login status...
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- QUICK ACTIONS -->
         <div class="card">
-            <h2>⚡ Quick Actions</h2>
-            <button class="button history" onclick="openHistory()">📚 Open History</button>
-            <button class="button settings" onclick="openSettings()">⚙️ Open Settings</button>
-            <button class="button home" onclick="goHome()">🏠 Back to Home</button>
+            <div class="card-title">
+                ⚡ Quick Actions
+            </div>
+
+            <!-- HISTORY -->
+            <div class="action-row">
+                <div class="action-info">
+                    <div class="action-title">
+                        📚 History
+                    </div>
+                    <div class="action-text">
+                        View your Chat, Photo Solver, Image and Quiz history
+                    </div>
+                </div>
+                <button type="button" class="history-btn" onclick="openHistory()">
+                    History
+                </button>
+            </div>
+
+            <!-- SETTINGS -->
+            <div class="action-row">
+                <div class="action-info">
+                    <div class="action-title">
+                        ⚙️ Settings
+                    </div>
+                    <div class="action-text">
+                        Change appearance, language, notifications and other settings
+                    </div>
+                </div>
+                <button type="button" class="settings-btn" onclick="openSettings()">
+                    Settings
+                </button>
+            </div>
+
+            <!-- HOME -->
+            <div class="action-row">
+                <div class="action-info">
+                    <div class="action-title">
+                        🏠 Home
+                    </div>
+                    <div class="action-text">
+                        Return to the Vision-AI-Pro home page
+                    </div>
+                </div>
+                <button type="button" class="home-btn" onclick="goHome()">
+                    Home
+                </button>
+            </div>
         </div>
+
+        <!-- ACCOUNT ACTIONS -->
         <div class="card">
-            <h2>🚪 Account</h2>
-            <p class="message">Sign out from your Vision-AI-Pro account.</p>
-            <button class="button logout" onclick="logoutUser()">🚪 Logout</button>
+            <div class="card-title">
+                🚪 Account Actions
+            </div>
+
+            <div class="action-row">
+                <div class="action-info">
+                    <div class="action-title">
+                        Logout
+                    </div>
+                    <div class="action-text">
+                        Sign out from your Vision-AI-Pro account
+                    </div>
+                </div>
+                <button type="button" class="logout-btn" onclick="logoutUser()">
+                    Logout
+                </button>
+            </div>
         </div>
+
+        <!-- LOGIN OPTION -->
+        <div class="card" id="loginCard" style="display:none;">
+            <div class="card-title">
+                🔐 Account Login
+            </div>
+
+            <div class="action-row">
+                <div class="action-info">
+                    <div class="action-title">
+                        Login required
+                    </div>
+                    <div class="action-text">
+                        Please login to use your Vision-AI-Pro account.
+                    </div>
+                </div>
+                <button type="button" class="login-btn" onclick="openLogin()">
+                    Login
+                </button>
+            </div>
+        </div>
+
     </div>
+
+    <div class="footer">
+        Vision-AI-Pro ❤️
+    </div>
+
     <script>
-        const supabaseClient = window.VAP_SB;
+        /* =====================================================
+           VISION-AI-PRO
+           PHASE 5 — ACCOUNT CENTER
+           ===================================================== */
+
+        function getVAPClient() {
+            return window.VAP_SB || null;
+        }
+
+        /* =====================================================
+           DARK MODE
+           ===================================================== */
+
+        function loadDarkMode() {
+            const darkMode = localStorage.getItem("vap_dark_mode") === "true";
+            if (darkMode) {
+                document.body.classList.add("dark");
+            }
+        }
+
+        /* =====================================================
+           LOAD ACCOUNT
+           ===================================================== */
+
         async function loadAccount() {
             const emailElement = document.getElementById("userEmail");
             const statusElement = document.getElementById("loginStatus");
-            if (!supabaseClient) {
-                emailElement.textContent = "Login system not connected";
-                statusElement.textContent = "Not connected";
-                statusElement.style.color = "#e74c4c";
+            const loginCard = document.getElementById("loginCard");
+            const client = getVAPClient();
+
+            if (!client) {
+                emailElement.textContent = "Account connection unavailable";
+                statusElement.textContent = "Login system not connected";
+                statusElement.className = "status error";
+                loginCard.style.display = "block";
                 return;
             }
+
             try {
-                const { data, error } = await supabaseClient.auth.getUser();
-                if (error || !data.user) {
+                const result = await client.auth.getSession();
+                const session = result.data && result.data.session;
+
+                if (session && session.user) {
+                    const user = session.user;
+
+                    /* EMAIL */
+                    emailElement.textContent = user.email || "Email unavailable";
+
+                    /* STATUS */
+                    statusElement.textContent = "Logged in ✅";
+                    statusElement.className = "status success";
+
+                    /* HIDE LOGIN CARD */
+                    loginCard.style.display = "none";
+                } else {
                     emailElement.textContent = "No active account";
                     statusElement.textContent = "Not logged in";
-                    statusElement.style.color = "#e74c4c";
-                    return;
+                    statusElement.className = "status error";
+                    loginCard.style.display = "block";
                 }
-                emailElement.textContent = data.user.email || "Email unavailable";
-                statusElement.textContent = "Logged in ✅";
-                statusElement.style.color = "#159447";
             } catch (error) {
                 console.error("Account loading error:", error);
                 emailElement.textContent = "Unable to load account";
-                statusElement.textContent = "Error";
-                statusElement.style.color = "#e74c4c";
+                statusElement.textContent = "Unable to check login";
+                statusElement.className = "status error";
+                loginCard.style.display = "block";
             }
         }
+
+        /* =====================================================
+           AUTH STATE LISTENER
+           ===================================================== */
+
+        function setupAuthListener() {
+            const client = getVAPClient();
+            if (!client) {
+                return;
+            }
+
+            try {
+                client.auth.onAuthStateChange(function(event, session) {
+                    const emailElement = document.getElementById("userEmail");
+                    const statusElement = document.getElementById("loginStatus");
+                    const loginCard = document.getElementById("loginCard");
+
+                    if (session && session.user) {
+                        emailElement.textContent = session.user.email || "Email unavailable";
+                        statusElement.textContent = "Logged in ✅";
+                        statusElement.className = "status success";
+                        loginCard.style.display = "none";
+                    } else {
+                        emailElement.textContent = "No active account";
+                        statusElement.textContent = "Not logged in";
+                        statusElement.className = "status error";
+                        loginCard.style.display = "block";
+                    }
+                });
+            } catch (error) {
+                console.error("Auth listener error:", error);
+            }
+        }
+
+        /* =====================================================
+           HISTORY
+           ===================================================== */
+
         function openHistory() {
             window.location.href = "History.html";
         }
+
+        /* =====================================================
+           SETTINGS
+           ===================================================== */
+
         function openSettings() {
             window.location.href = "Settings.html";
         }
+
+        /* =====================================================
+           HOME
+           ===================================================== */
+
         function goHome() {
             window.location.href = "index.html";
         }
+
+        /* =====================================================
+           LOGIN
+           ===================================================== */
+
+        function openLogin() {
+            window.location.href = "Login.html";
+        }
+
+        /* =====================================================
+           LOGOUT
+           ===================================================== */
+
         async function logoutUser() {
-            if (!supabaseClient) {
+            const client = getVAPClient();
+
+            if (!client) {
                 alert("Login system is not connected yet.");
                 return;
             }
+
             try {
-                const { error } = await supabaseClient.auth.signOut();
-                if (error) {
-                    console.error("Logout error:", error);
+                const result = await client.auth.signOut();
+
+                if (result.error) {
+                    console.error("Logout error:", result.error);
                     alert("Logout failed. Please try again.");
                     return;
                 }
-                alert("You have been logged out.");
+
+                alert("You have been logged out successfully.");
                 window.location.href = "Login.html";
             } catch (error) {
                 console.error("Logout error:", error);
                 alert("Logout failed. Please try again.");
             }
         }
-        loadAccount();
+
+        /* =====================================================
+           START ACCOUNT PAGE
+           ===================================================== */
+
+        function startAccount() {
+            loadDarkMode();
+            loadAccount();
+            setupAuthListener();
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", startAccount);
+        } else {
+            startAccount();
+        }
     </script>
 </body>
 </html>
