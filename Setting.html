@@ -9,7 +9,7 @@
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Vision-AI-Pro Phase 5 connection -->
+    <!-- Vision-AI-Pro Phase 5 -->
     <script src="phase5.js"></script>
 
     <style>
@@ -99,6 +99,10 @@
             font-size: 14px;
         }
 
+        button:active {
+            transform: scale(0.98);
+        }
+
         .toggle {
             width: 52px;
             height: 28px;
@@ -165,7 +169,22 @@
             font-size: 13px;
         }
 
+        .status-loading {
+            color: #777;
+        }
+
+        .status-success {
+            color: #1a9b4b;
+            font-weight: bold;
+        }
+
+        .status-error {
+            color: #d93025;
+            font-weight: bold;
+        }
+
         /* DARK MODE */
+
         body.dark {
             background: #121212;
             color: #eee;
@@ -227,7 +246,11 @@
                     </div>
                 </div>
 
-                <button class="toggle" id="darkToggle" onclick="toggleDarkMode()">
+                <button
+                    type="button"
+                    class="toggle"
+                    id="darkToggle"
+                    onclick="toggleDarkMode()">
                     <span></span>
                 </button>
             </div>
@@ -267,7 +290,11 @@
                     </div>
                 </div>
 
-                <button class="toggle" id="notificationToggle" onclick="toggleNotifications()">
+                <button
+                    type="button"
+                    class="toggle"
+                    id="notificationToggle"
+                    onclick="toggleNotifications()">
                     <span></span>
                 </button>
             </div>
@@ -286,7 +313,10 @@
                     </div>
                 </div>
 
-                <button class="action" onclick="openLogin()">
+                <button
+                    type="button"
+                    class="action"
+                    onclick="openLogin()">
                     Open
                 </button>
             </div>
@@ -296,7 +326,9 @@
                 <div>
                     <div class="option-title">Login Status</div>
 
-                    <div class="option-text" id="loginStatus">
+                    <div
+                        class="option-text status-loading"
+                        id="loginStatus">
                         Checking...
                     </div>
                 </div>
@@ -312,7 +344,10 @@
                     </div>
                 </div>
 
-                <button class="danger" onclick="logoutUser()">
+                <button
+                    type="button"
+                    class="danger"
+                    onclick="logoutUser()">
                     Logout
                 </button>
             </div>
@@ -334,7 +369,10 @@
                     </div>
                 </div>
 
-                <button class="action" onclick="showPrivacy()">
+                <button
+                    type="button"
+                    class="action"
+                    onclick="showPrivacy()">
                     View
                 </button>
             </div>
@@ -351,7 +389,10 @@
                     </div>
                 </div>
 
-                <button class="action" onclick="openLogin()">
+                <button
+                    type="button"
+                    class="action"
+                    onclick="openLogin()">
                     Manage
                 </button>
             </div>
@@ -373,7 +414,10 @@
                     </div>
                 </div>
 
-                <button class="action" onclick="openHistory()">
+                <button
+                    type="button"
+                    class="action"
+                    onclick="openHistory()">
                     Open
                 </button>
             </div>
@@ -427,14 +471,20 @@
                     </div>
                 </div>
 
-                <button class="action" onclick="showFeedback()">
+                <button
+                    type="button"
+                    class="action"
+                    onclick="showFeedback()">
                     Help
                 </button>
             </div>
         </div>
 
 
-        <button class="back" onclick="goHome()">
+        <button
+            type="button"
+            class="back"
+            onclick="goHome()">
             🏠 Back to Home
         </button>
 
@@ -447,180 +497,445 @@
 
 
     <script>
-        /*
-         * PHASE 5
-         * Use the SAME Supabase client created by phase5.js
-         *
-         * IMPORTANT:
-         * Do not put the Supabase URL or Publishable Key here.
-         */
 
-        const supabaseClient = window.VAP_SB;
+        /* =====================================================
+           VISION-AI-PRO SETTINGS
+           PHASE 5 — LOGIN / SESSION
+           ===================================================== */
+
+        function getVAPClient() {
+            return window.VAP_SB || null;
+        }
 
 
-        /* DARK MODE */
+        /* =====================================================
+           DARK MODE
+           ===================================================== */
 
         function loadDarkMode() {
-            const darkMode = localStorage.getItem("vap_dark_mode") === "true";
+
+            const darkMode =
+                localStorage.getItem("vap_dark_mode") === "true";
+
+            const toggle =
+                document.getElementById("darkToggle");
 
             if (darkMode) {
                 document.body.classList.add("dark");
-                document.getElementById("darkToggle").classList.add("active");
+
+                if (toggle) {
+                    toggle.classList.add("active");
+                }
             }
         }
 
 
         function toggleDarkMode() {
-            const isDark = document.body.classList.toggle("dark");
 
-            localStorage.setItem("vap_dark_mode", isDark);
+            const isDark =
+                document.body.classList.toggle("dark");
 
-            document.getElementById("darkToggle").classList.toggle("active", isDark);
+            localStorage.setItem(
+                "vap_dark_mode",
+                String(isDark)
+            );
+
+            const toggle =
+                document.getElementById("darkToggle");
+
+            if (toggle) {
+                toggle.classList.toggle("active", isDark);
+            }
         }
 
 
-        /* LANGUAGE */
+        /* =====================================================
+           LANGUAGE
+           ===================================================== */
 
         function loadLanguage() {
-            const savedLanguage = localStorage.getItem("vap_language") || "English";
 
-            document.getElementById("languageSelect").value = savedLanguage;
+            const savedLanguage =
+                localStorage.getItem("vap_language") || "English";
+
+            const select =
+                document.getElementById("languageSelect");
+
+            if (select) {
+                select.value = savedLanguage;
+            }
         }
 
 
         function saveLanguage() {
-            const language = document.getElementById("languageSelect").value;
 
-            localStorage.setItem("vap_language", language);
+            const select =
+                document.getElementById("languageSelect");
 
-            alert("Language preference saved: " + language);
+            if (!select) {
+                return;
+            }
+
+            localStorage.setItem(
+                "vap_language",
+                select.value
+            );
+
+            alert(
+                "Language preference saved: " +
+                select.value
+            );
         }
 
 
-        /* NOTIFICATIONS */
+        /* =====================================================
+           NOTIFICATIONS
+           ===================================================== */
 
         function loadNotifications() {
-            const enabled = localStorage.getItem("vap_notifications") !== "false";
 
-            document.getElementById("notificationToggle").classList.toggle("active", enabled);
+            const enabled =
+                localStorage.getItem("vap_notifications") !== "false";
+
+            const toggle =
+                document.getElementById("notificationToggle");
+
+            if (toggle) {
+                toggle.classList.toggle(
+                    "active",
+                    enabled
+                );
+            }
         }
 
 
         function toggleNotifications() {
-            const currentlyEnabled = localStorage.getItem("vap_notifications") !== "false";
+
+            const currentlyEnabled =
+                localStorage.getItem("vap_notifications") !== "false";
+
             const newValue = !currentlyEnabled;
 
-            localStorage.setItem("vap_notifications", newValue);
+            localStorage.setItem(
+                "vap_notifications",
+                String(newValue)
+            );
 
-            document.getElementById("notificationToggle").classList.toggle("active", newValue);
+            const toggle =
+                document.getElementById("notificationToggle");
+
+            if (toggle) {
+                toggle.classList.toggle(
+                    "active",
+                    newValue
+                );
+            }
         }
 
 
-        /* ACCOUNT / PHASE 5 SESSION */
+        /* =====================================================
+           LOGIN STATUS
+           ===================================================== */
 
-       async function checkLoginStatus() {
-    const status = document.getElementById("loginStatus");
+        async function checkLoginStatus() {
 
-    if (!supabaseClient) {
-        status.textContent = "Login system not connected";
-        return;
-    }
+            const status =
+                document.getElementById("loginStatus");
 
-    try {
-        const { data, error } = await supabaseClient.auth.getSession();
+            if (!status) {
+                return;
+            }
 
-        if (error) {
-            console.error("Session error:", error);
-            status.textContent = "Unable to check status";
-            return;
-        }
+            status.textContent = "Checking...";
+            status.className = "option-text status-loading";
 
-        if (data.session && data.session.user) {
-            status.textContent = "Logged in ✅";
-        } else {
-            status.textContent = "Not logged in";
-        }
+            const client = getVAPClient();
 
-    } catch (error) {
-        console.error("Login status error:", error);
-        status.textContent = "Unable to check status";
-    }
-}
-        if (data.session && data.session.user) {
-            status.textContent = "Logged in ✅";
-        } else {
-            status.textContent = "Not logged in";
-        }
+            if (!client) {
 
-    } catch (error) {
-        console.error("Login status error:", error);
-        status.textContent = "Unable to check status";
-    }
-}
+                status.textContent =
+                    "Login system not connected";
 
-        function openLogin() {
-            window.location.href = "Login.html";
-        }
+                status.className =
+                    "option-text status-error";
 
-
-        async function logoutUser() {
-            if (!supabaseClient) {
-                alert("Login system is not connected yet.");
                 return;
             }
 
             try {
-                const { error } = await supabaseClient.auth.signOut();
 
-                if (error) {
-                    console.error("Logout error:", error);
-                    alert("Logout failed.");
+                const result =
+                    await client.auth.getSession();
+
+                const sessionData =
+                    result.data;
+
+                const sessionError =
+                    result.error;
+
+                if (sessionError) {
+
+                    console.error(
+                        "Session check error:",
+                        sessionError
+                    );
+
+                    status.textContent =
+                        "Unable to check status";
+
+                    status.className =
+                        "option-text status-error";
+
                     return;
                 }
 
-                alert("You have been logged out.");
-                window.location.href = "Login.html";
+                if (
+                    sessionData &&
+                    sessionData.session &&
+                    sessionData.session.user
+                ) {
+
+                    status.textContent =
+                        "Logged in ✅";
+
+                    status.className =
+                        "option-text status-success";
+
+                } else {
+
+                    status.textContent =
+                        "Not logged in";
+
+                    status.className =
+                        "option-text status-error";
+                }
+
             } catch (error) {
-                console.error("Logout error:", error);
-                alert("Logout failed.");
+
+                console.error(
+                    "Login status error:",
+                    error
+                );
+
+                status.textContent =
+                    "Unable to check status";
+
+                status.className =
+                    "option-text status-error";
             }
         }
 
 
-        /* HISTORY */
+        /* =====================================================
+           AUTH STATE LISTENER
+           ===================================================== */
+
+        function setupAuthListener() {
+
+            const client = getVAPClient();
+
+            if (!client) {
+                return;
+            }
+
+            try {
+
+                client.auth.onAuthStateChange(
+                    function(event, session) {
+
+                        const status =
+                            document.getElementById(
+                                "loginStatus"
+                            );
+
+                        if (!status) {
+                            return;
+                        }
+
+                        if (
+                            session &&
+                            session.user
+                        ) {
+
+                            status.textContent =
+                                "Logged in ✅";
+
+                            status.className =
+                                "option-text status-success";
+
+                        } else {
+
+                            status.textContent =
+                                "Not logged in";
+
+                            status.className =
+                                "option-text status-error";
+                        }
+                    }
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Auth listener error:",
+                    error
+                );
+            }
+        }
+
+
+        /* =====================================================
+           LOGIN / PROFILE
+           ===================================================== */
+
+        function openLogin() {
+
+            window.location.href =
+                "Login.html";
+        }
+
+
+        /* =====================================================
+           LOGOUT
+           ===================================================== */
+
+        async function logoutUser() {
+
+            const client = getVAPClient();
+
+            if (!client) {
+
+                alert(
+                    "Login system is not connected yet."
+                );
+
+                return;
+            }
+
+            try {
+
+                const result =
+                    await client.auth.signOut();
+
+                if (result.error) {
+
+                    console.error(
+                        "Logout error:",
+                        result.error
+                    );
+
+                    alert(
+                        "Logout failed. Please try again."
+                    );
+
+                    return;
+                }
+
+                alert(
+                    "You have been logged out."
+                );
+
+                window.location.href =
+                    "Login.html";
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+                alert(
+                    "Logout failed. Please try again."
+                );
+            }
+        }
+
+
+        /* =====================================================
+           HISTORY
+           ===================================================== */
 
         function openHistory() {
-            window.location.href = "History.html";
+
+            window.location.href =
+                "History.html";
         }
 
 
-        /* PRIVACY */
+        /* =====================================================
+           PRIVACY
+           ===================================================== */
 
         function showPrivacy() {
-            alert("Vision-AI-Pro uses your account information only for features connected to your account. Your personal data should be handled securely.");
+
+            alert(
+                "Vision-AI-Pro uses your account information " +
+                "for features connected to your account. " +
+                "Your account data should be handled securely."
+            );
         }
 
 
-        /* HELP */
+        /* =====================================================
+           HELP & FEEDBACK
+           ===================================================== */
 
         function showFeedback() {
-            alert("Help & Feedback will be connected to the Vision-AI-Pro feedback system in a future update.");
+
+            alert(
+                "Help & Feedback will be connected to " +
+                "the Vision-AI-Pro feedback system in a future update."
+            );
         }
 
 
-        /* HOME */
+        /* =====================================================
+           HOME
+           ===================================================== */
 
         function goHome() {
-            window.location.href = "index.html";
+
+            window.location.href =
+                "index.html";
         }
 
 
-        /* START */
+        /* =====================================================
+           START SETTINGS
+           ===================================================== */
 
-        loadDarkMode();
-        loadLanguage();
-        loadNotifications();
-        checkLoginStatus();
+        function startSettings() {
+
+            loadDarkMode();
+
+            loadLanguage();
+
+            loadNotifications();
+
+            setupAuthListener();
+
+            checkLoginStatus();
+        }
+
+
+        /*
+         * Start after the page is ready.
+         */
+        if (
+            document.readyState === "loading"
+        ) {
+
+            document.addEventListener(
+                "DOMContentLoaded",
+                startSettings
+            );
+
+        } else {
+
+            startSettings();
+        }
+
     </script>
 
 </body>
