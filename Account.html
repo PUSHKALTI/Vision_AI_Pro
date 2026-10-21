@@ -1,1 +1,127 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision-AI-Pro • Account</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="phase5.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, sans-serif; background: #f5f7ff; color: #222; }
+        .header { background: linear-gradient(135deg, #2878e8, #663399); color: white; text-align: center; padding: 45px 20px 35px; border-radius: 0 0 28px 28px; }
+        .profile-icon { width: 85px; height: 85px; margin: 0 auto 15px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 45px; }
+        .header h1 { margin: 0; font-size: 28px; }
+        .header p { margin: 8px 0 0; opacity: 0.9; }
+        .container { max-width: 650px; margin: 25px auto; padding: 0 16px 30px; }
+        .card { background: white; border-radius: 18px; padding: 22px; margin-bottom: 18px; box-shadow: 0 5px 18px rgba(0,0,0,0.08); }
+        .card h2 { margin: 0 0 18px; font-size: 20px; }
+        .info-row { padding: 14px 0; border-bottom: 1px solid #eee; }
+        .info-row:last-child { border-bottom: none; }
+        .label { font-size: 13px; color: #777; margin-bottom: 5px; }
+        .value { font-size: 16px; font-weight: bold; word-break: break-word; }
+        .status { color: #159447; }
+        .button { width: 100%; border: none; padding: 14px; margin-top: 10px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; color: white; }
+        .history { background: #7b4cc9; }
+        .settings { background: #2878e8; }
+        .logout { background: #e74c4c; }
+        .home { background: #20a85a; }
+        .button:hover { opacity: 0.9; }
+        .message { text-align: center; color: #777; padding: 15px; }
+        @media (max-width: 600px) {
+            .header { padding-top: 35px; }
+            .header h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="profile-icon">👤</div>
+        <h1>My Account</h1>
+        <p>Manage your Vision-AI-Pro account</p>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h2>👤 Account Information</h2>
+            <div class="info-row">
+                <div class="label">Email</div>
+                <div class="value" id="userEmail">Loading...</div>
+            </div>
+            <div class="info-row">
+                <div class="label">Login Status</div>
+                <div class="value status" id="loginStatus">Checking...</div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>⚡ Quick Actions</h2>
+            <button class="button history" onclick="openHistory()">📚 Open History</button>
+            <button class="button settings" onclick="openSettings()">⚙️ Open Settings</button>
+            <button class="button home" onclick="goHome()">🏠 Back to Home</button>
+        </div>
+        <div class="card">
+            <h2>🚪 Account</h2>
+            <p class="message">Sign out from your Vision-AI-Pro account.</p>
+            <button class="button logout" onclick="logoutUser()">🚪 Logout</button>
+        </div>
+    </div>
+    <script>
+        const supabaseClient = window.VAP_SB;
+        async function loadAccount() {
+            const emailElement = document.getElementById("userEmail");
+            const statusElement = document.getElementById("loginStatus");
+            if (!supabaseClient) {
+                emailElement.textContent = "Login system not connected";
+                statusElement.textContent = "Not connected";
+                statusElement.style.color = "#e74c4c";
+                return;
+            }
+            try {
+                const { data, error } = await supabaseClient.auth.getUser();
+                if (error || !data.user) {
+                    emailElement.textContent = "No active account";
+                    statusElement.textContent = "Not logged in";
+                    statusElement.style.color = "#e74c4c";
+                    return;
+                }
+                emailElement.textContent = data.user.email || "Email unavailable";
+                statusElement.textContent = "Logged in ✅";
+                statusElement.style.color = "#159447";
+            } catch (error) {
+                console.error("Account loading error:", error);
+                emailElement.textContent = "Unable to load account";
+                statusElement.textContent = "Error";
+                statusElement.style.color = "#e74c4c";
+            }
+        }
+        function openHistory() {
+            window.location.href = "History.html";
+        }
+        function openSettings() {
+            window.location.href = "Settings.html";
+        }
+        function goHome() {
+            window.location.href = "index.html";
+        }
+        async function logoutUser() {
+            if (!supabaseClient) {
+                alert("Login system is not connected yet.");
+                return;
+            }
+            try {
+                const { error } = await supabaseClient.auth.signOut();
+                if (error) {
+                    console.error("Logout error:", error);
+                    alert("Logout failed. Please try again.");
+                    return;
+                }
+                alert("You have been logged out.");
+                window.location.href = "Login.html";
+            } catch (error) {
+                console.error("Logout error:", error);
+                alert("Logout failed. Please try again.");
+            }
+        }
+        loadAccount();
+    </script>
+</body>
+</html>
