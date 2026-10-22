@@ -1,1 +1,488 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suggest a Feature | Vision-AI-Pro</title>
+<style>
+:root {
+--primary: #6558f5;
+--secondary: #8b5cf6;
+--text: #20213a;
+--muted: #73758c;
+--card: rgba(255,255,255,.92);
+--border: #e9e7fb;
+}
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+body {
+font-family: Arial, Helvetica, sans-serif;
+min-height: 100vh;
+color: var(--text);
+background: radial-gradient(circle at 10% 10%, #dce8ff 0, transparent 32%), radial-gradient(circle at 90% 30%, #f0dcff 0, transparent 35%), linear-gradient(135deg, #f7f8ff, #f4f0ff);
+}
+.hero {
+background: linear-gradient(120deg, #4f46e5, #7455f7, #a855f7);
+color: white;
+padding: 34px 18px 42px;
+text-align: center;
+border-radius: 0 0 30px 30px;
+box-shadow: 0 12px 35px #6558f533;
+}
+.back {
+display: inline-block;
+color: white;
+text-decoration: none;
+opacity: .92;
+margin-bottom: 24px;
+font-size: 14px;
+}
+.hero-icon {
+width: 68px;
+height: 68px;
+margin: 0 auto 15px;
+display: grid;
+place-items: center;
+border-radius: 22px;
+background: #ffffff25;
+border: 1px solid #ffffff55;
+font-size: 34px;
+}
+h1 {
+font-size: clamp(27px, 5vw, 38px);
+margin-bottom: 10px;
+}
+.hero p {
+max-width: 540px;
+margin: auto;
+line-height: 1.6;
+color: #f0edff;
+font-size: 15px;
+}
+.container {
+width: min(760px, 92%);
+margin: -20px auto 35px;
+position: relative;
+}
+.welcome {
+background: var(--card);
+border: 1px solid #ffffff;
+border-radius: 20px;
+padding: 22px;
+box-shadow: 0 12px 35px #35316b0d;
+margin-bottom: 18px;
+display: flex;
+gap: 14px;
+align-items: flex-start;
+}
+.welcome-icon {
+font-size: 27px;
+background: #eeebff;
+border-radius: 14px;
+padding: 12px;
+}
+.welcome h2 {
+font-size: 18px;
+margin: 3px 0 7px;
+}
+.welcome p {
+color: var(--muted);
+font-size: 14px;
+line-height: 1.6;
+}
+.form-card, .history-card {
+background: var(--card);
+border: 1px solid #ffffff;
+border-radius: 23px;
+padding: clamp(19px, 4vw, 30px);
+box-shadow: 0 15px 40px #35316b0d;
+margin-bottom: 18px;
+}
+.section-heading {
+font-size: 21px;
+margin-bottom: 8px;
+}
+.section-description {
+font-size: 14px;
+line-height: 1.6;
+color: var(--muted);
+margin-bottom: 24px;
+}
+.field-label {
+display: block;
+font-size: 14px;
+font-weight: 700;
+margin-bottom: 10px;
+}
+.type-options {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 10px;
+margin-bottom: 23px;
+}
+.type-option {
+position: relative;
+}
+.type-option input {
+position: absolute;
+opacity: 0;
+}
+.type-option label {
+display: flex;
+min-height: 90px;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+gap: 8px;
+padding: 12px 5px;
+text-align: center;
+border: 1px solid var(--border);
+border-radius: 15px;
+cursor: pointer;
+background: white;
+transition: .2s;
+font-size: 13px;
+font-weight: 700;
+}
+.type-option label span {
+font-size: 25px;
+}
+.type-option input:checked + label {
+border: 2px solid var(--primary);
+background: #f2f0ff;
+color: #5143dc;
+box-shadow: 0 5px 15px #6558f51a;
+}
+.type-option input:focus-visible + label {
+outline: 3px solid #aaa0ff;
+}
+.input-wrap {
+margin-bottom: 21px;
+}
+input[type="text"], textarea {
+width: 100%;
+padding: 14px 15px;
+border: 1px solid #dedff0;
+border-radius: 13px;
+background: #fff;
+color: var(--text);
+font: inherit;
+font-size: 14px;
+outline: none;
+transition: .2s;
+}
+input[type="text"]:focus, textarea:focus {
+border-color: var(--primary);
+box-shadow: 0 0 0 4px #6558f518;
+}
+textarea {
+min-height: 145px;
+resize: vertical;
+line-height: 1.6;
+}
+.hint {
+margin-top: 8px;
+font-size: 12px;
+color: var(--muted);
+}
+.submit-btn {
+width: 100%;
+padding: 16px;
+border: none;
+border-radius: 14px;
+background: linear-gradient(110deg, #5145e5, #9255ed);
+color: white;
+font-weight: 700;
+font-size: 15px;
+cursor: pointer;
+box-shadow: 0 9px 20px #6558f533;
+transition: transform .2s, opacity .2s;
+}
+.submit-btn:hover {
+transform: translateY(-2px);
+}
+.submit-btn:disabled {
+opacity: .65;
+cursor: wait;
+transform: none;
+}
+.message {
+display: none;
+margin-top: 16px;
+border-radius: 12px;
+padding: 13px;
+font-size: 14px;
+line-height: 1.5;
+}
+.message.success {
+display: block;
+background: #e9fff3;
+color: #12683c;
+border: 1px solid #bcebd0;
+}
+.message.error {
+display: block;
+background: #fff0f0;
+color: #a52727;
+border: 1px solid #ffd0d0;
+}
+.history-item {
+padding: 16px 0;
+border-bottom: 1px solid #eeedf7;
+}
+.history-item:last-child {
+border-bottom: none;
+padding-bottom: 0;
+}
+.history-title {
+font-weight: 700;
+font-size: 15px;
+margin-bottom: 8px;
+overflow-wrap: anywhere;
+}
+.history-description {
+color: var(--muted);
+font-size: 13px;
+line-height: 1.6;
+overflow-wrap: anywhere;
+margin-bottom: 10px;
+}
+.history-meta {
+display: flex;
+gap: 8px;
+align-items: center;
+flex-wrap: wrap;
+font-size: 12px;
+color: var(--muted);
+}
+.pill {
+display: inline-block;
+padding: 6px 10px;
+background: #efedff;
+color: #5846d8;
+border-radius: 20px;
+font-weight: 700;
+}
+.empty-state {
+color: var(--muted);
+text-align: center;
+padding: 20px 0 5px;
+font-size: 14px;
+line-height: 1.7;
+}
+.footer {
+text-align: center;
+padding: 0 15px 28px;
+color: var(--muted);
+font-size: 13px;
+}
+.footer a {
+display: inline-block;
+margin-top: 12px;
+color: #5c4de8;
+text-decoration: none;
+font-weight: 700;
+}
+@media (max-width: 480px) {
+.hero {
+padding-top: 25px;
+}
+.type-options {
+gap: 7px;
+}
+.type-option label {
+min-height: 82px;
+font-size: 12px;
+}
+.welcome {
+padding: 17px;
+}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+<a class="back" href="Settings.html">← Back to Settings</a>
+<div class="hero-icon">💡</div>
+<h1>Help Us Improve!</h1>
+<p>Your ideas can make Vision-AI-Pro better for every student. Share a feature idea, report a bug, or suggest an improvement.</p>
+</header>
+<main class="container">
+<section class="welcome">
+<div class="welcome-icon">🚀</div>
+<div>
+<h2>Your voice matters</h2>
+<p>Every useful suggestion gets recorded for review. Our team can review ideas and consider useful ones for the development list.</p>
+</div>
+</section>
+<section class="form-card">
+<h2 class="section-heading">✨ Share Your Idea</h2>
+<p class="section-description">Tell us what you would love to see in Vision-AI-Pro.</p>
+<form id="suggestionForm">
+<label class="field-label">What would you like to share?</label>
+<div class="type-options">
+<div class="type-option">
+<input type="radio" id="feature" name="suggestionType" value="feature" checked>
+<label for="feature"><span>💡</span>New Feature</label>
+</div>
+<div class="type-option">
+<input type="radio" id="bug" name="suggestionType" value="bug">
+<label for="bug"><span>🐛</span>Report a Bug</label>
+</div>
+<div class="type-option">
+<input type="radio" id="improvement" name="suggestionType" value="improvement">
+<label for="improvement"><span>⚡</span>Improvement</label>
+</div>
+</div>
+<div class="input-wrap">
+<label class="field-label" for="title">Suggestion title</label>
+<input type="text" id="title" maxlength="120" placeholder="e.g. Add a Science Quiz mode" required>
+</div>
+<div class="input-wrap">
+<label class="field-label" for="description">Tell us more</label>
+<textarea id="description" maxlength="3000" placeholder="Describe your idea or explain the problem in detail..." required></textarea>
+<p class="hint">Please explain what you want and how it could help students.</p>
+</div>
+<button class="submit-btn" id="submitBtn" type="submit">🚀 Submit Suggestion</button>
+<div id="formMessage" class="message" role="status" aria-live="polite"></div>
+</form>
+</section>
+<section class="history-card">
+<h2 class="section-heading">📋 My Suggestions</h2>
+<p class="section-description">Track the suggestions submitted from your account.</p>
+<div id="suggestionHistory" class="empty-state">Loading your suggestions...</div>
+</section>
+</main>
+<footer class="footer">
+Made with 💜 for the Vision-AI-Pro community<br>
+<a href="index.html">← Back to Home</a>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="phase5.js"></script>
+<script>
+const form = document.getElementById("suggestionForm");
+const submitBtn = document.getElementById("submitBtn");
+const formMessage = document.getElementById("formMessage");
+const suggestionHistory = document.getElementById("suggestionHistory");
+let currentUser = null;
+function showMessage(message, type) {
+formMessage.textContent = message;
+formMessage.className = "message " + type;
+}
+function readableType(type) {
+const names = {
+feature: "💡 New Feature",
+bug: "🐛 Bug Report",
+improvement: "⚡ Improvement"
+};
+return names[type] || type;
+}
+function readableStatus(status) {
+const names = {
+submitted: "Submitted",
+under_review: "Under Review",
+planned: "Planned",
+implemented: "Implemented",
+rejected: "Not Selected"
+};
+return names[status] || status;
+}
+function escapeHTML(value) {
+return String(value).replace(/[&<>"']/g, function (char) {
+return {
+"&": "&amp;",
+"<": "&lt;",
+">": "&gt;",
+'"': "&quot;",
+"'": "&#39;"
+}[char];
+});
+}
+async function loadSuggestions() {
+const client = window.VAP_SB;
+if (!client || !currentUser) {
+suggestionHistory.textContent = "Log in to view suggestions saved to your account.";
+return;
+}
+suggestionHistory.textContent = "Loading your suggestions...";
+const { data, error } = await client.from("feature_suggestions").select("id, suggestion_type, title, description, status, created_at").eq("user_id", currentUser.id).order("created_at", { ascending: false });
+if (error) {
+console.error("Could not load suggestions:", error);
+suggestionHistory.textContent = "Suggestions could not be loaded. Please refresh and try again.";
+return;
+}
+if (!data || data.length === 0) {
+suggestionHistory.textContent = "No suggestions yet. Share your first idea above! 💡";
+return;
+}
+suggestionHistory.className = "";
+suggestionHistory.innerHTML = data.map(function (item) {
+const date = new Date(item.created_at).toLocaleDateString();
+return `<article class="history-item"><div class="history-title">${escapeHTML(item.title)}</div><p class="history-description">${escapeHTML(item.description)}</p><div class="history-meta"><span>${escapeHTML(readableType(item.suggestion_type))}</span><span class="pill">${escapeHTML(readableStatus(item.status))}</span><span>${escapeHTML(date)}</span></div></article>`;
+}).join("");
+}
+async function initializePage() {
+const client = window.VAP_SB;
+if (!client) {
+showMessage("Supabase connection was not found. Please check phase5.js.", "error");
+suggestionHistory.textContent = "Unable to connect to your account.";
+submitBtn.disabled = true;
+return;
+}
+const { data, error } = await client.auth.getSession();
+if (error || !data.session) {
+showMessage("Please log in first to submit and track your suggestions.", "error");
+suggestionHistory.textContent = "Log in to see your personal suggestion history.";
+submitBtn.disabled = true;
+return;
+}
+currentUser = data.session.user;
+await loadSuggestions();
+}
+form.addEventListener("submit", async function (event) {
+event.preventDefault();
+const client = window.VAP_SB;
+if (!client || !currentUser) {
+showMessage("Please log in before submitting a suggestion.", "error");
+return;
+}
+const title = document.getElementById("title").value.trim();
+const description = document.getElementById("description").value.trim();
+const suggestionType = document.querySelector('input[name="suggestionType"]:checked').value;
+if (!title || !description) {
+showMessage("Please complete both fields before submitting.", "error");
+return;
+}
+submitBtn.disabled = true;
+submitBtn.textContent = "Submitting...";
+formMessage.className = "message";
+try {
+const { error } = await client.from("feature_suggestions").insert({
+user_id: currentUser.id,
+suggestion_type: suggestionType,
+title: title,
+description: description
+});
+if (error) {
+console.error("Suggestion submission failed:", error);
+showMessage("Your suggestion was not saved. Please check the database setup and try again.", "error");
+return;
+}
+showMessage("🎉 Suggestion submitted successfully! Thank you for helping improve Vision-AI-Pro.", "success");
+form.reset();
+await loadSuggestions();
+} catch (error) {
+console.error(error);
+showMessage("Something went wrong. Please try again.", "error");
+} finally {
+submitBtn.disabled = false;
+submitBtn.textContent = "🚀 Submit Suggestion";
+}
+});
+initializePage();
+</script>
+</body>
+</html>
