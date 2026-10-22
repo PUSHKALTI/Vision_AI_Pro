@@ -3,26 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Vision-AI-Pro • Settings</title>
 
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- Vision-AI-Pro Phase 5 -->
     <script src="phase5.js"></script>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
             font-family: Arial, sans-serif;
             background: #f4f7ff;
             color: #222;
-            transition: 0.3s;
+            transition: .3s;
         }
 
         .header {
@@ -32,15 +26,8 @@
             padding: 28px 15px;
         }
 
-        .header h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-
-        .header p {
-            margin: 8px 0 0;
-            opacity: 0.9;
-        }
+        .header h1 { margin: 0; font-size: 28px; }
+        .header p { margin: 8px 0 0; opacity: .9; }
 
         .container {
             max-width: 700px;
@@ -53,13 +40,10 @@
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 16px;
-            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 18px rgba(0,0,0,.08);
         }
 
-        .card h2 {
-            margin-top: 0;
-            font-size: 19px;
-        }
+        .card h2 { margin-top: 0; font-size: 19px; }
 
         .option {
             display: flex;
@@ -70,13 +54,8 @@
             gap: 15px;
         }
 
-        .option:last-child {
-            border-bottom: none;
-        }
-
-        .option-title {
-            font-weight: bold;
-        }
+        .option:last-child { border-bottom: none; }
+        .option-title { font-weight: bold; }
 
         .option-text {
             font-size: 13px;
@@ -84,11 +63,14 @@
             margin-top: 4px;
         }
 
-        select {
-            padding: 9px 12px;
+        select, input, textarea {
+            width: 100%;
+            padding: 11px 12px;
             border-radius: 8px;
             border: 1px solid #ccc;
             background: white;
+            color: #222;
+            font: inherit;
         }
 
         button {
@@ -99,13 +81,12 @@
             font-size: 14px;
         }
 
-        button:active {
-            transform: scale(0.98);
-        }
+        button:disabled { opacity: .6; cursor: not-allowed; }
 
         .toggle {
             width: 52px;
             height: 28px;
+            flex-shrink: 0;
             border-radius: 20px;
             background: #bbb;
             position: relative;
@@ -120,21 +101,14 @@
             border-radius: 50%;
             left: 3px;
             top: 3px;
-            transition: 0.2s;
+            transition: .2s;
         }
 
-        .toggle.active {
-            background: #286cff;
-        }
+        .toggle.active { background: #286cff; }
+        .toggle.active span { left: 27px; }
 
-        .toggle.active span {
-            left: 27px;
-        }
-
-        .action {
-            background: #286cff;
-            color: white;
-        }
+        .action { background: #286cff; color: white; }
+        .danger { background: #e74c3c; color: white; }
 
         .back {
             background: #eee;
@@ -143,15 +117,7 @@
             margin-top: 5px;
         }
 
-        .danger {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .about {
-            line-height: 1.6;
-            color: #555;
-        }
+        .about { line-height: 1.6; color: #555; }
 
         .creator {
             margin-top: 12px;
@@ -169,773 +135,542 @@
             font-size: 13px;
         }
 
-        .status-loading {
-            color: #777;
+        .status-dot {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            margin-right: 6px;
+            background: #777;
         }
 
-        .status-success {
-            color: #1a9b4b;
+        .status-dot.online { background: #16a34a; }
+        .status-dot.offline { background: #111; }
+
+        .feedback-panel {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f7ff;
+            border: 1px solid #dce5ff;
+            border-radius: 12px;
+        }
+
+        .feedback-panel.open { display: block; }
+
+        .feedback-panel label {
+            display: block;
+            margin: 12px 0 6px;
+            font-size: 14px;
             font-weight: bold;
         }
 
-        .status-error {
-            color: #d93025;
-            font-weight: bold;
+        .feedback-panel button { margin-top: 12px; }
+
+        .message {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-top: 12px;
+            overflow-wrap: anywhere;
         }
 
-        /* DARK MODE */
+        .message.error { color: #c62828; }
+        .message.success { color: #16803c; }
 
-        body.dark {
-            background: #121212;
-            color: #eee;
+        .suggestion-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #ddd;
+            overflow-wrap: anywhere;
         }
 
+        .suggestion-item:last-child { border-bottom: none; }
+
+        .suggestion-status {
+            display: inline-block;
+            margin-top: 7px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            background: #e8edff;
+            color: #2456c5;
+            font-size: 12px;
+        }
+
+        .small-text { font-size: 12px; color: #777; }
+
+        body.dark { background: #121212; color: #eee; }
         body.dark .card {
             background: #1e1e1e;
-            box-shadow: 0 5px 18px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 18px rgba(0,0,0,.3);
         }
-
-        body.dark .option {
-            border-color: #333;
-        }
-
-        body.dark .option-text {
-            color: #aaa;
-        }
-
-        body.dark select {
+        body.dark .option { border-color: #333; }
+        body.dark .option-text,
+        body.dark .small-text { color: #aaa; }
+        body.dark select,
+        body.dark input,
+        body.dark textarea {
             background: #292929;
             color: white;
             border-color: #555;
         }
-
-        body.dark .back {
-            background: #333;
-            color: white;
-        }
-
-        body.dark .about {
-            color: #ccc;
-        }
-
+        body.dark .back { background: #333; color: white; }
+        body.dark .about { color: #ccc; }
         body.dark .creator {
             background: #292929;
             color: #6fa0ff;
+        }
+        body.dark .feedback-panel {
+            background: #242424;
+            border-color: #444;
+        }
+        body.dark .suggestion-item { border-color: #444; }
+        body.dark .suggestion-status {
+            background: #293653;
+            color: #b9ccff;
+        }
+
+        @media (max-width: 480px) {
+            .option { gap: 10px; }
+            .option button { flex-shrink: 0; }
+            .card { padding: 16px; }
         }
     </style>
 </head>
 
 <body>
-
     <div class="header">
         <h1>⚙️ Settings</h1>
         <p>Customize your Vision-AI-Pro experience</p>
     </div>
 
-    <div class="container">
+    <main class="container">
 
-        <!-- APPEARANCE -->
-        <div class="card">
+        <section class="card">
             <h2>🌙 Appearance</h2>
-
             <div class="option">
                 <div>
                     <div class="option-title">Dark Mode</div>
-                    <div class="option-text">
-                        Switch between light and dark mode
-                    </div>
+                    <div class="option-text">Switch between light and dark mode</div>
                 </div>
-
-                <button
-                    type="button"
-                    class="toggle"
-                    id="darkToggle"
-                    onclick="toggleDarkMode()">
-                    <span></span>
-                </button>
+                <button class="toggle" id="darkToggle"
+                    aria-label="Toggle dark mode" aria-pressed="false"
+                    onclick="toggleDarkMode()"><span></span></button>
             </div>
-        </div>
+        </section>
 
-
-        <!-- LANGUAGE -->
-        <div class="card">
+        <section class="card">
             <h2>🌐 Answer Language</h2>
-
             <div class="option">
                 <div>
                     <div class="option-title">Preferred Language</div>
-                    <div class="option-text">
-                        Choose the language for AI answers
-                    </div>
+                    <div class="option-text">Choose the language for AI answers</div>
                 </div>
-
-                <select id="languageSelect" onchange="saveLanguage()">
+                <select id="languageSelect" onchange="saveLanguage()" style="width:auto;max-width:48%">
                     <option value="English">English</option>
                     <option value="Hindi">Hindi</option>
                     <option value="Hinglish">Hinglish</option>
                 </select>
             </div>
-        </div>
+        </section>
 
-
-        <!-- NOTIFICATIONS -->
-        <div class="card">
+        <section class="card">
             <h2>🔔 Notifications</h2>
-
             <div class="option">
                 <div>
                     <div class="option-title">Notifications</div>
-                    <div class="option-text">
-                        Enable or disable notifications
-                    </div>
+                    <div class="option-text">Enable or disable notifications preference</div>
                 </div>
-
-                <button
-                    type="button"
-                    class="toggle"
-                    id="notificationToggle"
-                    onclick="toggleNotifications()">
-                    <span></span>
-                </button>
+                <button class="toggle" id="notificationToggle"
+                    aria-label="Toggle notifications preference"
+                    aria-pressed="true" onclick="toggleNotifications()"><span></span></button>
             </div>
-        </div>
+        </section>
 
-
-        <!-- ACCOUNT -->
-        <div class="card">
+        <section class="card">
             <h2>👤 Account</h2>
-
             <div class="option">
                 <div>
                     <div class="option-title">Profile / Account</div>
-                    <div class="option-text">
-                        Manage your Vision-AI-Pro account
-                    </div>
+                    <div class="option-text">Manage your Vision-AI-Pro account</div>
                 </div>
-
-                <button
-                    type="button"
-                    class="action"
-                    onclick="openAccount()">
-                    Open
-                </button>
+                <button class="action" onclick="openLogin()">Open</button>
             </div>
-
 
             <div class="option">
                 <div>
                     <div class="option-title">Login Status</div>
-
-                    <div
-                        class="option-text status-loading"
-                        id="loginStatus">
-                        Checking...
+                    <div class="option-text" id="loginStatus">
+                        <span class="status-dot"></span>Checking...
                     </div>
                 </div>
             </div>
-
 
             <div class="option">
                 <div>
                     <div class="option-title">Logout</div>
-
-                    <div class="option-text">
-                        Sign out from your account
-                    </div>
+                    <div class="option-text">Sign out from your account</div>
                 </div>
-
-                <button
-                    type="button"
-                    class="danger"
-                    onclick="logoutUser()">
-                    Logout
-                </button>
+                <button class="danger" onclick="logoutUser()">Logout</button>
             </div>
-        </div>
+        </section>
 
-
-        <!-- PRIVACY -->
-        <div class="card">
+        <section class="card">
             <h2>🔒 Privacy & Security</h2>
-
             <div class="option">
                 <div>
-                    <div class="option-title">
-                        Privacy Information
-                    </div>
-
-                    <div class="option-text">
-                        Learn how your account data is handled
-                    </div>
+                    <div class="option-title">Privacy Information</div>
+                    <div class="option-text">Learn how your account data is handled</div>
                 </div>
-
-                <button
-                    type="button"
-                    class="action"
-                    onclick="showPrivacy()">
-                    View
-                </button>
+                <button class="action" onclick="showPrivacy()">View</button>
             </div>
-
-
             <div class="option">
                 <div>
-                    <div class="option-title">
-                        Account Controls
-                    </div>
-
-                    <div class="option-text">
-                        Manage account-related options
-                    </div>
+                    <div class="option-title">Account Controls</div>
+                    <div class="option-text">Manage account-related options</div>
                 </div>
-
-                <button
-                    type="button"
-                    class="action"
-                    onclick="openLogin()">
-                    Manage
-                </button>
+                <button class="action" onclick="openLogin()">Manage</button>
             </div>
-        </div>
+        </section>
 
-
-        <!-- HISTORY -->
-        <div class="card">
+        <section class="card">
             <h2>📚 History</h2>
-
             <div class="option">
                 <div>
-                    <div class="option-title">
-                        Central History
-                    </div>
-
-                    <div class="option-text">
-                        View your Chat, Photo Solver, Image and Quiz history
-                    </div>
+                    <div class="option-title">Central History</div>
+                    <div class="option-text">View your Chat, Photo Solver, Image and Quiz history</div>
                 </div>
-
-                <button
-                    type="button"
-                    class="action"
-                    onclick="openHistory()">
-                    Open
-                </button>
+                <button class="action" onclick="openHistory()">Open</button>
             </div>
-        </div>
+        </section>
 
-
-        <!-- ABOUT -->
-        <div class="card">
+        <section class="card">
             <h2>ℹ️ About Vision-AI-Pro</h2>
-
             <div class="option">
                 <div>
-                    <div class="option-title">
-                        App Version
-                    </div>
-
-                    <div class="option-text">
-                        Version 1.0.0
-                    </div>
+                    <div class="option-title">App Version</div>
+                    <div class="option-text">Version 1.0.0</div>
                 </div>
             </div>
-
-
             <div class="option">
                 <div>
-                    <div class="option-title">
-                        About the App
-                    </div>
-
+                    <div class="option-title">About the App</div>
                     <div class="about">
-                        Vision-AI-Pro is an AI-powered study app
-                        designed to help students with AI Chat,
-                        Photo Solver, Quiz Battle and other learning tools.
-
-                        <div class="creator">
-                            🚀 Created by Pushkal Tiwari
-                        </div>
+                        Vision-AI-Pro is an AI-powered study app designed to help students
+                        with AI Chat, Photo Solver, Quiz Battle and other learning tools.
+                        <div class="creator">🚀 Created by Pushkal Tiwari</div>
                     </div>
                 </div>
             </div>
-
 
             <div class="option">
                 <div>
-                    <div class="option-title">
-                        Help & Feedback
-                    </div>
-
-                    <div class="option-text">
-                        Share suggestions or report a problem
-                    </div>
+                    <div class="option-title">Help & Feedback</div>
+                    <div class="option-text">Suggest a feature, report a bug or share an improvement</div>
                 </div>
-
-                <button
-                    type="button"
-                    class="action"
-                    onclick="showFeedback()">
-                    Help
-                </button>
+                <button class="action" onclick="showFeedback()">Open</button>
             </div>
-        </div>
 
+            <div class="feedback-panel" id="feedbackPanel">
+                <h3 style="margin-top:0">💡 Suggest a Feature</h3>
+                <p class="option-text">
+                    Help us improve Vision-AI-Pro. Share a feature idea, bug report
+                    or improvement suggestion.
+                </p>
 
-        <button
-            type="button"
-            class="back"
-            onclick="goHome()">
-            🏠 Back to Home
-        </button>
+                <form id="suggestionForm">
+                    <label for="suggestionCategory">Suggestion type</label>
+                    <select id="suggestionCategory" required>
+                        <option value="feature">Suggest a feature</option>
+                        <option value="bug">Report a bug</option>
+                        <option value="improvement">Suggest an improvement</option>
+                    </select>
 
-    </div>
+                    <label for="suggestionTitle">Title</label>
+                    <input id="suggestionTitle" type="text"
+                        minlength="3" maxlength="120" required
+                        placeholder="Example: Add voice answers">
 
+                    <label for="suggestionDescription">Detailed description</label>
+                    <textarea id="suggestionDescription" rows="5"
+                        minlength="10" maxlength="3000" required
+                        placeholder="Explain your idea or describe the problem..."></textarea>
 
-    <div class="footer">
-        Vision-AI-Pro ❤️
-    </div>
+                    <button class="action" id="submitSuggestion" type="submit">
+                        Submit Suggestion
+                    </button>
+                    <button type="button" onclick="closeFeedback()">Close</button>
+                    <div id="suggestionMessage" class="message" role="status" aria-live="polite"></div>
+                </form>
 
+                <hr style="border:0;border-top:1px solid #ddd;margin:20px 0">
+
+                <h3>📋 My Suggestions</h3>
+                <p class="small-text">Your own submitted suggestions and their current status.</p>
+                <button class="action" type="button" onclick="loadMySuggestions()">
+                    Refresh My Suggestions
+                </button>
+                <div id="mySuggestions" class="message" aria-live="polite"></div>
+            </div>
+        </section>
+
+        <button class="back" onclick="goHome()">🏠 Back to Home</button>
+    </main>
+
+    <div class="footer">Vision-AI-Pro ❤️</div>
 
     <script>
-
-        /* =====================================================
-           VISION-AI-PRO SETTINGS
-           PHASE 5 — LOGIN / SESSION
-           ===================================================== */
-
-        function getVAPClient() {
-            return window.VAP_SB || null;
-        }
-
-
-        /* =====================================================
-           DARK MODE
-           ===================================================== */
+        // Reuse the shared client from phase5.js.
+        const supabaseClient = window.VAP_SB;
+        let currentUserId = null;
 
         function loadDarkMode() {
-
-            const darkMode =
-                localStorage.getItem("vap_dark_mode") === "true";
-
-            const toggle =
-                document.getElementById("darkToggle");
-
-            if (darkMode) {
-                document.body.classList.add("dark");
-
-                if (toggle) {
-                    toggle.classList.add("active");
-                }
-            }
+            const enabled = localStorage.getItem("vap_dark_mode") === "true";
+            document.body.classList.toggle("dark", enabled);
+            document.getElementById("darkToggle").classList.toggle("active", enabled);
+            document.getElementById("darkToggle").setAttribute("aria-pressed", String(enabled));
         }
-
 
         function toggleDarkMode() {
-
-            const isDark =
-                document.body.classList.toggle("dark");
-
-            localStorage.setItem(
-                "vap_dark_mode",
-                String(isDark)
-            );
-
-            const toggle =
-                document.getElementById("darkToggle");
-
-            if (toggle) {
-                toggle.classList.toggle("active", isDark);
-            }
+            const enabled = document.body.classList.toggle("dark");
+            localStorage.setItem("vap_dark_mode", String(enabled));
+            document.getElementById("darkToggle").classList.toggle("active", enabled);
+            document.getElementById("darkToggle").setAttribute("aria-pressed", String(enabled));
         }
-
-
-        /* =====================================================
-           LANGUAGE
-           ===================================================== */
 
         function loadLanguage() {
-
-            const savedLanguage =
-                localStorage.getItem("vap_language") || "English";
-
-            const select =
-                document.getElementById("languageSelect");
-
-            if (select) {
-                select.value = savedLanguage;
-            }
+            const language = localStorage.getItem("vap_language") || "English";
+            document.getElementById("languageSelect").value = language;
         }
-
 
         function saveLanguage() {
-
-            const select =
-                document.getElementById("languageSelect");
-
-            if (!select) {
-                return;
-            }
-
-            localStorage.setItem(
-                "vap_language",
-                select.value
-            );
-
-            alert(
-                "Language preference saved: " +
-                select.value
-            );
+            const language = document.getElementById("languageSelect").value;
+            localStorage.setItem("vap_language", language);
+            alert("Language preference saved: " + language);
         }
-
-
-        /* =====================================================
-           NOTIFICATIONS
-           ===================================================== */
 
         function loadNotifications() {
-
-            const enabled =
-                localStorage.getItem("vap_notifications") !== "false";
-
-            const toggle =
-                document.getElementById("notificationToggle");
-
-            if (toggle) {
-                toggle.classList.toggle(
-                    "active",
-                    enabled
-                );
-            }
+            const enabled = localStorage.getItem("vap_notifications") !== "false";
+            document.getElementById("notificationToggle").classList.toggle("active", enabled);
+            document.getElementById("notificationToggle").setAttribute("aria-pressed", String(enabled));
         }
-
 
         function toggleNotifications() {
-
-            const currentlyEnabled =
-                localStorage.getItem("vap_notifications") !== "false";
-
-            const newValue = !currentlyEnabled;
-
-            localStorage.setItem(
-                "vap_notifications",
-                String(newValue)
-            );
-
-            const toggle =
-                document.getElementById("notificationToggle");
-
-            if (toggle) {
-                toggle.classList.toggle(
-                    "active",
-                    newValue
-                );
-            }
+            const enabled = localStorage.getItem("vap_notifications") !== "false";
+            const newValue = !enabled;
+            localStorage.setItem("vap_notifications", String(newValue));
+            document.getElementById("notificationToggle").classList.toggle("active", newValue);
+            document.getElementById("notificationToggle").setAttribute("aria-pressed", String(newValue));
         }
-
-
-        /* =====================================================
-           LOGIN STATUS
-           ===================================================== */
 
         async function checkLoginStatus() {
-
-            const status =
-                document.getElementById("loginStatus");
-
-            if (!status) {
-                return;
-            }
-
-            status.textContent = "Checking...";
-            status.className = "option-text status-loading";
-
-            const client = getVAPClient();
-
-            if (!client) {
-
-                status.textContent =
-                    "Login system not connected";
-
-                status.className =
-                    "option-text status-error";
-
+            const status = document.getElementById("loginStatus");
+            if (!supabaseClient) {
+                status.innerHTML = '<span class="status-dot offline"></span>Login system not connected';
                 return;
             }
 
             try {
-
-                const result =
-                    await client.auth.getSession();
-
-                const sessionData =
-                    result.data;
-
-                const sessionError =
-                    result.error;
-
-                if (sessionError) {
-
-                    console.error(
-                        "Session check error:",
-                        sessionError
-                    );
-
-                    status.textContent =
-                        "Unable to check status";
-
-                    status.className =
-                        "option-text status-error";
-
+                const { data, error } = await supabaseClient.auth.getUser();
+                if (error || !data.user) {
+                    currentUserId = null;
+                    status.innerHTML = '<span class="status-dot offline"></span>Not logged in';
                     return;
                 }
 
-                if (
-                    sessionData &&
-                    sessionData.session &&
-                    sessionData.session.user
-                ) {
-
-                    status.textContent =
-                        "Logged in ✅";
-
-                    status.className =
-                        "option-text status-success";
-
-                } else {
-
-                    status.textContent =
-                        "Not logged in";
-
-                    status.className =
-                        "option-text status-error";
-                }
-
+                currentUserId = data.user.id;
+                status.innerHTML = '<span class="status-dot online"></span>Logged in ✅';
             } catch (error) {
-
-                console.error(
-                    "Login status error:",
-                    error
-                );
-
-                status.textContent =
-                    "Unable to check status";
-
-                status.className =
-                    "option-text status-error";
+                console.error("Login status error:", error);
+                status.textContent = "Unable to check status";
             }
         }
 
-
-        /* =====================================================
-           AUTH STATE LISTENER
-           ===================================================== */
-
-        function setupAuthListener() {
-
-            const client = getVAPClient();
-
-            if (!client) {
-                return;
-            }
-
-            try {
-
-                client.auth.onAuthStateChange(
-                    function(event, session) {
-
-                        const status =
-                            document.getElementById(
-                                "loginStatus"
-                            );
-
-                        if (!status) {
-                            return;
-                        }
-
-                        if (
-                            session &&
-                            session.user
-                        ) {
-
-                            status.textContent =
-                                "Logged in ✅";
-
-                            status.className =
-                                "option-text status-success";
-
-                        } else {
-
-                            status.textContent =
-                                "Not logged in";
-
-                            status.className =
-                                "option-text status-error";
-                        }
-                    }
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "Auth listener error:",
-                    error
-                );
-            }
+        function openLogin() {
+            window.location.href = "Login.html";
         }
-
-
-        /* =====================================================
-           LOGIN / PROFILE
-           ===================================================== */
-function openAccount() {
-
-    window.location.href =
-        "Account.html";
-}
-
-
-        /* =====================================================
-           LOGOUT
-           ===================================================== */
 
         async function logoutUser() {
-
-            const client = getVAPClient();
-
-            if (!client) {
-
-                alert(
-                    "Login system is not connected yet."
-                );
-
+            if (!supabaseClient) {
+                alert("Login system is not connected yet.");
                 return;
             }
 
             try {
-
-                const result =
-                    await client.auth.signOut();
-
-                if (result.error) {
-
-                    console.error(
-                        "Logout error:",
-                        result.error
-                    );
-
-                    alert(
-                        "Logout failed. Please try again."
-                    );
-
+                const { error } = await supabaseClient.auth.signOut();
+                if (error) {
+                    console.error("Logout error:", error);
+                    alert("Logout failed. Please try again.");
                     return;
                 }
-
-                alert(
-                    "You have been logged out."
-                );
-
-                window.location.href =
-                    "Login.html";
-
+                currentUserId = null;
+                alert("You have been logged out.");
+                window.location.href = "Login.html";
             } catch (error) {
-
-                console.error(
-                    "Logout error:",
-                    error
-                );
-
-                alert(
-                    "Logout failed. Please try again."
-                );
+                console.error("Logout error:", error);
+                alert("Logout failed. Please try again.");
             }
         }
 
-
-        /* =====================================================
-           HISTORY
-           ===================================================== */
-
         function openHistory() {
-
-            window.location.href =
-                "History.html";
+            window.location.href = "History.html";
         }
-
-
-        /* =====================================================
-           PRIVACY
-           ===================================================== */
 
         function showPrivacy() {
-
-            alert(
-                "Vision-AI-Pro uses your account information " +
-                "for features connected to your account. " +
-                "Your account data should be handled securely."
-            );
+            alert("Vision-AI-Pro uses account information for features connected to your account. Please keep your login credentials private.");
         }
-
-
-        /* =====================================================
-           HELP & FEEDBACK
-           ===================================================== */
 
         function showFeedback() {
-
-            alert(
-                "Help & Feedback will be connected to " +
-                "the Vision-AI-Pro feedback system in a future update."
-            );
+            const panel = document.getElementById("feedbackPanel");
+            panel.classList.add("open");
+            panel.scrollIntoView({ behavior: "smooth", block: "start" });
+            loadMySuggestions();
         }
 
+        function closeFeedback() {
+            document.getElementById("feedbackPanel").classList.remove("open");
+        }
 
-        /* =====================================================
-           HOME
-           ===================================================== */
+        function showSuggestionMessage(message, type) {
+            const element = document.getElementById("suggestionMessage");
+            element.textContent = message;
+            element.className = "message " + (type || "");
+        }
+
+        async function submitSuggestion(event) {
+            event.preventDefault();
+
+            const button = document.getElementById("submitSuggestion");
+            const category = document.getElementById("suggestionCategory").value;
+            const title = document.getElementById("suggestionTitle").value.trim();
+            const description = document.getElementById("suggestionDescription").value.trim();
+
+            if (!supabaseClient) {
+                showSuggestionMessage("The database connection is unavailable. Please try again later.", "error");
+                return;
+            }
+
+            if (title.length < 3 || description.length < 10) {
+                showSuggestionMessage("Please enter a title of at least 3 characters and a description of at least 10 characters.", "error");
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = "Submitting...";
+
+            try {
+                const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+
+                if (userError || !userData.user) {
+                    showSuggestionMessage("Please log in first before submitting a suggestion.", "error");
+                    return;
+                }
+
+                currentUserId = userData.user.id;
+
+                const { error } = await supabaseClient
+                    .from("feature_suggestions")
+                    .insert({
+                        user_id: currentUserId,
+                        title: title,
+                        description: description,
+                        category: category
+                    });
+
+                if (error) {
+                    console.error("Suggestion submission error:", error);
+                    showSuggestionMessage(
+                        "We couldn't save your suggestion. Please check your connection and database setup, then try again.",
+                        "error"
+                    );
+                    return;
+                }
+
+                showSuggestionMessage("Suggestion submitted successfully! Thank you for helping improve Vision-AI-Pro. ❤️", "success");
+                document.getElementById("suggestionForm").reset();
+                await loadMySuggestions();
+            } catch (error) {
+                console.error("Suggestion submission error:", error);
+                showSuggestionMessage("Something went wrong while submitting. Please try again.", "error");
+            } finally {
+                button.disabled = false;
+                button.textContent = "Submit Suggestion";
+            }
+        }
+
+        async function loadMySuggestions() {
+            const output = document.getElementById("mySuggestions");
+
+            if (!supabaseClient) {
+                output.textContent = "Database connection is unavailable.";
+                return;
+            }
+
+            try {
+                const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+
+                if (userError || !userData.user) {
+                    output.textContent = "Please log in to view your submitted suggestions.";
+                    return;
+                }
+
+                currentUserId = userData.user.id;
+                output.textContent = "Loading your suggestions...";
+
+                const { data, error } = await supabaseClient
+                    .from("feature_suggestions")
+                    .select("id, title, category, status, created_at")
+                    .eq("user_id", currentUserId)
+                    .order("created_at", { ascending: false })
+                    .limit(50);
+
+                if (error) {
+                    console.error("Loading suggestions error:", error);
+                    output.textContent = "Could not load suggestions. Please try again.";
+                    return;
+                }
+
+                output.replaceChildren();
+
+                if (!data || data.length === 0) {
+                    output.textContent = "You haven't submitted any suggestions yet.";
+                    return;
+                }
+
+                data.forEach(function (item) {
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "suggestion-item";
+
+                    const title = document.createElement("strong");
+                    title.textContent = item.title;
+
+                    const details = document.createElement("div");
+                    details.className = "small-text";
+                    details.textContent =
+                        item.category + " • " +
+                        new Date(item.created_at).toLocaleDateString();
+
+                    const status = document.createElement("div");
+                    status.className = "suggestion-status";
+                    status.textContent = "Status: " + item.status.replaceAll("_", " ");
+
+                    wrapper.append(title, details, status);
+                    output.appendChild(wrapper);
+                });
+            } catch (error) {
+                console.error("Loading suggestions error:", error);
+                output.textContent = "Something went wrong while loading suggestions.";
+            }
+        }
 
         function goHome() {
-
-            window.location.href =
-                "index.html";
+            window.location.href = "index.html";
         }
 
+        document.getElementById("suggestionForm").addEventListener("submit", submitSuggestion);
 
-        /* =====================================================
-           START SETTINGS
-           ===================================================== */
-
-        function startSettings() {
-
-            loadDarkMode();
-
-            loadLanguage();
-
-            loadNotifications();
-
-            setupAuthListener();
-
-            checkLoginStatus();
-        }
-
-
-        /*
-         * Start after the page is ready.
-         */
-        if (
-            document.readyState === "loading"
-        ) {
-
-            document.addEventListener(
-                "DOMContentLoaded",
-                startSettings
-            );
-
-        } else {
-
-            startSettings();
-        }
-
+        loadDarkMode();
+        loadLanguage();
+        loadNotifications();
+        checkLoginStatus();
     </script>
-
 </body>
 </html>
