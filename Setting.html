@@ -55,6 +55,7 @@
         }
 
         .option:last-child { border-bottom: none; }
+
         .option-title { font-weight: bold; }
 
         .option-text {
@@ -81,7 +82,10 @@
             font-size: 14px;
         }
 
-        button:disabled { opacity: .6; cursor: not-allowed; }
+        button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
 
         .toggle {
             width: 52px;
@@ -107,8 +111,15 @@
         .toggle.active { background: #286cff; }
         .toggle.active span { left: 27px; }
 
-        .action { background: #286cff; color: white; }
-        .danger { background: #e74c3c; color: white; }
+        .action {
+            background: #286cff;
+            color: white;
+        }
+
+        .danger {
+            background: #e74c3c;
+            color: white;
+        }
 
         .back {
             background: #eee;
@@ -117,7 +128,10 @@
             margin-top: 5px;
         }
 
-        .about { line-height: 1.6; color: #555; }
+        .about {
+            line-height: 1.6;
+            color: #555;
+        }
 
         .creator {
             margin-top: 12px;
@@ -144,8 +158,13 @@
             background: #777;
         }
 
-        .status-dot.online { background: #16a34a; }
-        .status-dot.offline { background: #111; }
+        .status-dot.online {
+            background: #16a34a;
+        }
+
+        .status-dot.offline {
+            background: #111;
+        }
 
         .feedback-panel {
             display: none;
@@ -156,7 +175,9 @@
             border-radius: 12px;
         }
 
-        .feedback-panel.open { display: block; }
+        .feedback-panel.open {
+            display: block;
+        }
 
         .feedback-panel label {
             display: block;
@@ -165,7 +186,9 @@
             font-weight: bold;
         }
 
-        .feedback-panel button { margin-top: 12px; }
+        .feedback-panel button {
+            margin-top: 12px;
+        }
 
         .message {
             font-size: 14px;
@@ -174,8 +197,13 @@
             overflow-wrap: anywhere;
         }
 
-        .message.error { color: #c62828; }
-        .message.success { color: #16803c; }
+        .message.error {
+            color: #c62828;
+        }
+
+        .message.success {
+            color: #16803c;
+        }
 
         .suggestion-item {
             padding: 12px 0;
@@ -183,7 +211,9 @@
             overflow-wrap: anywhere;
         }
 
-        .suggestion-item:last-child { border-bottom: none; }
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
 
         .suggestion-status {
             display: inline-block;
@@ -195,16 +225,30 @@
             font-size: 12px;
         }
 
-        .small-text { font-size: 12px; color: #777; }
+        .small-text {
+            font-size: 12px;
+            color: #777;
+        }
 
-        body.dark { background: #121212; color: #eee; }
+        body.dark {
+            background: #121212;
+            color: #eee;
+        }
+
         body.dark .card {
             background: #1e1e1e;
             box-shadow: 0 5px 18px rgba(0,0,0,.3);
         }
-        body.dark .option { border-color: #333; }
+
+        body.dark .option {
+            border-color: #333;
+        }
+
         body.dark .option-text,
-        body.dark .small-text { color: #aaa; }
+        body.dark .small-text {
+            color: #aaa;
+        }
+
         body.dark select,
         body.dark input,
         body.dark textarea {
@@ -212,31 +256,53 @@
             color: white;
             border-color: #555;
         }
-        body.dark .back { background: #333; color: white; }
-        body.dark .about { color: #ccc; }
+
+        body.dark .back {
+            background: #333;
+            color: white;
+        }
+
+        body.dark .about {
+            color: #ccc;
+        }
+
         body.dark .creator {
             background: #292929;
             color: #6fa0ff;
         }
+
         body.dark .feedback-panel {
             background: #242424;
             border-color: #444;
         }
-        body.dark .suggestion-item { border-color: #444; }
+
+        body.dark .suggestion-item {
+            border-color: #444;
+        }
+
         body.dark .suggestion-status {
             background: #293653;
             color: #b9ccff;
         }
 
         @media (max-width: 480px) {
-            .option { gap: 10px; }
-            .option button { flex-shrink: 0; }
-            .card { padding: 16px; }
+            .option {
+                gap: 10px;
+            }
+
+            .option button {
+                flex-shrink: 0;
+            }
+
+            .card {
+                padding: 16px;
+            }
         }
     </style>
 </head>
 
 <body>
+
     <div class="header">
         <h1>⚙️ Settings</h1>
         <p>Customize your Vision-AI-Pro experience</p>
@@ -246,25 +312,42 @@
 
         <section class="card">
             <h2>🌙 Appearance</h2>
+
             <div class="option">
                 <div>
                     <div class="option-title">Dark Mode</div>
-                    <div class="option-text">Switch between light and dark mode</div>
+                    <div class="option-text">
+                        Switch between light and dark mode
+                    </div>
                 </div>
-                <button class="toggle" id="darkToggle"
-                    aria-label="Toggle dark mode" aria-pressed="false"
-                    onclick="toggleDarkMode()"><span></span></button>
+
+                <button
+                    class="toggle"
+                    id="darkToggle"
+                    aria-label="Toggle dark mode"
+                    aria-pressed="false"
+                    onclick="toggleDarkMode()">
+                    <span></span>
+                </button>
             </div>
         </section>
 
+
         <section class="card">
             <h2>🌐 Answer Language</h2>
+
             <div class="option">
                 <div>
                     <div class="option-title">Preferred Language</div>
-                    <div class="option-text">Choose the language for AI answers</div>
+                    <div class="option-text">
+                        Choose the language for AI answers
+                    </div>
                 </div>
-                <select id="languageSelect" onchange="saveLanguage()" style="width:auto;max-width:48%">
+
+                <select
+                    id="languageSelect"
+                    onchange="saveLanguage()"
+                    style="width:auto;max-width:48%">
                     <option value="English">English</option>
                     <option value="Hindi">Hindi</option>
                     <option value="Hinglish">Hinglish</option>
@@ -272,405 +355,1149 @@
             </div>
         </section>
 
+
         <section class="card">
             <h2>🔔 Notifications</h2>
+
             <div class="option">
                 <div>
                     <div class="option-title">Notifications</div>
-                    <div class="option-text">Enable or disable notifications preference</div>
+                    <div class="option-text">
+                        Enable or disable notifications preference
+                    </div>
                 </div>
-                <button class="toggle" id="notificationToggle"
+
+                <button
+                    class="toggle"
+                    id="notificationToggle"
                     aria-label="Toggle notifications preference"
-                    aria-pressed="true" onclick="toggleNotifications()"><span></span></button>
+                    aria-pressed="true"
+                    onclick="toggleNotifications()">
+                    <span></span>
+                </button>
             </div>
         </section>
 
+
         <section class="card">
             <h2>👤 Account</h2>
+
             <div class="option">
                 <div>
                     <div class="option-title">Profile / Account</div>
-                    <div class="option-text">Manage your Vision-AI-Pro account</div>
+                    <div class="option-text">
+                        Manage your Vision-AI-Pro account
+                    </div>
                 </div>
-                <button class="action" onclick="openLogin()">Open</button>
+
+                <button class="action" onclick="openLogin()">
+                    Open
+                </button>
             </div>
+
 
             <div class="option">
                 <div>
                     <div class="option-title">Login Status</div>
+
                     <div class="option-text" id="loginStatus">
-                        <span class="status-dot"></span>Checking...
+                        <span class="status-dot"></span>
+                        Checking...
                     </div>
                 </div>
             </div>
+
 
             <div class="option">
                 <div>
                     <div class="option-title">Logout</div>
-                    <div class="option-text">Sign out from your account</div>
+                    <div class="option-text">
+                        Sign out from your account
+                    </div>
                 </div>
-                <button class="danger" onclick="logoutUser()">Logout</button>
+
+                <button class="danger" onclick="logoutUser()">
+                    Logout
+                </button>
             </div>
         </section>
+
 
         <section class="card">
             <h2>🔒 Privacy & Security</h2>
+
             <div class="option">
                 <div>
                     <div class="option-title">Privacy Information</div>
-                    <div class="option-text">Learn how your account data is handled</div>
+                    <div class="option-text">
+                        Learn how your account data is handled
+                    </div>
                 </div>
-                <button class="action" onclick="showPrivacy()">View</button>
+
+                <button class="action" onclick="showPrivacy()">
+                    View
+                </button>
             </div>
+
             <div class="option">
                 <div>
                     <div class="option-title">Account Controls</div>
-                    <div class="option-text">Manage account-related options</div>
+                    <div class="option-text">
+                        Manage account-related options
+                    </div>
                 </div>
-                <button class="action" onclick="openLogin()">Manage</button>
+
+                <button class="action" onclick="openLogin()">
+                    Manage
+                </button>
             </div>
         </section>
+
 
         <section class="card">
             <h2>📚 History</h2>
+
             <div class="option">
                 <div>
                     <div class="option-title">Central History</div>
-                    <div class="option-text">View your Chat, Photo Solver, Image and Quiz history</div>
+                    <div class="option-text">
+                        View your Chat, Photo Solver, Image and Quiz history
+                    </div>
                 </div>
-                <button class="action" onclick="openHistory()">Open</button>
+
+                <button class="action" onclick="openHistory()">
+                    Open
+                </button>
             </div>
         </section>
 
+
         <section class="card">
             <h2>ℹ️ About Vision-AI-Pro</h2>
+
             <div class="option">
                 <div>
                     <div class="option-title">App Version</div>
-                    <div class="option-text">Version 1.0.0</div>
-                </div>
-            </div>
-            <div class="option">
-                <div>
-                    <div class="option-title">About the App</div>
-                    <div class="about">
-                        Vision-AI-Pro is an AI-powered study app designed to help students
-                        with AI Chat, Photo Solver, Quiz Battle and other learning tools.
-                        <div class="creator">🚀 Created by Pushkal Tiwari</div>
+                    <div class="option-text">
+                        Version 1.0.0
                     </div>
                 </div>
             </div>
 
+
+            <div class="option">
+                <div>
+                    <div class="option-title">About the App</div>
+
+                    <div class="about">
+                        Vision-AI-Pro is an AI-powered study app designed
+                        to help students with AI Chat, Photo Solver,
+                        Quiz Battle and other learning tools.
+
+                        <div class="creator">
+                            🚀 Created by Pushkal Tiwari
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="option">
                 <div>
                     <div class="option-title">Help & Feedback</div>
-                    <div class="option-text">Suggest a feature, report a bug or share an improvement</div>
+
+                    <div class="option-text">
+                        Suggest a feature, report a bug or share an improvement
+                    </div>
                 </div>
-                <button class="action" onclick="showFeedback()">Open</button>
+
+                <button class="action" onclick="showFeedback()">
+                    Open
+                </button>
             </div>
 
+
             <div class="feedback-panel" id="feedbackPanel">
-                <h3 style="margin-top:0">💡 Suggest a Feature</h3>
+
+                <h3 style="margin-top:0">
+                    💡 Suggest a Feature
+                </h3>
+
                 <p class="option-text">
-                    Help us improve Vision-AI-Pro. Share a feature idea, bug report
-                    or improvement suggestion.
+                    Help us improve Vision-AI-Pro. Share a feature idea,
+                    bug report or improvement suggestion.
                 </p>
 
+
                 <form id="suggestionForm">
-                    <label for="suggestionCategory">Suggestion type</label>
+
+                    <label for="suggestionCategory">
+                        Suggestion type
+                    </label>
+
                     <select id="suggestionCategory" required>
-                        <option value="feature">Suggest a feature</option>
-                        <option value="bug">Report a bug</option>
-                        <option value="improvement">Suggest an improvement</option>
+                        <option value="feature">
+                            Suggest a feature
+                        </option>
+
+                        <option value="bug">
+                            Report a bug
+                        </option>
+
+                        <option value="improvement">
+                            Suggest an improvement
+                        </option>
                     </select>
 
-                    <label for="suggestionTitle">Title</label>
-                    <input id="suggestionTitle" type="text"
-                        minlength="3" maxlength="120" required
+
+                    <label for="suggestionTitle">
+                        Title
+                    </label>
+
+                    <input
+                        id="suggestionTitle"
+                        type="text"
+                        minlength="3"
+                        maxlength="120"
+                        required
                         placeholder="Example: Add voice answers">
 
-                    <label for="suggestionDescription">Detailed description</label>
-                    <textarea id="suggestionDescription" rows="5"
-                        minlength="10" maxlength="3000" required
+
+                    <label for="suggestionDescription">
+                        Detailed description
+                    </label>
+
+                    <textarea
+                        id="suggestionDescription"
+                        rows="5"
+                        minlength="10"
+                        maxlength="3000"
+                        required
                         placeholder="Explain your idea or describe the problem..."></textarea>
 
-                    <button class="action" id="submitSuggestion" type="submit">
+
+                    <button
+                        class="action"
+                        id="submitSuggestion"
+                        type="submit">
                         Submit Suggestion
                     </button>
-                    <button type="button" onclick="closeFeedback()">Close</button>
-                    <div id="suggestionMessage" class="message" role="status" aria-live="polite"></div>
+
+                    <button
+                        type="button"
+                        onclick="closeFeedback()">
+                        Close
+                    </button>
+
+                    <div
+                        id="suggestionMessage"
+                        class="message"
+                        role="status"
+                        aria-live="polite">
+                    </div>
+
                 </form>
+
 
                 <hr style="border:0;border-top:1px solid #ddd;margin:20px 0">
 
+
                 <h3>📋 My Suggestions</h3>
-                <p class="small-text">Your own submitted suggestions and their current status.</p>
-                <button class="action" type="button" onclick="loadMySuggestions()">
+
+                <p class="small-text">
+                    Your own submitted suggestions and their current status.
+                </p>
+
+                <button
+                    class="action"
+                    type="button"
+                    onclick="loadMySuggestions()">
                     Refresh My Suggestions
                 </button>
-                <div id="mySuggestions" class="message" aria-live="polite"></div>
+
+                <div
+                    id="mySuggestions"
+                    class="message"
+                    aria-live="polite">
+                </div>
+
             </div>
         </section>
 
-        <button class="back" onclick="goHome()">🏠 Back to Home</button>
+
+        <button class="back" onclick="goHome()">
+            🏠 Back to Home
+        </button>
+
     </main>
 
-    <div class="footer">Vision-AI-Pro ❤️</div>
+
+    <div class="footer">
+        Vision-AI-Pro ❤️
+    </div>
+
 
     <script>
-        // Reuse the shared client from phase5.js.
+
+        // Shared Supabase client
         const supabaseClient = window.VAP_SB;
+
         let currentUserId = null;
 
+
+        /* =========================
+           DARK MODE
+        ========================= */
+
         function loadDarkMode() {
-            const enabled = localStorage.getItem("vap_dark_mode") === "true";
+
+            const enabled =
+                localStorage.getItem("vap_dark_mode") === "true";
+
             document.body.classList.toggle("dark", enabled);
-            document.getElementById("darkToggle").classList.toggle("active", enabled);
-            document.getElementById("darkToggle").setAttribute("aria-pressed", String(enabled));
+
+            document
+                .getElementById("darkToggle")
+                .classList.toggle("active", enabled);
+
+            document
+                .getElementById("darkToggle")
+                .setAttribute(
+                    "aria-pressed",
+                    String(enabled)
+                );
         }
+
 
         function toggleDarkMode() {
-            const enabled = document.body.classList.toggle("dark");
-            localStorage.setItem("vap_dark_mode", String(enabled));
-            document.getElementById("darkToggle").classList.toggle("active", enabled);
-            document.getElementById("darkToggle").setAttribute("aria-pressed", String(enabled));
+
+            const enabled =
+                document.body.classList.toggle("dark");
+
+            localStorage.setItem(
+                "vap_dark_mode",
+                String(enabled)
+            );
+
+            document
+                .getElementById("darkToggle")
+                .classList.toggle("active", enabled);
+
+            document
+                .getElementById("darkToggle")
+                .setAttribute(
+                    "aria-pressed",
+                    String(enabled)
+                );
         }
+
+
+        /* =========================
+           LANGUAGE
+        ========================= */
 
         function loadLanguage() {
-            const language = localStorage.getItem("vap_language") || "English";
-            document.getElementById("languageSelect").value = language;
+
+            const language =
+                localStorage.getItem("vap_language") ||
+                "English";
+
+            document.getElementById(
+                "languageSelect"
+            ).value = language;
         }
+
 
         function saveLanguage() {
-            const language = document.getElementById("languageSelect").value;
-            localStorage.setItem("vap_language", language);
-            alert("Language preference saved: " + language);
+
+            const language =
+                document.getElementById(
+                    "languageSelect"
+                ).value;
+
+            localStorage.setItem(
+                "vap_language",
+                language
+            );
+
+            alert(
+                "Language preference saved: " +
+                language
+            );
         }
+
+
+        /* =========================
+           NOTIFICATIONS
+        ========================= */
 
         function loadNotifications() {
-            const enabled = localStorage.getItem("vap_notifications") !== "false";
-            document.getElementById("notificationToggle").classList.toggle("active", enabled);
-            document.getElementById("notificationToggle").setAttribute("aria-pressed", String(enabled));
+
+            const enabled =
+                localStorage.getItem(
+                    "vap_notifications"
+                ) !== "false";
+
+            document
+                .getElementById("notificationToggle")
+                .classList.toggle("active", enabled);
+
+            document
+                .getElementById("notificationToggle")
+                .setAttribute(
+                    "aria-pressed",
+                    String(enabled)
+                );
         }
+
 
         function toggleNotifications() {
-            const enabled = localStorage.getItem("vap_notifications") !== "false";
+
+            const enabled =
+                localStorage.getItem(
+                    "vap_notifications"
+                ) !== "false";
+
             const newValue = !enabled;
-            localStorage.setItem("vap_notifications", String(newValue));
-            document.getElementById("notificationToggle").classList.toggle("active", newValue);
-            document.getElementById("notificationToggle").setAttribute("aria-pressed", String(newValue));
+
+            localStorage.setItem(
+                "vap_notifications",
+                String(newValue)
+            );
+
+            document
+                .getElementById("notificationToggle")
+                .classList.toggle(
+                    "active",
+                    newValue
+                );
+
+            document
+                .getElementById("notificationToggle")
+                .setAttribute(
+                    "aria-pressed",
+                    String(newValue)
+                );
         }
+
+
+        /* =========================
+           LOGIN STATUS
+        ========================= */
 
         async function checkLoginStatus() {
-            const status = document.getElementById("loginStatus");
+
+            const status =
+                document.getElementById(
+                    "loginStatus"
+                );
+
+
             if (!supabaseClient) {
-                status.innerHTML = '<span class="status-dot offline"></span>Login system not connected';
+
+                currentUserId = null;
+
+                status.innerHTML =
+                    '<span class="status-dot offline"></span>' +
+                    'Login system not connected';
+
                 return;
             }
 
+
             try {
-                const { data, error } = await supabaseClient.auth.getUser();
-                if (error || !data.user) {
+
+                /*
+                 * IMPORTANT:
+                 * getSession() reads the current
+                 * Supabase session instead of
+                 * immediately calling /auth/v1/user.
+                 */
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth.getSession();
+
+
+                if (error) {
+
+                    console.error(
+                        "Session check error:",
+                        error
+                    );
+
                     currentUserId = null;
-                    status.innerHTML = '<span class="status-dot offline"></span>Not logged in';
+
+                    status.innerHTML =
+                        '<span class="status-dot offline"></span>' +
+                        'Not logged in';
+
                     return;
                 }
 
-                currentUserId = data.user.id;
-                status.innerHTML = '<span class="status-dot online"></span>Logged in ✅';
+
+                const session = data.session;
+
+
+                if (!session || !session.user) {
+
+                    currentUserId = null;
+
+                    status.innerHTML =
+                        '<span class="status-dot offline"></span>' +
+                        'Not logged in';
+
+                    return;
+                }
+
+
+                currentUserId =
+                    session.user.id;
+
+
+                status.innerHTML =
+                    '<span class="status-dot online"></span>' +
+                    'Logged in ✅';
+
+
             } catch (error) {
-                console.error("Login status error:", error);
-                status.textContent = "Unable to check status";
+
+                console.error(
+                    "Login status error:",
+                    error
+                );
+
+                currentUserId = null;
+
+                status.innerHTML =
+                    '<span class="status-dot offline"></span>' +
+                    'Not logged in';
             }
         }
+
+
+        /* =========================
+           AUTH STATE LISTENER
+        ========================= */
+
+        function listenForAuthChanges() {
+
+            if (!supabaseClient) return;
+
+
+            supabaseClient.auth.onAuthStateChange(
+                function(event, session) {
+
+                    console.log(
+                        "Auth state:",
+                        event
+                    );
+
+
+                    const status =
+                        document.getElementById(
+                            "loginStatus"
+                        );
+
+
+                    if (
+                        session &&
+                        session.user
+                    ) {
+
+                        currentUserId =
+                            session.user.id;
+
+                        status.innerHTML =
+                            '<span class="status-dot online"></span>' +
+                            'Logged in ✅';
+
+                    } else {
+
+                        currentUserId = null;
+
+                        status.innerHTML =
+                            '<span class="status-dot offline"></span>' +
+                            'Not logged in';
+                    }
+                }
+            );
+        }
+
+
+        /* =========================
+           LOGIN PAGE
+        ========================= */
 
         function openLogin() {
-            window.location.href = "Login.html";
+
+            window.location.href =
+                "Login.html";
         }
 
+
+        /* =========================
+           LOGOUT
+        ========================= */
+
         async function logoutUser() {
+
             if (!supabaseClient) {
-                alert("Login system is not connected yet.");
+
+                alert(
+                    "Login system is not connected yet."
+                );
+
                 return;
             }
 
+
             try {
-                const { error } = await supabaseClient.auth.signOut();
+
+                const {
+                    error
+                } =
+                    await supabaseClient.auth.signOut();
+
+
                 if (error) {
-                    console.error("Logout error:", error);
-                    alert("Logout failed. Please try again.");
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+                    alert(
+                        "Logout failed. Please try again."
+                    );
+
                     return;
                 }
+
+
                 currentUserId = null;
-                alert("You have been logged out.");
-                window.location.href = "Login.html";
+
+                alert(
+                    "You have been logged out."
+                );
+
+                window.location.href =
+                    "Login.html";
+
+
             } catch (error) {
-                console.error("Logout error:", error);
-                alert("Logout failed. Please try again.");
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+                alert(
+                    "Logout failed. Please try again."
+                );
             }
         }
 
+
+        /* =========================
+           HISTORY
+        ========================= */
+
         function openHistory() {
-            window.location.href = "History.html";
+
+            window.location.href =
+                "History.html";
         }
+
+
+        /* =========================
+           PRIVACY
+        ========================= */
 
         function showPrivacy() {
-            alert("Vision-AI-Pro uses account information for features connected to your account. Please keep your login credentials private.");
+
+            alert(
+                "Vision-AI-Pro uses account information " +
+                "for features connected to your account. " +
+                "Please keep your login credentials private."
+            );
         }
 
+
+        /* =========================
+           FEEDBACK PANEL
+        ========================= */
+
         function showFeedback() {
-            const panel = document.getElementById("feedbackPanel");
+
+            const panel =
+                document.getElementById(
+                    "feedbackPanel"
+                );
+
             panel.classList.add("open");
-            panel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+            panel.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
             loadMySuggestions();
         }
 
+
         function closeFeedback() {
-            document.getElementById("feedbackPanel").classList.remove("open");
+
+            document
+                .getElementById("feedbackPanel")
+                .classList.remove("open");
         }
 
-        function showSuggestionMessage(message, type) {
-            const element = document.getElementById("suggestionMessage");
-            element.textContent = message;
-            element.className = "message " + (type || "");
+
+        function showSuggestionMessage(
+            message,
+            type
+        ) {
+
+            const element =
+                document.getElementById(
+                    "suggestionMessage"
+                );
+
+            element.textContent =
+                message;
+
+            element.className =
+                "message " +
+                (type || "");
         }
+
+
+        /* =========================
+           SUBMIT SUGGESTION
+        ========================= */
 
         async function submitSuggestion(event) {
+
             event.preventDefault();
 
-            const button = document.getElementById("submitSuggestion");
-            const category = document.getElementById("suggestionCategory").value;
-            const title = document.getElementById("suggestionTitle").value.trim();
-            const description = document.getElementById("suggestionDescription").value.trim();
+
+            const button =
+                document.getElementById(
+                    "submitSuggestion"
+                );
+
+
+            const category =
+                document.getElementById(
+                    "suggestionCategory"
+                ).value;
+
+
+            const title =
+                document.getElementById(
+                    "suggestionTitle"
+                ).value.trim();
+
+
+            const description =
+                document.getElementById(
+                    "suggestionDescription"
+                ).value.trim();
+
 
             if (!supabaseClient) {
-                showSuggestionMessage("The database connection is unavailable. Please try again later.", "error");
+
+                showSuggestionMessage(
+                    "The database connection is unavailable. Please try again later.",
+                    "error"
+                );
+
                 return;
             }
 
-            if (title.length < 3 || description.length < 10) {
-                showSuggestionMessage("Please enter a title of at least 3 characters and a description of at least 10 characters.", "error");
+
+            if (
+                title.length < 3 ||
+                description.length < 10
+            ) {
+
+                showSuggestionMessage(
+                    "Please enter a title of at least 3 characters and a description of at least 10 characters.",
+                    "error"
+                );
+
                 return;
             }
+
 
             button.disabled = true;
-            button.textContent = "Submitting...";
+
+            button.textContent =
+                "Submitting...";
+
 
             try {
-                const { data: userData, error: userError } = await supabaseClient.auth.getUser();
 
-                if (userError || !userData.user) {
-                    showSuggestionMessage("Please log in first before submitting a suggestion.", "error");
-                    return;
-                }
+                /*
+                 * Use the existing session first.
+                 */
 
-                currentUserId = userData.user.id;
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth.getSession();
 
-                const { error } = await supabaseClient
-                    .from("feature_suggestions")
-                    .insert({
-                        user_id: currentUserId,
-                        title: title,
-                        description: description,
-                        category: category
-                    });
 
                 if (error) {
-                    console.error("Suggestion submission error:", error);
+
+                    console.error(
+                        "Session error:",
+                        error
+                    );
+
                     showSuggestionMessage(
-                        "We couldn't save your suggestion. Please check your connection and database setup, then try again.",
+                        "Your login session could not be verified. Please log in again.",
                         "error"
                     );
+
                     return;
                 }
 
-                showSuggestionMessage("Suggestion submitted successfully! Thank you for helping improve Vision-AI-Pro. ❤️", "success");
-                document.getElementById("suggestionForm").reset();
+
+                const session =
+                    data.session;
+
+
+                if (
+                    !session ||
+                    !session.user
+                ) {
+
+                    showSuggestionMessage(
+                        "Please log in first before submitting a suggestion.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                currentUserId =
+                    session.user.id;
+
+
+                const {
+                    error: insertError
+                } =
+                    await supabaseClient
+                        .from("feature_suggestions")
+                        .insert({
+
+                            user_id:
+                                currentUserId,
+
+                            title:
+                                title,
+
+                            description:
+                                description,
+
+                            category:
+                                category
+                        });
+
+
+                if (insertError) {
+
+                    console.error(
+                        "Suggestion submission error:",
+                        insertError
+                    );
+
+                    showSuggestionMessage(
+                        "We couldn't save your suggestion. Please try again.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                showSuggestionMessage(
+                    "Suggestion submitted successfully! Thank you for helping improve Vision-AI-Pro. ❤️",
+                    "success"
+                );
+
+
+                document
+                    .getElementById(
+                        "suggestionForm"
+                    )
+                    .reset();
+
+
                 await loadMySuggestions();
+
+
             } catch (error) {
-                console.error("Suggestion submission error:", error);
-                showSuggestionMessage("Something went wrong while submitting. Please try again.", "error");
+
+                console.error(
+                    "Suggestion submission error:",
+                    error
+                );
+
+                showSuggestionMessage(
+                    "Something went wrong while submitting. Please try again.",
+                    "error"
+                );
+
+
             } finally {
+
                 button.disabled = false;
-                button.textContent = "Submit Suggestion";
+
+                button.textContent =
+                    "Submit Suggestion";
             }
         }
 
+
+        /* =========================
+           LOAD MY SUGGESTIONS
+        ========================= */
+
         async function loadMySuggestions() {
-            const output = document.getElementById("mySuggestions");
+
+            const output =
+                document.getElementById(
+                    "mySuggestions"
+                );
+
 
             if (!supabaseClient) {
-                output.textContent = "Database connection is unavailable.";
+
+                output.textContent =
+                    "Database connection is unavailable.";
+
                 return;
             }
 
+
             try {
-                const { data: userData, error: userError } = await supabaseClient.auth.getUser();
 
-                if (userError || !userData.user) {
-                    output.textContent = "Please log in to view your submitted suggestions.";
-                    return;
-                }
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth.getSession();
 
-                currentUserId = userData.user.id;
-                output.textContent = "Loading your suggestions...";
-
-                const { data, error } = await supabaseClient
-                    .from("feature_suggestions")
-                    .select("id, title, category, status, created_at")
-                    .eq("user_id", currentUserId)
-                    .order("created_at", { ascending: false })
-                    .limit(50);
 
                 if (error) {
-                    console.error("Loading suggestions error:", error);
-                    output.textContent = "Could not load suggestions. Please try again.";
+
+                    console.error(
+                        "Session error:",
+                        error
+                    );
+
+                    output.textContent =
+                        "Please log in to view your submitted suggestions.";
+
                     return;
                 }
+
+
+                const session =
+                    data.session;
+
+
+                if (
+                    !session ||
+                    !session.user
+                ) {
+
+                    output.textContent =
+                        "Please log in to view your submitted suggestions.";
+
+                    return;
+                }
+
+
+                currentUserId =
+                    session.user.id;
+
+
+                output.textContent =
+                    "Loading your suggestions...";
+
+
+                const {
+                    data: suggestions,
+                    error: suggestionError
+                } =
+                    await supabaseClient
+                        .from("feature_suggestions")
+                        .select(
+                            "id, title, category, status, created_at"
+                        )
+                        .eq(
+                            "user_id",
+                            currentUserId
+                        )
+                        .order(
+                            "created_at",
+                            {
+                                ascending: false
+                            }
+                        )
+                        .limit(50);
+
+
+                if (suggestionError) {
+
+                    console.error(
+                        "Loading suggestions error:",
+                        suggestionError
+                    );
+
+                    output.textContent =
+                        "Could not load suggestions. Please try again.";
+
+                    return;
+                }
+
 
                 output.replaceChildren();
 
-                if (!data || data.length === 0) {
-                    output.textContent = "You haven't submitted any suggestions yet.";
+
+                if (
+                    !suggestions ||
+                    suggestions.length === 0
+                ) {
+
+                    output.textContent =
+                        "You haven't submitted any suggestions yet.";
+
                     return;
                 }
 
-                data.forEach(function (item) {
-                    const wrapper = document.createElement("div");
-                    wrapper.className = "suggestion-item";
 
-                    const title = document.createElement("strong");
-                    title.textContent = item.title;
+                suggestions.forEach(
+                    function(item) {
 
-                    const details = document.createElement("div");
-                    details.className = "small-text";
-                    details.textContent =
-                        item.category + " • " +
-                        new Date(item.created_at).toLocaleDateString();
+                        const wrapper =
+                            document.createElement(
+                                "div"
+                            );
 
-                    const status = document.createElement("div");
-                    status.className = "suggestion-status";
-                    status.textContent = "Status: " + item.status.replaceAll("_", " ");
+                        wrapper.className =
+                            "suggestion-item";
 
-                    wrapper.append(title, details, status);
-                    output.appendChild(wrapper);
-                });
+
+                        const title =
+                            document.createElement(
+                                "strong"
+                            );
+
+                        title.textContent =
+                            item.title;
+
+
+                        const details =
+                            document.createElement(
+                                "div"
+                            );
+
+                        details.className =
+                            "small-text";
+
+                        details.textContent =
+                            item.category +
+                            " • " +
+                            new Date(
+                                item.created_at
+                            ).toLocaleDateString();
+
+
+                        const status =
+                            document.createElement(
+                                "div"
+                            );
+
+                        status.className =
+                            "suggestion-status";
+
+                        status.textContent =
+                            "Status: " +
+                            item.status.replaceAll(
+                                "_",
+                                " "
+                            );
+
+
+                        wrapper.append(
+                            title,
+                            details,
+                            status
+                        );
+
+
+                        output.appendChild(
+                            wrapper
+                        );
+                    }
+                );
+
+
             } catch (error) {
-                console.error("Loading suggestions error:", error);
-                output.textContent = "Something went wrong while loading suggestions.";
+
+                console.error(
+                    "Loading suggestions error:",
+                    error
+                );
+
+                output.textContent =
+                    "Something went wrong while loading suggestions.";
             }
         }
 
+
+        /* =========================
+           HOME
+        ========================= */
+
         function goHome() {
-            window.location.href = "index.html";
+
+            window.location.href =
+                "index.html";
         }
 
-        document.getElementById("suggestionForm").addEventListener("submit", submitSuggestion);
+
+        /* =========================
+           START
+        ========================= */
+
+        document
+            .getElementById(
+                "suggestionForm"
+            )
+            .addEventListener(
+                "submit",
+                submitSuggestion
+            );
+
 
         loadDarkMode();
         loadLanguage();
         loadNotifications();
+
         checkLoginStatus();
+        listenForAuthChanges();
+
     </script>
+
 </body>
 </html>
