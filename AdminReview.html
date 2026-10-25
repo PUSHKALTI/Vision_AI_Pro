@@ -116,13 +116,15 @@
       const title = document.createElement("h2");
       title.textContent = item.title || "(Untitled suggestion)";
       card.appendChild(title);
- const meta = document.createElement("p");
+
+      const meta = document.createElement("p");
       meta.className = "muted";
       meta.textContent =
         "Type: " + (item.suggestion_type || "unknown") +
         " | Status: " + (item.status || "submitted");
       card.appendChild(meta);
- const description = document.createElement("p");
+
+      const description = document.createElement("p");
       description.textContent = item.description || "";
       card.appendChild(description);
 
@@ -134,7 +136,8 @@
       const statusLabel = document.createElement("label");
       statusLabel.textContent = "Review status";
       card.appendChild(statusLabel);
-const status = document.createElement("select");
+
+      const status = document.createElement("select");
       [
         ["submitted", "Submitted"],
         ["under_review", "Under review"],
@@ -158,12 +161,14 @@ const status = document.createElement("select");
       notes.value = item.admin_notes || "";
       notes.placeholder = "Private review notes...";
       card.appendChild(notes);
- const saveButton = document.createElement("button");
+
+      const saveButton = document.createElement("button");
       saveButton.textContent = "Save review";
       saveButton.addEventListener("click", async function () {
         saveButton.disabled = true;
         saveButton.textContent = "Saving...";
-const { error: saveError } = await supabaseClient
+
+        const { error: saveError } = await supabaseClient
           .from("feature_suggestions")
           .update({
             status: status.value,
@@ -173,23 +178,27 @@ const { error: saveError } = await supabaseClient
             updated_at: new Date().toISOString()
           })
           .eq("id", item.id);
- if (saveError) {
+
+        if (saveError) {
           showMessage("Save failed: " + saveError.message, "error");
           saveButton.disabled = false;
           saveButton.textContent = "Save review";
           return;
         }
-  item.status = status.value;
+
+        item.status = status.value;
         item.admin_notes = notes.value;
         showMessage("Review saved successfully!", "success");
         saveButton.disabled = false;
         saveButton.textContent = "Save review";
       });
-card.appendChild(saveButton);
+
+      card.appendChild(saveButton);
       container.appendChild(card);
     });
   }
-await loadSuggestions();
+
+  await loadSuggestions();
 })();
 </script>
 </body>
