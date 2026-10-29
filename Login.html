@@ -124,7 +124,7 @@ async function signupUser(){
  if(password!==confirm){msg("signupMsg","Passwords do not match.",false);return;}
  const b=document.getElementById("signupBtn");b.disabled=true;b.textContent="Creating account...";
  try{
-  const r=await VAP_SB.auth.signUp({email:email,password:password});
+ VAP_SB.auth.signUp({email,password,options:{emailRedirectTo:'https://pushkalti.github.io/Vision_AI_Pro/Login.html'}})
   if(r.error)throw r.error;
   if(r.data&&r.data.session){
    msg("signupMsg","Account created. Opening Vision-AI-Pro...",true);
