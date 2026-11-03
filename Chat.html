@@ -239,25 +239,51 @@ data.forEach(function(item) {
    SEND MESSAGE
 ========================= */
 async function sendMessage() {
-  let input = document.getElementById("message");
-  let text = input.value.trim();
-if (text === "") {
+  const input = document.getElementById("message");
+  const text = input.value.trim();
+
+  if (text === "") {
     return;
   }
- addUserMessage(text);
+
+  addUserMessage(text);
   input.value = "";
- await saveChatMessage(
-    "user",
-    text
-  );
- setTimeout(async function() {
-    let answer = getDemoAnswer(text);
-    addAIMessage(answer);
-await saveChatMessage(
-      "ai",
-      answer
+
+  await saveChatMessage("user", text);
+
+  try {
+    const { data, error } = await supabaseClient.functions.invoke(
+      "vap-api",
+      {
+        body: {
+          message: text
+        }
+      }
     );
-  }, 500);
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data || !data.success) {
+      throw new Error(data?.error || "Backend request failed.");
+    }
+
+    const answer =
+      data.message + "\n" + data.received_message;
+
+    addAIMessage(answer);
+    await saveChatMessage("ai", answer);
+
+  } catch (error) {
+    console.error("AI backend error:", error);
+
+    const errorMessage =
+      "I couldn't connect to the backend. Please try again.";
+
+    addAIMessage(errorMessage);
+    await saveChatMessage("ai", errorMessage);
+  }
 }
 /* =========================
    USER MESSAGE
