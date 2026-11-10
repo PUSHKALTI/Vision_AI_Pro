@@ -3,198 +3,258 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Chat - Vision AI Pro</title>
+
+<title>Vision AI Pro - AI Chat</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f4f6fb;
-  color: #202b3c;
+  background: #ffffff;
+  color: #26364a;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
 }
 
 .app {
-  display: flex;
   min-height: 100vh;
-  max-width: 1400px;
-  margin: auto;
-  background: white;
-}
-
-.sidebar {
-  width: 270px;
-  flex-shrink: 0;
-  background: #f7f9fc;
-  border-right: 1px solid #e5e9f0;
-  padding: 17px;
   display: flex;
   flex-direction: column;
 }
 
-.sidebar-top {
+/* HEADER */
+
+.header {
+  height: 68px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 15px;
+  padding: 0 20px;
+  border-bottom: 1px solid #e8edf3;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 
-.sidebar h3 {
+.menu-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #e5eaf1;
+  border-radius: 11px;
+  background: #ffffff;
+  color: #315d91;
+  font-size: 23px;
+}
+
+.menu-btn:hover {
+  background: #edf4fc;
+}
+
+.brand {
+  flex: 1;
+  min-width: 0;
+}
+
+.brand h2 {
   margin: 0;
-  color: #245b91;
+  font-size: 20px;
+  color: #2464a5;
 }
 
-.new-chat {
-  width: 100%;
-  margin-bottom: 17px;
+.brand p {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: #8b96a5;
 }
 
-.history-heading {
+.header-status {
   font-size: 12px;
-  color: #8490a0;
+  color: #718096;
+}
+
+/* DRAWER */
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 31, 49, 0.35);
+  z-index: 20;
+  visibility: hidden;
+  opacity: 0;
+  transition: .2s;
+}
+
+.drawer-overlay.open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  left: -310px;
+  bottom: 0;
+  width: 290px;
+  max-width: 85vw;
+  background: #f8faff;
+  z-index: 21;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  transition: left .25s ease;
+  box-shadow: 5px 0 25px rgba(0,0,0,.08);
+}
+
+.drawer.open {
+  left: 0;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e6ebf2;
+}
+
+.drawer-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #285f99;
+}
+
+.close-btn {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 10px;
+  background: #eaf0f8;
+  color: #315d91;
+  font-size: 21px;
+}
+
+.new-chat-btn {
+  margin-top: 18px;
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #cbdcf0;
+  border-radius: 11px;
+  background: #eaf3ff;
+  color: #235f9e;
+  font-size: 14px;
   font-weight: bold;
-  margin: 8px 0;
+  text-align: left;
+}
+
+.new-chat-btn:hover {
+  background: #dcecff;
+}
+
+.recent-heading {
+  margin: 25px 5px 12px;
+  color: #8994a3;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: .7px;
 }
 
 #conversationList {
-  overflow-y: auto;
   flex: 1;
+  overflow-y: auto;
 }
 
 .conversation-item {
   width: 100%;
   display: block;
-  text-align: left;
+  border: none;
+  border-radius: 10px;
   padding: 12px;
   margin-bottom: 5px;
-  border-radius: 9px;
   background: transparent;
-  color: #33445b;
-  font-weight: normal;
+  color: #394c63;
+  font-size: 13px;
+  text-align: left;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.conversation-item:hover {
+  background: #edf3fa;
+}
+
 .conversation-item.active {
   background: #dcecff;
-  color: #174e84;
+  color: #19558d;
   font-weight: bold;
 }
 
 .legacy-item {
-  background: #fff5df;
-  color: #795a19;
+  background: #fff3dd;
+  color: #785c23;
 }
 
-.sidebar-footer {
-  padding-top: 12px;
-  border-top: 1px solid #e5e9f0;
+.drawer-footer {
+  padding-top: 14px;
+  border-top: 1px solid #e6ebf2;
 }
 
-.main {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.header {
-  padding: 17px 20px;
-  background: white;
-  border-bottom: 1px solid #e5e9f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.brand h2 {
-  margin: 0;
-  color: #2563a6;
-  font-size: 21px;
-}
-
-.brand p {
-  margin: 5px 0 0;
-  color: #7b8492;
-  font-size: 12px;
-}
-
-.header-actions {
-  display: flex;
-  gap: 7px;
-  flex-wrap: wrap;
-}
-
-button, select {
-  border: 0;
-  border-radius: 9px;
-  padding: 11px 14px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-button {
-  background: #2869b1;
-  color: white;
+.home-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #edf3fa;
+  color: #315d91;
   font-weight: bold;
 }
 
-button:hover { opacity: .88; }
-
-button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-}
-
-.secondary {
-  background: #edf3fa;
-  color: #245b91;
-}
-
-.danger {
-  background: #fff0f0;
-  color: #c03939;
-}
-
-select {
-  background: #edf3fa;
-  color: #245b91;
-}
+/* CHAT AREA */
 
 .chat-area {
   flex: 1;
   width: 100%;
   max-width: 900px;
   margin: auto;
-  padding: 20px;
+  padding: 25px 22px;
 }
 
 .welcome {
   text-align: center;
-  padding: 65px 10px 35px;
+  padding: 85px 10px 45px;
 }
 
-.welcome .logo { font-size: 48px; }
+.welcome-logo {
+  font-size: 58px;
+  margin-bottom: 15px;
+}
 
 .welcome h1 {
-  margin: 12px 0 8px;
-  color: #244f7e;
+  color: #285c91;
+  font-size: 29px;
+  margin: 10px 0;
 }
 
 .welcome p {
-  color: #788493;
-  line-height: 1.6;
+  color: #8591a0;
+  line-height: 1.7;
+  font-size: 14px;
 }
 
 #chatBox {
-  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  min-height: 250px;
   max-height: 60vh;
   overflow-y: auto;
   padding: 10px 0;
@@ -202,30 +262,36 @@ select {
 
 .message {
   display: flex;
-  margin: 15px 0;
+  margin: 13px 0;
 }
 
-.userMsg { justify-content: flex-end; }
-.aiMsg { justify-content: flex-start; }
+.userMsg {
+  justify-content: flex-end;
+}
+
+.aiMsg {
+  justify-content: flex-start;
+}
 
 .bubble {
   max-width: 82%;
-  padding: 13px 16px;
-  border-radius: 16px;
-  line-height: 1.6;
+  padding: 14px 17px;
+  border-radius: 17px;
+  font-size: 14px;
+  line-height: 1.7;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
 .userMsg .bubble {
-  background: #dcecff;
-  color: #173d65;
+  background: #e4f0ff;
+  color: #234b76;
   border-bottom-right-radius: 4px;
 }
 
 .aiMsg .bubble {
-  background: #f0f2f7;
-  color: #26364a;
+  background: #f1f3f7;
+  color: #293b50;
   border-bottom-left-radius: 4px;
 }
 
@@ -233,106 +299,145 @@ select {
   display: block;
   font-size: 11px;
   font-weight: bold;
+  opacity: .65;
   margin-bottom: 5px;
-  opacity: .7;
 }
+
+/* COMPOSER */
 
 .composer {
   width: 100%;
   max-width: 900px;
-  margin: auto;
   padding: 12px 20px 18px;
-  border-top: 1px solid #e9edf3;
-  background: white;
+  margin: auto;
+  background: #ffffff;
 }
 
 .input-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   padding: 8px;
-  border: 1px solid #d9e1eb;
-  border-radius: 15px;
-  background: white;
+  border: 1px solid #dce3ed;
+  border-radius: 16px;
+  box-shadow: 0 3px 15px rgba(20,50,90,.05);
 }
 
 #message {
   flex: 1;
   min-width: 0;
-  padding: 12px;
   border: none;
   outline: none;
-  font-size: 16px;
+  padding: 12px;
+  font-size: 15px;
   color: #26364a;
+  background: transparent;
 }
 
-#sendBtn { padding: 13px 18px; }
+#sendBtn {
+  border: none;
+  border-radius: 12px;
+  padding: 13px 17px;
+  background: #2869b1;
+  color: white;
+  font-weight: bold;
+}
+
+#sendBtn:disabled {
+  opacity: .5;
+}
 
 .tools {
   display: flex;
   justify-content: center;
+  gap: 9px;
   flex-wrap: wrap;
-  gap: 8px;
-  padding-top: 12px;
+  padding-top: 13px;
+}
+
+.tool-btn, #language {
+  border: 1px solid #e0e8f1;
+  border-radius: 10px;
+  background: #f5f8fc;
+  color: #315d91;
+  padding: 10px 12px;
+  font-size: 12px;
 }
 
 .status {
   text-align: center;
-  color: #8993a0;
-  font-size: 12px;
-  padding: 10px;
+  color: #8994a2;
+  font-size: 11px;
+  padding: 12px 5px 3px;
 }
 
 .footer {
   text-align: center;
-  padding: 12px;
   border-top: 1px solid #edf0f4;
+  padding: 14px;
 }
 
 .footer a {
   color: #2869b1;
   text-decoration: none;
   font-weight: bold;
+  font-size: 13px;
 }
 
-.mobile-menu { display: none; }
+/* MOBILE */
 
-@media(max-width:700px) {
-  .sidebar {
-    position: fixed;
-    z-index: 10;
-    top: 0;
-    bottom: 0;
-    left: -290px;
-    width: 270px;
-    transition: left .2s;
-    box-shadow: 3px 0 15px rgba(0,0,0,.08);
+@media(max-width:600px) {
+
+  .header {
+    height: 62px;
+    padding: 0 12px;
   }
 
-  .sidebar.open { left: 0; }
+  .brand h2 {
+    font-size: 17px;
+  }
 
-  .mobile-menu { display: inline-block; }
+  .header-status {
+    display: none;
+  }
 
-  .header { padding: 12px; }
+  .chat-area {
+    padding: 12px;
+  }
 
-  .brand h2 { font-size: 17px; }
+  .welcome {
+    padding-top: 65px;
+  }
 
-  .chat-area { padding: 10px; }
+  .welcome h1 {
+    font-size: 23px;
+  }
 
-  #chatBox { max-height: 55vh; }
+  #chatBox {
+    max-height: 55vh;
+  }
 
-  .bubble { max-width: 90%; }
+  .bubble {
+    max-width: 91%;
+    font-size: 13px;
+  }
 
-  .composer { padding: 10px; }
-
-  #sendBtn { padding: 12px; }
-
-  button, select {
-    font-size: 12px;
+  .composer {
     padding: 10px;
   }
 
-  .welcome { padding-top: 40px; }
+  #sendBtn {
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  #message {
+    font-size: 14px;
+  }
+
+  .tool-btn, #language {
+    padding: 9px;
+  }
 }
 </style>
 </head>
@@ -341,115 +446,143 @@ select {
 
 <div class="app">
 
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-top">
-      <h3>💬 My Chats</h3>
-      <button class="secondary" onclick="toggleSidebar()">✕</button>
+  <!-- CHAT HISTORY DRAWER -->
+
+  <div class="drawer-overlay" id="drawerOverlay"
+       onclick="closeDrawer()"></div>
+
+  <aside class="drawer" id="drawer">
+
+    <div class="drawer-header">
+      <h3>💬 Chats</h3>
+      <button class="close-btn" onclick="closeDrawer()">×</button>
     </div>
 
-    <button class="new-chat" id="newChatBtn" onclick="startNewChat()">
-      ＋ New Chat
+    <button class="new-chat-btn" onclick="startNewChat()">
+      ＋ &nbsp; New Chat
     </button>
 
-    <div class="history-heading">RECENT CONVERSATIONS</div>
-    <div id="conversationList"></div>
+    <div class="recent-heading">RECENT CHATS</div>
 
-    <div class="sidebar-footer">
-      <button class="secondary" style="width:100%"
-        onclick="location.href='index.html'">
+    <div id="conversationList">
+      <div style="padding:10px;color:#8793a2;font-size:13px">
+        Loading conversations...
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button class="home-btn" onclick="location.href='index.html'">
         🏠 Home
       </button>
     </div>
+
   </aside>
 
-  <main class="main">
+  <!-- HEADER -->
 
-    <header class="header">
-      <div style="display:flex;align-items:center;gap:10px">
-        <button class="secondary mobile-menu"
-          onclick="toggleSidebar()">☰</button>
+  <header class="header">
 
-        <div class="brand">
-          <h2>🤖 Vision AI Pro</h2>
-          <p>AI Teacher • Ask • Learn • Improve</p>
-        </div>
-      </div>
+    <button class="menu-btn" onclick="openDrawer()"
+            aria-label="Open chat history">
+      ☰
+    </button>
 
-      <div class="header-actions">
-        <button class="secondary" onclick="startVoice()">🎤 Voice</button>
-      </div>
-    </header>
+    <div class="brand">
+      <h2>🤖 Vision AI Pro</h2>
+      <p>AI Teacher • Ask • Learn • Improve</p>
+    </div>
 
-    <section class="chat-area">
+    <div class="header-status">
+      AI Chat
+    </div>
 
-      <div class="welcome" id="welcome">
-        <div class="logo">🤖</div>
-        <h1>Welcome to Vision AI Pro</h1>
-        <p>Your AI Teacher is ready.<br>
-        Ask questions and learn step by step.</p>
-      </div>
+  </header>
 
-      <div id="chatBox"></div>
+  <!-- MAIN CHAT -->
 
-    </section>
+  <main class="chat-area">
 
-    <section class="composer">
+    <div class="welcome" id="welcome">
 
-      <div class="input-row">
-        <input id="message" type="text"
-          placeholder="Message Vision AI Pro..."
-          autocomplete="off">
+      <div class="welcome-logo">🤖</div>
 
-        <button id="sendBtn" onclick="sendMessage()">➤ Send</button>
-      </div>
+      <h1>Welcome to Vision AI Pro</h1>
 
-      <div class="tools">
+      <p>
+        Your AI Teacher is ready.<br>
+        Ask questions and learn step by step.
+      </p>
 
-        <select id="language">
-          <option value="English">English</option>
-          <option value="Hindi">Hindi</option>
-          <option value="Hinglish">Hinglish</option>
-        </select>
+    </div>
 
-        <button class="secondary" onclick="teacherMode()">
-          👨‍🏫 AI Teacher
-        </button>
-
-        <button class="secondary" onclick="studyPlanner()">
-          📅 Study Planner
-        </button>
-
-        <button class="secondary" onclick="progressTracker()">
-          📊 Progress
-        </button>
-
-      </div>
-
-      <div class="status" id="status">
-        Vision AI Pro • Starting...
-      </div>
-
-    </section>
-
-    <footer class="footer">
-      <a href="index.html">🏠 Home</a>
-    </footer>
+    <div id="chatBox"></div>
 
   </main>
+
+  <!-- MESSAGE INPUT -->
+
+  <section class="composer">
+
+    <div class="input-row">
+
+      <input
+        id="message"
+        type="text"
+        placeholder="Message Vision AI Pro..."
+        autocomplete="off"
+      >
+
+      <button id="sendBtn" onclick="sendMessage()">
+        ➤
+      </button>
+
+    </div>
+
+    <div class="tools">
+
+      <select id="language">
+        <option value="English">English</option>
+        <option value="Hindi">Hindi</option>
+        <option value="Hinglish">Hinglish</option>
+      </select>
+
+      <button class="tool-btn" onclick="teacherMode()">
+        👨‍🏫 AI Teacher
+      </button>
+
+      <button class="tool-btn" onclick="studyPlanner()">
+        📅 Study Planner
+      </button>
+
+      <button class="tool-btn" onclick="progressTracker()">
+        📊 Progress
+      </button>
+
+    </div>
+
+    <div class="status" id="status">
+      Vision AI Pro • Connecting...
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    <a href="index.html">🏠 Home</a>
+  </footer>
 
 </div>
 
 <script>
 
-/* =========================
+/* ==================================
    SUPABASE CONNECTION
-========================= */
+================================== */
 
 const SUPABASE_URL =
-  "https://swyvrgpapuralxngfoxd.supabase.co";
+"https://swyvrgpapuralxngfoxd.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
+"sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
@@ -461,31 +594,58 @@ let currentUserId = null;
 let isSending = false;
 let isLegacyChat = false;
 
-/* =========================
-   BASIC HELPERS
-========================= */
+
+/* ==================================
+   STATUS
+================================== */
 
 function setStatus(message) {
   document.getElementById("status").textContent = message;
 }
 
+
+/* ==================================
+   DRAWER OPEN AND CLOSE
+================================== */
+
+function openDrawer() {
+
+  document.getElementById("drawer").classList.add("open");
+
+  document.getElementById("drawerOverlay")
+    .classList.add("open");
+
+}
+
+function closeDrawer() {
+
+  document.getElementById("drawer").classList.remove("open");
+
+  document.getElementById("drawerOverlay")
+    .classList.remove("open");
+
+}
+
+
+/* ==================================
+   SESSION
+================================== */
+
 async function getCurrentSession() {
+
   const { data, error } =
     await supabaseClient.auth.getSession();
 
   if (error) throw error;
 
   return data.session;
+
 }
 
-function toggleSidebar() {
-  document.getElementById("sidebar")
-    .classList.toggle("open");
-}
 
-/* =========================
+/* ==================================
    MESSAGE DISPLAY
-========================= */
+================================== */
 
 function addMessage(sender, message, scroll = true) {
 
@@ -512,103 +672,43 @@ function addMessage(sender, message, scroll = true) {
 
   bubble.appendChild(label);
   bubble.appendChild(content);
+
   row.appendChild(bubble);
   box.appendChild(row);
 
   if (scroll) {
     box.scrollTop = box.scrollHeight;
   }
-}
 
-function addUserMessage(message, scroll = true) {
-  addMessage("user", message, scroll);
-}
-
-function addAIMessage(message, scroll = true) {
-  addMessage("ai", message, scroll);
 }
 
 function clearChatScreen() {
+
   document.getElementById("chatBox").innerHTML = "";
+
   document.getElementById("welcome").style.display = "block";
+
 }
 
-/* =========================
-   CREATE CONVERSATION
-========================= */
 
-async function createConversation() {
-
-  const session = await getCurrentSession();
-
-  if (!session || !session.user) {
-    setStatus("Please log in before starting a chat.");
-    return null;
-  }
-
-  const { data, error } = await supabaseClient
-    .from("chat_conversations")
-    .insert({
-      user_id: session.user.id,
-      title: "New Chat"
-    })
-    .select("id, title, created_at, updated_at")
-    .single();
-
-  if (error) {
-    console.error("Create conversation error:", error);
-    throw error;
-  }
-
-  currentConversationId = data.id;
-  currentUserId = session.user.id;
-  isLegacyChat = false;
-
-  clearChatScreen();
-
-  await loadConversations();
-
-  setStatus("New conversation ready.");
-
-  return data;
-}
-
-/* =========================
-   NEW CHAT BUTTON
-========================= */
-
-async function startNewChat() {
-
-  if (isSending) return;
-
-  try {
-    await createConversation();
-
-    document.getElementById("sidebar")
-      .classList.remove("open");
-
-    document.getElementById("message").focus();
-
-  } catch (error) {
-    console.error(error);
-    setStatus("Could not create a new chat.");
-  }
-}
-
-/* =========================
-   LOAD CONVERSATION LIST
-========================= */
+/* ==================================
+   LOAD CONVERSATIONS
+================================== */
 
 async function loadConversations() {
 
   const list = document.getElementById("conversationList");
+
   list.innerHTML = "";
 
   const session = await getCurrentSession();
 
   if (!session || !session.user) {
-    list.textContent = "Please log in to view chats.";
+
+    list.textContent = "Please log in to view your chats.";
+
     return;
+
   }
 
   currentUserId = session.user.id;
@@ -630,6 +730,7 @@ async function loadConversations() {
       (chat.id === currentConversationId ? " active" : "");
 
     button.textContent = "💬 " + chat.title;
+
     button.title = chat.title;
 
     button.onclick = function() {
@@ -640,7 +741,7 @@ async function loadConversations() {
 
   });
 
-  /* Show older messages that have no conversation ID */
+  /* OLD CHAT HISTORY */
 
   const { count, error: legacyError } = await supabaseClient
     .from("chat_history")
@@ -649,27 +750,117 @@ async function loadConversations() {
     .is("conversation_id", null);
 
   if (legacyError) {
-    console.error("Legacy history check:", legacyError);
+
+    console.error("Legacy history error:", legacyError);
+
   } else if (count > 0) {
 
-    const legacyButton = document.createElement("button");
+    const button = document.createElement("button");
 
-    legacyButton.className =
+    button.className =
       "conversation-item legacy-item" +
       (isLegacyChat ? " active" : "");
 
-    legacyButton.textContent = "📁 Older Messages (" + count + ")";
+    button.textContent = "📁 Older Messages (" + count + ")";
 
-    legacyButton.onclick = loadLegacyMessages;
+    button.onclick = loadLegacyMessages;
 
-    list.appendChild(legacyButton);
+    list.appendChild(button);
+
+  }
+
+  if (!data || data.length === 0) {
+
+    if (!count) {
+
+      const empty = document.createElement("div");
+
+      empty.style.cssText =
+        "padding:12px;color:#8994a2;font-size:13px";
+
+      empty.textContent = "No conversations yet.";
+
+      list.appendChild(empty);
+
+    }
+
   }
 
 }
 
-/* =========================
-   OPEN OLD CONVERSATION
-========================= */
+
+/* ==================================
+   CREATE NEW CHAT
+================================== */
+
+async function createConversation() {
+
+  const session = await getCurrentSession();
+
+  if (!session || !session.user) {
+
+    throw new Error("Please log in before starting a chat.");
+
+  }
+
+  const { data, error } = await supabaseClient
+    .from("chat_conversations")
+    .insert({
+      user_id: session.user.id,
+      title: "New Chat"
+    })
+    .select("id, title, created_at, updated_at")
+    .single();
+
+  if (error) throw error;
+
+  currentConversationId = data.id;
+
+  currentUserId = session.user.id;
+
+  isLegacyChat = false;
+
+  clearChatScreen();
+
+  await loadConversations();
+
+  setStatus("New conversation ready.");
+
+  return data;
+
+}
+
+
+/* ==================================
+   NEW CHAT BUTTON
+================================== */
+
+async function startNewChat() {
+
+  if (isSending) return;
+
+  try {
+
+    await createConversation();
+
+    closeDrawer();
+
+    document.getElementById("message").focus();
+
+  } catch (error) {
+
+    console.error("New chat error:", error);
+
+    setStatus("New Chat Error: " + error.message);
+
+  }
+
+}
+
+
+/* ==================================
+   OPEN EXISTING CHAT
+================================== */
 
 async function openConversation(conversationId) {
 
@@ -678,8 +869,9 @@ async function openConversation(conversationId) {
     const session = await getCurrentSession();
 
     if (!session || !session.user) {
-      setStatus("Please log in.");
-      return;
+
+      throw new Error("Please log in first.");
+
     }
 
     const { data: conversation, error: conversationError } =
@@ -702,16 +894,18 @@ async function openConversation(conversationId) {
     if (error) throw error;
 
     currentConversationId = conversation.id;
+
     currentUserId = session.user.id;
+
     isLegacyChat = false;
 
     clearChatScreen();
 
-    if (data && data.length > 0) {
-      data.forEach(function(item) {
-        addMessage(item.sender, item.message, false);
-      });
-    }
+    (data || []).forEach(function(item) {
+
+      addMessage(item.sender, item.message, false);
+
+    });
 
     document.getElementById("chatBox").scrollTop =
       document.getElementById("chatBox").scrollHeight;
@@ -720,21 +914,22 @@ async function openConversation(conversationId) {
 
     setStatus("Opened: " + conversation.title);
 
-    document.getElementById("sidebar")
-      .classList.remove("open");
+    closeDrawer();
 
   } catch (error) {
 
-    console.error("Open conversation error:", error);
-    setStatus("Could not open this conversation.");
+    console.error("Open chat error:", error);
+
+    setStatus("Open Chat Error: " + error.message);
 
   }
 
 }
 
-/* =========================
-   LOAD OLD UNLINKED MESSAGES
-========================= */
+
+/* ==================================
+   LOAD OLDER MESSAGES
+================================== */
 
 async function loadLegacyMessages() {
 
@@ -742,7 +937,9 @@ async function loadLegacyMessages() {
 
     const session = await getCurrentSession();
 
-    if (!session || !session.user) return;
+    if (!session || !session.user) {
+      throw new Error("Please log in.");
+    }
 
     const { data, error } = await supabaseClient
       .from("chat_history")
@@ -754,74 +951,81 @@ async function loadLegacyMessages() {
     if (error) throw error;
 
     currentConversationId = null;
+
     currentUserId = session.user.id;
+
     isLegacyChat = true;
 
     clearChatScreen();
 
     (data || []).forEach(function(item) {
+
       addMessage(item.sender, item.message, false);
+
     });
-
-    document.getElementById("chatBox").scrollTop =
-      document.getElementById("chatBox").scrollHeight;
-
-    setStatus("Viewing older saved messages. Start a New Chat to continue.");
-
-    document.getElementById("sidebar")
-      .classList.remove("open");
 
     await loadConversations();
 
+    setStatus("Viewing older messages. Start New Chat to continue.");
+
+    closeDrawer();
+
   } catch (error) {
-    console.error("Legacy loading error:", error);
-    setStatus("Could not load older messages.");
+
+    console.error("Legacy chat error:", error);
+
+    setStatus("History Error: " + error.message);
+
   }
 
 }
 
-/* =========================
+
+/* ==================================
    SAVE MESSAGE
-========================= */
+================================== */
 
 async function saveChatMessage(sender, message) {
 
-  try {
+  if (!currentConversationId || !currentUserId) {
 
-    if (!currentConversationId || !currentUserId) {
-      return false;
-    }
+    console.error("Missing conversation or user ID.");
 
-    const { error } = await supabaseClient
-      .from("chat_history")
-      .insert({
-        user_id: currentUserId,
-        sender: sender,
-        message: message,
-        conversation_id: currentConversationId
-      });
-
-    if (error) throw error;
-
-    return true;
-
-  } catch (error) {
-
-    console.error("History save error:", error);
-    setStatus("Warning: Message could not be saved.");
     return false;
 
   }
 
+  const { error } = await supabaseClient
+    .from("chat_history")
+    .insert({
+      user_id: currentUserId,
+      conversation_id: currentConversationId,
+      sender: sender,
+      message: message
+    });
+
+  if (error) {
+
+    console.error("Message save error:", error);
+
+    setStatus("History Save Error: " + error.message);
+
+    return false;
+
+  }
+
+  return true;
+
 }
 
-/* =========================
-   AUTOMATIC CHAT TITLE
-========================= */
+
+/* ==================================
+   UPDATE CHAT TITLE
+================================== */
 
 async function updateConversationTitle(message) {
 
-  if (!currentConversationId) return;
+  if (!currentConversationId || !currentUserId) return;
 
   try {
 
@@ -834,58 +1038,52 @@ async function updateConversationTitle(message) {
 
     if (error) throw error;
 
-    if (data.title === "New Chat") {
+    let title = data.title;
 
-      let title = message
-        .replace(/\s+/g, " ")
-        .trim();
+    if (title === "New Chat") {
+
+      title = message.replace(/\s+/g, " ").trim();
 
       if (title.length > 42) {
+
         title = title.substring(0, 42).trim() + "...";
+
       }
 
-      const { error: updateError } = await supabaseClient
-        .from("chat_conversations")
-        .update({
-          title: title,
-          updated_at: new Date().toISOString()
-        })
-        .eq("id", currentConversationId)
-        .eq("user_id", currentUserId);
-
-      if (updateError) throw updateError;
-
-    } else {
-
-      const { error: timeError } = await supabaseClient
-        .from("chat_conversations")
-        .update({
-          updated_at: new Date().toISOString()
-        })
-        .eq("id", currentConversationId)
-        .eq("user_id", currentUserId);
-
-      if (timeError) throw timeError;
-
     }
+
+    const { error: updateError } = await supabaseClient
+      .from("chat_conversations")
+      .update({
+        title: title,
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", currentConversationId)
+      .eq("user_id", currentUserId);
+
+    if (updateError) throw updateError;
 
     await loadConversations();
 
   } catch (error) {
+
     console.error("Title update error:", error);
+
   }
 
 }
 
-/* =========================
+
+/* ==================================
    SEND MESSAGE
-========================= */
+================================== */
 
 async function sendMessage() {
 
   if (isSending) return;
 
   const input = document.getElementById("message");
+
   const sendBtn = document.getElementById("sendBtn");
 
   const messageText = input.value.trim();
@@ -893,33 +1091,44 @@ async function sendMessage() {
   if (!messageText) return;
 
   isSending = true;
+
   sendBtn.disabled = true;
-  sendBtn.textContent = "Sending...";
+
+  sendBtn.textContent = "...";
 
   try {
 
     const session = await getCurrentSession();
 
     if (!session || !session.user) {
-      setStatus("Please log in before sending messages.");
-      return;
+
+      throw new Error("Please log in before sending messages.");
+
     }
 
     currentUserId = session.user.id;
 
     if (!currentConversationId || isLegacyChat) {
+
       await createConversation();
+
     }
 
     input.value = "";
 
-    addUserMessage(messageText);
+    addMessage("user", messageText);
 
-    await saveChatMessage("user", messageText);
+    const saved = await saveChatMessage("user", messageText);
+
+    if (!saved) {
+
+      throw new Error("Your message could not be saved to chat history.");
+
+    }
 
     await updateConversationTitle(messageText);
 
-    setStatus("Vision AI Pro is processing your question...");
+    setStatus("Processing your question...");
 
     const { data, error } =
       await supabaseClient.functions.invoke(
@@ -927,22 +1136,41 @@ async function sendMessage() {
         {
           body: {
             message: messageText,
-            request_type: "chat"
+            request_type: "chat",
+            language: document.getElementById("language").value
           }
         }
       );
 
-    if (error) throw error;
+    if (error) {
 
-    if (!data || !data.success) {
-      throw new Error(data?.error || "Backend request failed.");
+      let details = error.message || "Function request failed.";
+
+      if (error.context) {
+
+        try {
+
+          details += "\n" + await error.context.clone().text();
+
+        } catch (readError) {
+
+          console.error(readError);
+
+        }
+
+      }
+
+      throw new Error(details);
+
     }
 
-    console.log("Vision AI Pro Request:", {
-      request_id: data.request_id,
-      request_type: data.request_type,
-      status: data.status
-    });
+    if (!data || !data.success) {
+
+      throw new Error(
+        data?.error || "Backend returned an unsuccessful response."
+      );
+
+    }
 
     const answer = [
       data.message,
@@ -950,42 +1178,57 @@ async function sendMessage() {
     ].filter(Boolean).join("\n");
 
     if (!answer) {
-      throw new Error("Backend returned an empty response.");
+
+      throw new Error("Backend returned an empty answer.");
+
     }
 
-    addAIMessage(answer);
+    addMessage("ai", answer);
 
-    await saveChatMessage("ai", answer);
+    const aiSaved = await saveChatMessage("ai", answer);
 
-    setStatus("Vision AI Pro • Response received");
+    if (!aiSaved) {
+
+      setStatus("Answer received, but history saving failed.");
+
+    } else {
+
+      setStatus("Vision AI Pro • Response received");
+
+    }
 
   } catch (error) {
 
-    console.error("Vision AI Pro Chat Error:", error);
+    console.error("FULL BACKEND ERROR:", error);
 
-    const errorMessage =
-      "I couldn't connect to the backend. Please try again.";
+    const details =
+      error?.message || String(error);
 
-    addAIMessage(errorMessage);
+    addMessage(
+      "ai",
+      "⚠️ Technical Error\n\n" + details
+    );
 
-    await saveChatMessage("ai", errorMessage);
-
-    setStatus("Backend connection error.");
+    setStatus("Request failed. See the technical error above.");
 
   } finally {
 
     isSending = false;
+
     sendBtn.disabled = false;
-    sendBtn.textContent = "➤ Send";
+
+    sendBtn.textContent = "➤";
+
     input.focus();
 
   }
 
 }
 
-/* =========================
+
+/* ==================================
    VOICE INPUT
-========================= */
+================================== */
 
 function startVoice() {
 
@@ -994,8 +1237,11 @@ function startVoice() {
     window.webkitSpeechRecognition;
 
   if (!Recognition) {
+
     alert("Voice input is not supported in this browser.");
+
     return;
+
   }
 
   const recognition = new Recognition();
@@ -1014,43 +1260,50 @@ function startVoice() {
   };
 
   recognition.onerror = function(event) {
+
     console.error("Voice error:", event.error);
-    alert("Voice input failed. Please try again.");
+
+    setStatus("Voice Error: " + event.error);
+
   };
 
   recognition.start();
 
 }
 
-/* =========================
+
+/* ==================================
    AI TEACHER
-========================= */
+================================== */
 
 function teacherMode() {
 
   document.getElementById("message").value =
-    "Act as my AI Teacher. Explain my question step by step.";
+    "Act as my AI Teacher. Explain my question step by step in " +
+    document.getElementById("language").value + ".";
 
   document.getElementById("message").focus();
 
 }
 
-/* =========================
+
+/* ==================================
    STUDY PLANNER
-========================= */
+================================== */
 
 function studyPlanner() {
 
   document.getElementById("message").value =
-    "Help me create a study timetable.";
+    "Help me create a daily study timetable.";
 
   document.getElementById("message").focus();
 
 }
 
-/* =========================
+
+/* ==================================
    PROGRESS TRACKER
-========================= */
+================================== */
 
 function progressTracker() {
 
@@ -1061,25 +1314,28 @@ function progressTracker() {
 
 }
 
-/* =========================
-   ENTER KEY
-========================= */
 
-document.getElementById("message").addEventListener(
-  "keydown",
-  function(event) {
+/* ==================================
+   ENTER KEY
+================================== */
+
+document.getElementById("message")
+  .addEventListener("keydown", function(event) {
 
     if (event.key === "Enter") {
+
       event.preventDefault();
+
       sendMessage();
+
     }
 
-  }
-);
+  });
 
-/* =========================
+
+/* ==================================
    PAGE INITIALIZATION
-========================= */
+================================== */
 
 window.addEventListener("load", async function() {
 
@@ -1088,8 +1344,11 @@ window.addEventListener("load", async function() {
     const session = await getCurrentSession();
 
     if (!session || !session.user) {
-      setStatus("Please log in to use your private chat history.");
+
+      setStatus("Please log in to use your private chat.");
+
       return;
+
     }
 
     currentUserId = session.user.id;
@@ -1106,15 +1365,22 @@ window.addEventListener("load", async function() {
     if (error) throw error;
 
     if (data && data.length > 0) {
+
       await openConversation(data[0].id);
+
     } else {
-      setStatus("Welcome! Click New Chat to begin.");
+
+      clearChatScreen();
+
+      setStatus("Welcome! Click the menu to start a New Chat.");
+
     }
 
   } catch (error) {
 
-    console.error("Initialization error:", error);
-    setStatus("Chat initialization warning. Please refresh.");
+    console.error("Initialization Error:", error);
+
+    setStatus("Initialization Error: " + error.message);
 
   }
 
