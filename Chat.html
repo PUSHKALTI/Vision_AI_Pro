@@ -8,29 +8,105 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f7f8fc;
+  background: #f4f6fb;
   color: #202b3c;
 }
 
 .app {
   display: flex;
-  flex-direction: column;
   min-height: 100vh;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: auto;
   background: white;
 }
 
+.sidebar {
+  width: 270px;
+  flex-shrink: 0;
+  background: #f7f9fc;
+  border-right: 1px solid #e5e9f0;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.sidebar h3 {
+  margin: 0;
+  color: #245b91;
+}
+
+.new-chat {
+  width: 100%;
+  margin-bottom: 17px;
+}
+
+.history-heading {
+  font-size: 12px;
+  color: #8490a0;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+#conversationList {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.conversation-item {
+  width: 100%;
+  display: block;
+  text-align: left;
+  padding: 12px;
+  margin-bottom: 5px;
+  border-radius: 9px;
+  background: transparent;
+  color: #33445b;
+  font-weight: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-item.active {
+  background: #dcecff;
+  color: #174e84;
+  font-weight: bold;
+}
+
+.legacy-item {
+  background: #fff5df;
+  color: #795a19;
+}
+
+.sidebar-footer {
+  padding-top: 12px;
+  border-top: 1px solid #e5e9f0;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .header {
-  padding: 18px 22px;
-  background: #ffffff;
+  padding: 17px 20px;
+  background: white;
   border-bottom: 1px solid #e5e9f0;
   display: flex;
   align-items: center;
@@ -41,7 +117,7 @@ body {
 .brand h2 {
   margin: 0;
   color: #2563a6;
-  font-size: 22px;
+  font-size: 21px;
 }
 
 .brand p {
@@ -70,12 +146,10 @@ button {
   font-weight: bold;
 }
 
-button:hover {
-  opacity: 0.88;
-}
+button:hover { opacity: .88; }
 
 button:disabled {
-  opacity: 0.55;
+  opacity: .55;
   cursor: not-allowed;
 }
 
@@ -97,7 +171,7 @@ select {
 .chat-area {
   flex: 1;
   width: 100%;
-  max-width: 850px;
+  max-width: 900px;
   margin: auto;
   padding: 20px;
 }
@@ -107,9 +181,7 @@ select {
   padding: 65px 10px 35px;
 }
 
-.welcome .logo {
-  font-size: 48px;
-}
+.welcome .logo { font-size: 48px; }
 
 .welcome h1 {
   margin: 12px 0 8px;
@@ -122,8 +194,8 @@ select {
 }
 
 #chatBox {
-  min-height: 350px;
-  max-height: 55vh;
+  min-height: 300px;
+  max-height: 60vh;
   overflow-y: auto;
   padding: 10px 0;
 }
@@ -133,13 +205,8 @@ select {
   margin: 15px 0;
 }
 
-.userMsg {
-  justify-content: flex-end;
-}
-
-.aiMsg {
-  justify-content: flex-start;
-}
+.userMsg { justify-content: flex-end; }
+.aiMsg { justify-content: flex-start; }
 
 .bubble {
   max-width: 82%;
@@ -167,12 +234,12 @@ select {
   font-size: 11px;
   font-weight: bold;
   margin-bottom: 5px;
-  opacity: 0.7;
+  opacity: .7;
 }
 
 .composer {
   width: 100%;
-  max-width: 850px;
+  max-width: 900px;
   margin: auto;
   padding: 12px 20px 18px;
   border-top: 1px solid #e9edf3;
@@ -186,7 +253,7 @@ select {
   padding: 8px;
   border: 1px solid #d9e1eb;
   border-radius: 15px;
-  background: #fff;
+  background: white;
 }
 
 #message {
@@ -199,9 +266,7 @@ select {
   color: #26364a;
 }
 
-#sendBtn {
-  padding: 13px 18px;
-}
+#sendBtn { padding: 13px 18px; }
 
 .tools {
   display: flex;
@@ -230,43 +295,44 @@ select {
   font-weight: bold;
 }
 
-@media(max-width:600px) {
-  .header {
-    padding: 13px;
+.mobile-menu { display: none; }
+
+@media(max-width:700px) {
+  .sidebar {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    bottom: 0;
+    left: -290px;
+    width: 270px;
+    transition: left .2s;
+    box-shadow: 3px 0 15px rgba(0,0,0,.08);
   }
 
-  .brand h2 {
-    font-size: 18px;
-  }
+  .sidebar.open { left: 0; }
 
-  .chat-area {
-    padding: 10px;
-  }
+  .mobile-menu { display: inline-block; }
 
-  #chatBox {
-    max-height: 52vh;
-  }
+  .header { padding: 12px; }
 
-  .bubble {
-    max-width: 90%;
-  }
+  .brand h2 { font-size: 17px; }
 
-  .composer {
-    padding: 10px;
-  }
+  .chat-area { padding: 10px; }
 
-  #sendBtn {
-    padding: 12px;
-  }
+  #chatBox { max-height: 55vh; }
+
+  .bubble { max-width: 90%; }
+
+  .composer { padding: 10px; }
+
+  #sendBtn { padding: 12px; }
 
   button, select {
     font-size: 12px;
     padding: 10px;
   }
 
-  .welcome {
-    padding-top: 40px;
-  }
+  .welcome { padding-top: 40px; }
 }
 </style>
 </head>
@@ -275,72 +341,106 @@ select {
 
 <div class="app">
 
-  <header class="header">
-    <div class="brand">
-      <h2>🤖 Vision AI Pro</h2>
-      <p>AI Teacher • Ask • Learn • Improve</p>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <h3>💬 My Chats</h3>
+      <button class="secondary" onclick="toggleSidebar()">✕</button>
     </div>
 
-    <div class="header-actions">
-      <button class="secondary" onclick="startVoice()">🎤 Voice</button>
-      <button class="danger" onclick="clearChat()">🗑️ Clear</button>
+    <button class="new-chat" id="newChatBtn" onclick="startNewChat()">
+      ＋ New Chat
+    </button>
+
+    <div class="history-heading">RECENT CONVERSATIONS</div>
+    <div id="conversationList"></div>
+
+    <div class="sidebar-footer">
+      <button class="secondary" style="width:100%"
+        onclick="location.href='index.html'">
+        🏠 Home
+      </button>
     </div>
-  </header>
+  </aside>
 
-  <main class="chat-area">
+  <main class="main">
 
-    <div class="welcome" id="welcome">
-      <div class="logo">🤖</div>
-      <h1>Welcome to Vision AI Pro</h1>
-      <p>Your AI Teacher is ready.<br>
-      Ask questions and learn step by step.</p>
-    </div>
+    <header class="header">
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="secondary mobile-menu"
+          onclick="toggleSidebar()">☰</button>
 
-    <div id="chatBox"></div>
+        <div class="brand">
+          <h2>🤖 Vision AI Pro</h2>
+          <p>AI Teacher • Ask • Learn • Improve</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="secondary" onclick="startVoice()">🎤 Voice</button>
+      </div>
+    </header>
+
+    <section class="chat-area">
+
+      <div class="welcome" id="welcome">
+        <div class="logo">🤖</div>
+        <h1>Welcome to Vision AI Pro</h1>
+        <p>Your AI Teacher is ready.<br>
+        Ask questions and learn step by step.</p>
+      </div>
+
+      <div id="chatBox"></div>
+
+    </section>
+
+    <section class="composer">
+
+      <div class="input-row">
+        <input id="message" type="text"
+          placeholder="Message Vision AI Pro..."
+          autocomplete="off">
+
+        <button id="sendBtn" onclick="sendMessage()">➤ Send</button>
+      </div>
+
+      <div class="tools">
+
+        <select id="language">
+          <option value="English">English</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Hinglish">Hinglish</option>
+        </select>
+
+        <button class="secondary" onclick="teacherMode()">
+          👨‍🏫 AI Teacher
+        </button>
+
+        <button class="secondary" onclick="studyPlanner()">
+          📅 Study Planner
+        </button>
+
+        <button class="secondary" onclick="progressTracker()">
+          📊 Progress
+        </button>
+
+      </div>
+
+      <div class="status" id="status">
+        Vision AI Pro • Starting...
+      </div>
+
+    </section>
+
+    <footer class="footer">
+      <a href="index.html">🏠 Home</a>
+    </footer>
 
   </main>
-
-  <section class="composer">
-
-    <div class="input-row">
-      <input
-        id="message"
-        type="text"
-        placeholder="Message Vision AI Pro..."
-        autocomplete="off"
-      >
-      <button id="sendBtn" onclick="sendMessage()">➤ Send</button>
-    </div>
-
-    <div class="tools">
-
-      <select id="language">
-        <option value="English">English</option>
-        <option value="Hindi">Hindi</option>
-        <option value="Hinglish">Hinglish</option>
-      </select>
-
-      <button class="secondary" onclick="teacherMode()">👨‍🏫 AI Teacher</button>
-
-      <button class="secondary" onclick="studyPlanner()">📅 Study Planner</button>
-
-      <button class="secondary" onclick="progressTracker()">📊 Progress</button>
-
-    </div>
-
-    <div class="status" id="status">
-      Vision AI Pro • Chat ready
-    </div>
-
-  </section>
-
-  <footer class="footer">
-    <a href="index.html">🏠 Home</a>
-  </footer>
 
 </div>
 
 <script>
+
 /* =========================
    SUPABASE CONNECTION
 ========================= */
@@ -356,7 +456,32 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_PUBLISHABLE_KEY
 );
 
+let currentConversationId = null;
+let currentUserId = null;
 let isSending = false;
+let isLegacyChat = false;
+
+/* =========================
+   BASIC HELPERS
+========================= */
+
+function setStatus(message) {
+  document.getElementById("status").textContent = message;
+}
+
+async function getCurrentSession() {
+  const { data, error } =
+    await supabaseClient.auth.getSession();
+
+  if (error) throw error;
+
+  return data.session;
+}
+
+function toggleSidebar() {
+  document.getElementById("sidebar")
+    .classList.toggle("open");
+}
 
 /* =========================
    MESSAGE DISPLAY
@@ -369,6 +494,7 @@ function addMessage(sender, message, scroll = true) {
   document.getElementById("welcome").style.display = "none";
 
   const row = document.createElement("div");
+
   row.className =
     sender === "user" ? "message userMsg" : "message aiMsg";
 
@@ -377,6 +503,7 @@ function addMessage(sender, message, scroll = true) {
 
   const label = document.createElement("span");
   label.className = "sender";
+
   label.textContent =
     sender === "user" ? "👤 You" : "🤖 AI Teacher";
 
@@ -393,108 +520,361 @@ function addMessage(sender, message, scroll = true) {
   }
 }
 
-function addUserMessage(text, scroll = true) {
-  addMessage("user", text, scroll);
+function addUserMessage(message, scroll = true) {
+  addMessage("user", message, scroll);
 }
 
-function addAIMessage(text, scroll = true) {
-  addMessage("ai", text, scroll);
+function addAIMessage(message, scroll = true) {
+  addMessage("ai", message, scroll);
+}
+
+function clearChatScreen() {
+  document.getElementById("chatBox").innerHTML = "";
+  document.getElementById("welcome").style.display = "block";
 }
 
 /* =========================
-   SAVE CHAT HISTORY
+   CREATE CONVERSATION
+========================= */
+
+async function createConversation() {
+
+  const session = await getCurrentSession();
+
+  if (!session || !session.user) {
+    setStatus("Please log in before starting a chat.");
+    return null;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("chat_conversations")
+    .insert({
+      user_id: session.user.id,
+      title: "New Chat"
+    })
+    .select("id, title, created_at, updated_at")
+    .single();
+
+  if (error) {
+    console.error("Create conversation error:", error);
+    throw error;
+  }
+
+  currentConversationId = data.id;
+  currentUserId = session.user.id;
+  isLegacyChat = false;
+
+  clearChatScreen();
+
+  await loadConversations();
+
+  setStatus("New conversation ready.");
+
+  return data;
+}
+
+/* =========================
+   NEW CHAT BUTTON
+========================= */
+
+async function startNewChat() {
+
+  if (isSending) return;
+
+  try {
+    await createConversation();
+
+    document.getElementById("sidebar")
+      .classList.remove("open");
+
+    document.getElementById("message").focus();
+
+  } catch (error) {
+    console.error(error);
+    setStatus("Could not create a new chat.");
+  }
+}
+
+/* =========================
+   LOAD CONVERSATION LIST
+========================= */
+
+async function loadConversations() {
+
+  const list = document.getElementById("conversationList");
+  list.innerHTML = "";
+
+  const session = await getCurrentSession();
+
+  if (!session || !session.user) {
+    list.textContent = "Please log in to view chats.";
+    return;
+  }
+
+  currentUserId = session.user.id;
+
+  const { data, error } = await supabaseClient
+    .from("chat_conversations")
+    .select("id, title, updated_at")
+    .eq("user_id", currentUserId)
+    .order("updated_at", { ascending: false });
+
+  if (error) throw error;
+
+  (data || []).forEach(function(chat) {
+
+    const button = document.createElement("button");
+
+    button.className =
+      "conversation-item" +
+      (chat.id === currentConversationId ? " active" : "");
+
+    button.textContent = "💬 " + chat.title;
+    button.title = chat.title;
+
+    button.onclick = function() {
+      openConversation(chat.id);
+    };
+
+    list.appendChild(button);
+
+  });
+
+  /* Show older messages that have no conversation ID */
+
+  const { count, error: legacyError } = await supabaseClient
+    .from("chat_history")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", currentUserId)
+    .is("conversation_id", null);
+
+  if (legacyError) {
+    console.error("Legacy history check:", legacyError);
+  } else if (count > 0) {
+
+    const legacyButton = document.createElement("button");
+
+    legacyButton.className =
+      "conversation-item legacy-item" +
+      (isLegacyChat ? " active" : "");
+
+    legacyButton.textContent = "📁 Older Messages (" + count + ")";
+
+    legacyButton.onclick = loadLegacyMessages;
+
+    list.appendChild(legacyButton);
+  }
+
+}
+
+/* =========================
+   OPEN OLD CONVERSATION
+========================= */
+
+async function openConversation(conversationId) {
+
+  try {
+
+    const session = await getCurrentSession();
+
+    if (!session || !session.user) {
+      setStatus("Please log in.");
+      return;
+    }
+
+    const { data: conversation, error: conversationError } =
+      await supabaseClient
+        .from("chat_conversations")
+        .select("id, title")
+        .eq("id", conversationId)
+        .eq("user_id", session.user.id)
+        .single();
+
+    if (conversationError) throw conversationError;
+
+    const { data, error } = await supabaseClient
+      .from("chat_history")
+      .select("sender, message, created_at")
+      .eq("user_id", session.user.id)
+      .eq("conversation_id", conversationId)
+      .order("created_at", { ascending: true });
+
+    if (error) throw error;
+
+    currentConversationId = conversation.id;
+    currentUserId = session.user.id;
+    isLegacyChat = false;
+
+    clearChatScreen();
+
+    if (data && data.length > 0) {
+      data.forEach(function(item) {
+        addMessage(item.sender, item.message, false);
+      });
+    }
+
+    document.getElementById("chatBox").scrollTop =
+      document.getElementById("chatBox").scrollHeight;
+
+    await loadConversations();
+
+    setStatus("Opened: " + conversation.title);
+
+    document.getElementById("sidebar")
+      .classList.remove("open");
+
+  } catch (error) {
+
+    console.error("Open conversation error:", error);
+    setStatus("Could not open this conversation.");
+
+  }
+
+}
+
+/* =========================
+   LOAD OLD UNLINKED MESSAGES
+========================= */
+
+async function loadLegacyMessages() {
+
+  try {
+
+    const session = await getCurrentSession();
+
+    if (!session || !session.user) return;
+
+    const { data, error } = await supabaseClient
+      .from("chat_history")
+      .select("sender, message, created_at")
+      .eq("user_id", session.user.id)
+      .is("conversation_id", null)
+      .order("created_at", { ascending: true });
+
+    if (error) throw error;
+
+    currentConversationId = null;
+    currentUserId = session.user.id;
+    isLegacyChat = true;
+
+    clearChatScreen();
+
+    (data || []).forEach(function(item) {
+      addMessage(item.sender, item.message, false);
+    });
+
+    document.getElementById("chatBox").scrollTop =
+      document.getElementById("chatBox").scrollHeight;
+
+    setStatus("Viewing older saved messages. Start a New Chat to continue.");
+
+    document.getElementById("sidebar")
+      .classList.remove("open");
+
+    await loadConversations();
+
+  } catch (error) {
+    console.error("Legacy loading error:", error);
+    setStatus("Could not load older messages.");
+  }
+
+}
+
+/* =========================
+   SAVE MESSAGE
 ========================= */
 
 async function saveChatMessage(sender, message) {
 
   try {
 
-    const { data: { session }, error: sessionError } =
-      await supabaseClient.auth.getSession();
-
-    if (sessionError) {
-      console.error("Session error:", sessionError);
-      return false;
-    }
-
-    if (!session || !session.user) {
-      console.log("User is not logged in.");
+    if (!currentConversationId || !currentUserId) {
       return false;
     }
 
     const { error } = await supabaseClient
       .from("chat_history")
       .insert({
-        user_id: session.user.id,
+        user_id: currentUserId,
         sender: sender,
-        message: message
+        message: message,
+        conversation_id: currentConversationId
       });
 
-    if (error) {
-      console.error("History save error:", error);
-      return false;
-    }
+    if (error) throw error;
 
     return true;
 
   } catch (error) {
-    console.error("History error:", error);
+
+    console.error("History save error:", error);
+    setStatus("Warning: Message could not be saved.");
     return false;
+
   }
+
 }
 
 /* =========================
-   LOAD CHAT HISTORY
+   AUTOMATIC CHAT TITLE
 ========================= */
 
-async function loadChatHistory() {
+async function updateConversationTitle(message) {
 
-  const status = document.getElementById("status");
+  if (!currentConversationId) return;
 
   try {
 
-    const { data: { session }, error: sessionError } =
-      await supabaseClient.auth.getSession();
-
-    if (sessionError) throw sessionError;
-
-    if (!session || !session.user) {
-      status.textContent = "Please log in to save your chat history.";
-      return;
-    }
-
     const { data, error } = await supabaseClient
-      .from("chat_history")
-      .select("sender, message, created_at")
-      .eq("user_id", session.user.id)
-      .order("created_at", { ascending: true });
+      .from("chat_conversations")
+      .select("title")
+      .eq("id", currentConversationId)
+      .eq("user_id", currentUserId)
+      .single();
 
     if (error) throw error;
 
-    if (data && data.length > 0) {
+    if (data.title === "New Chat") {
 
-      document.getElementById("chatBox").innerHTML = "";
+      let title = message
+        .replace(/\s+/g, " ")
+        .trim();
 
-      data.forEach(function(item) {
+      if (title.length > 42) {
+        title = title.substring(0, 42).trim() + "...";
+      }
 
-        if (item.sender === "user") {
-          addUserMessage(item.message, false);
-        } else {
-          addAIMessage(item.message, false);
-        }
+      const { error: updateError } = await supabaseClient
+        .from("chat_conversations")
+        .update({
+          title: title,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", currentConversationId)
+        .eq("user_id", currentUserId);
 
-      });
+      if (updateError) throw updateError;
 
-      document.getElementById("chatBox").scrollTop =
-        document.getElementById("chatBox").scrollHeight;
+    } else {
+
+      const { error: timeError } = await supabaseClient
+        .from("chat_conversations")
+        .update({
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", currentConversationId)
+        .eq("user_id", currentUserId);
+
+      if (timeError) throw timeError;
+
     }
 
-    status.textContent = "Vision AI Pro • Chat ready";
+    await loadConversations();
 
   } catch (error) {
-    console.error("History loading error:", error);
-    status.textContent = "Chat loaded with history warning.";
+    console.error("Title update error:", error);
   }
+
 }
 
 /* =========================
@@ -507,7 +887,6 @@ async function sendMessage() {
 
   const input = document.getElementById("message");
   const sendBtn = document.getElementById("sendBtn");
-  const status = document.getElementById("status");
 
   const messageText = input.value.trim();
 
@@ -516,14 +895,31 @@ async function sendMessage() {
   isSending = true;
   sendBtn.disabled = true;
   sendBtn.textContent = "Sending...";
-  status.textContent = "Vision AI Pro is processing your question...";
-
-  addUserMessage(messageText);
-  input.value = "";
-
-  await saveChatMessage("user", messageText);
 
   try {
+
+    const session = await getCurrentSession();
+
+    if (!session || !session.user) {
+      setStatus("Please log in before sending messages.");
+      return;
+    }
+
+    currentUserId = session.user.id;
+
+    if (!currentConversationId || isLegacyChat) {
+      await createConversation();
+    }
+
+    input.value = "";
+
+    addUserMessage(messageText);
+
+    await saveChatMessage("user", messageText);
+
+    await updateConversationTitle(messageText);
+
+    setStatus("Vision AI Pro is processing your question...");
 
     const { data, error } =
       await supabaseClient.functions.invoke(
@@ -539,9 +935,7 @@ async function sendMessage() {
     if (error) throw error;
 
     if (!data || !data.success) {
-      throw new Error(
-        data?.error || "Backend request failed."
-      );
+      throw new Error(data?.error || "Backend request failed.");
     }
 
     console.log("Vision AI Pro Request:", {
@@ -560,9 +954,10 @@ async function sendMessage() {
     }
 
     addAIMessage(answer);
+
     await saveChatMessage("ai", answer);
 
-    status.textContent = "Vision AI Pro • Response received";
+    setStatus("Vision AI Pro • Response received");
 
   } catch (error) {
 
@@ -572,9 +967,10 @@ async function sendMessage() {
       "I couldn't connect to the backend. Please try again.";
 
     addAIMessage(errorMessage);
+
     await saveChatMessage("ai", errorMessage);
 
-    status.textContent = "Backend connection error.";
+    setStatus("Backend connection error.");
 
   } finally {
 
@@ -584,6 +980,7 @@ async function sendMessage() {
     input.focus();
 
   }
+
 }
 
 /* =========================
@@ -622,24 +1019,7 @@ function startVoice() {
   };
 
   recognition.start();
-}
 
-/* =========================
-   CLEAR CHAT SCREEN
-========================= */
-
-function clearChat() {
-
-  if (!confirm("Clear the messages from this screen?")) {
-    return;
-  }
-
-  document.getElementById("chatBox").innerHTML = "";
-
-  document.getElementById("welcome").style.display = "block";
-
-  document.getElementById("status").textContent =
-    "Screen cleared. Saved history remains unchanged.";
 }
 
 /* =========================
@@ -648,9 +1028,10 @@ function clearChat() {
 
 function teacherMode() {
 
-  addAIMessage(
-    "👨‍🏫 AI Teacher Mode is ready. Ask your school question and I will help explain it step by step."
-  );
+  document.getElementById("message").value =
+    "Act as my AI Teacher. Explain my question step by step.";
+
+  document.getElementById("message").focus();
 
 }
 
@@ -660,9 +1041,10 @@ function teacherMode() {
 
 function studyPlanner() {
 
-  addAIMessage(
-    "📅 Study Planner: We can add subjects, study time, daily targets and a timetable in the next development step."
-  );
+  document.getElementById("message").value =
+    "Help me create a study timetable.";
+
+  document.getElementById("message").focus();
 
 }
 
@@ -672,9 +1054,10 @@ function studyPlanner() {
 
 function progressTracker() {
 
-  addAIMessage(
-    "📊 Progress Tracker: We can track completed quizzes, questions solved and study progress in the next development step."
-  );
+  document.getElementById("message").value =
+    "Help me review my study progress.";
+
+  document.getElementById("message").focus();
 
 }
 
@@ -698,8 +1081,43 @@ document.getElementById("message").addEventListener(
    PAGE INITIALIZATION
 ========================= */
 
-window.addEventListener("load", function() {
-  loadChatHistory();
+window.addEventListener("load", async function() {
+
+  try {
+
+    const session = await getCurrentSession();
+
+    if (!session || !session.user) {
+      setStatus("Please log in to use your private chat history.");
+      return;
+    }
+
+    currentUserId = session.user.id;
+
+    await loadConversations();
+
+    const { data, error } = await supabaseClient
+      .from("chat_conversations")
+      .select("id")
+      .eq("user_id", currentUserId)
+      .order("updated_at", { ascending: false })
+      .limit(1);
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      await openConversation(data[0].id);
+    } else {
+      setStatus("Welcome! Click New Chat to begin.");
+    }
+
+  } catch (error) {
+
+    console.error("Initialization error:", error);
+    setStatus("Chat initialization warning. Please refresh.");
+
+  }
+
 });
 
 </script>
