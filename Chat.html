@@ -1,271 +1,542 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Chat - Vision AI Pro</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-body {
-  background: linear-gradient(135deg, #e8f4ff, #f4f8ff);
-  text-align: center;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-  color: #173b63;
-}
-h1 {
-  margin-bottom: 5px;
-}
-.subtitle {
-  margin-top: 0;
-  color: #555;
-}
-#chatBox {
-  width: 92%;
-  max-width: 700px;
-  height: 400px;
-  margin: 20px auto;
-  padding: 15px;
-  background-color: white;
-  border: 2px solid #4b8cc5;
-  border-radius: 16px;
-  overflow-y: auto;
-  text-align: left;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-}
-.userMsg {
-  background-color: #d8f5d0;
-  padding: 12px;
-  margin: 8px;
-  border-radius: 12px;
-  text-align: right;
-  word-wrap: break-word;
-}
-.aiMsg {
-  background-color: #e5e5ff;
-  padding: 12px;
-  margin: 8px;
-  border-radius: 12px;
-  text-align: left;
-  word-wrap: break-word;
-}
-#message {
-  width: 62%;
-  padding: 13px;
-  font-size: 16px;
-  border: 1px solid #aaa;
-  border-radius: 10px;
+* {
   box-sizing: border-box;
 }
-button {
-  padding: 11px 16px;
-  margin: 5px;
-  cursor: pointer;
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f7f8fc;
+  color: #202b3c;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1100px;
+  margin: auto;
+  background: white;
+}
+
+.header {
+  padding: 18px 22px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e9f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.brand h2 {
+  margin: 0;
+  color: #2563a6;
+  font-size: 22px;
+}
+
+.brand p {
+  margin: 5px 0 0;
+  color: #7b8492;
+  font-size: 12px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+button, select {
+  border: 0;
   border-radius: 9px;
-  border: 1px solid #777;
-  background-color: #3f7fc4;
+  padding: 11px 14px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button {
+  background: #2869b1;
   color: white;
   font-weight: bold;
 }
+
 button:hover {
-  opacity: 0.9;
+  opacity: 0.88;
 }
-#language {
-  padding: 11px;
-  margin: 5px;
-  border-radius: 9px;
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
-.featureBox {
-  margin: 10px auto;
-  max-width: 700px;
+
+.secondary {
+  background: #edf3fa;
+  color: #245b91;
 }
-.homeBtn {
-  margin-top: 15px;
+
+.danger {
+  background: #fff0f0;
+  color: #c03939;
 }
+
+select {
+  background: #edf3fa;
+  color: #245b91;
+}
+
+.chat-area {
+  flex: 1;
+  width: 100%;
+  max-width: 850px;
+  margin: auto;
+  padding: 20px;
+}
+
+.welcome {
+  text-align: center;
+  padding: 65px 10px 35px;
+}
+
+.welcome .logo {
+  font-size: 48px;
+}
+
+.welcome h1 {
+  margin: 12px 0 8px;
+  color: #244f7e;
+}
+
+.welcome p {
+  color: #788493;
+  line-height: 1.6;
+}
+
+#chatBox {
+  min-height: 350px;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.message {
+  display: flex;
+  margin: 15px 0;
+}
+
+.userMsg {
+  justify-content: flex-end;
+}
+
+.aiMsg {
+  justify-content: flex-start;
+}
+
+.bubble {
+  max-width: 82%;
+  padding: 13px 16px;
+  border-radius: 16px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.userMsg .bubble {
+  background: #dcecff;
+  color: #173d65;
+  border-bottom-right-radius: 4px;
+}
+
+.aiMsg .bubble {
+  background: #f0f2f7;
+  color: #26364a;
+  border-bottom-left-radius: 4px;
+}
+
+.sender {
+  display: block;
+  font-size: 11px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  opacity: 0.7;
+}
+
+.composer {
+  width: 100%;
+  max-width: 850px;
+  margin: auto;
+  padding: 12px 20px 18px;
+  border-top: 1px solid #e9edf3;
+  background: white;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid #d9e1eb;
+  border-radius: 15px;
+  background: #fff;
+}
+
+#message {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #26364a;
+}
+
+#sendBtn {
+  padding: 13px 18px;
+}
+
+.tools {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+}
+
 .status {
-  font-size: 13px;
-  color: #666;
-  margin-top: 8px;
+  text-align: center;
+  color: #8993a0;
+  font-size: 12px;
+  padding: 10px;
 }
-@media (max-width: 600px) {
-  body {
+
+.footer {
+  text-align: center;
+  padding: 12px;
+  border-top: 1px solid #edf0f4;
+}
+
+.footer a {
+  color: #2869b1;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+@media(max-width:600px) {
+  .header {
+    padding: 13px;
+  }
+
+  .brand h2 {
+    font-size: 18px;
+  }
+
+  .chat-area {
+    padding: 10px;
+  }
+
+  #chatBox {
+    max-height: 52vh;
+  }
+
+  .bubble {
+    max-width: 90%;
+  }
+
+  .composer {
+    padding: 10px;
+  }
+
+  #sendBtn {
     padding: 12px;
   }
-  h1 {
-    font-size: 25px;
+
+  button, select {
+    font-size: 12px;
+    padding: 10px;
   }
-#chatBox {
-    width: 94%;
-    height: 430px;
-    padding: 8px;
-  }
-  #message {
-    width: 68%;
-    font-size: 15px;
-  }
-  button {
-    padding: 10px 12px;
-    font-size: 13px;
-  }
-.featureBox {
-    width: 100%;
+
+  .welcome {
+    padding-top: 40px;
   }
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="header">
+    <div class="brand">
+      <h2>🤖 Vision AI Pro</h2>
+      <p>AI Teacher • Ask • Learn • Improve</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="secondary" onclick="startVoice()">🎤 Voice</button>
+      <button class="danger" onclick="clearChat()">🗑️ Clear</button>
+    </div>
+  </header>
+
+  <main class="chat-area">
+
+    <div class="welcome" id="welcome">
+      <div class="logo">🤖</div>
+      <h1>Welcome to Vision AI Pro</h1>
+      <p>Your AI Teacher is ready.<br>
+      Ask questions and learn step by step.</p>
+    </div>
+
+    <div id="chatBox"></div>
+
+  </main>
+
+  <section class="composer">
+
+    <div class="input-row">
+      <input
+        id="message"
+        type="text"
+        placeholder="Message Vision AI Pro..."
+        autocomplete="off"
+      >
+      <button id="sendBtn" onclick="sendMessage()">➤ Send</button>
+    </div>
+
+    <div class="tools">
+
+      <select id="language">
+        <option value="English">English</option>
+        <option value="Hindi">Hindi</option>
+        <option value="Hinglish">Hinglish</option>
+      </select>
+
+      <button class="secondary" onclick="teacherMode()">👨‍🏫 AI Teacher</button>
+
+      <button class="secondary" onclick="studyPlanner()">📅 Study Planner</button>
+
+      <button class="secondary" onclick="progressTracker()">📊 Progress</button>
+
+    </div>
+
+    <div class="status" id="status">
+      Vision AI Pro • Chat ready
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    <a href="index.html">🏠 Home</a>
+  </footer>
+
+</div>
+
 <script>
-const SUPABASE_URL = "https://swyvrgpapuralxngfoxd.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
-const supabaseClient = supabase.createClient(
+/* =========================
+   SUPABASE CONNECTION
+========================= */
+
+const SUPABASE_URL =
+  "https://swyvrgpapuralxngfoxd.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
+
+const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
-</script>
-</head>
-<body>
-<h1>🤖 Vision AI Pro</h1>
-<p class="subtitle">
-AI Teacher • Ask • Learn • Improve
-</p>
-<div class="featureBox">
-<select id="language">
-  <option value="English">English</option>
-  <option value="Hindi">Hindi</option>
-  <option value="Hinglish">Hinglish</option>
-</select>
-<button onclick="startVoice()">🎤 Voice</button>
-<button onclick="clearChat()">🗑️ Clear</button>
-</div>
-<div id="chatBox">
-<div class="aiMsg">
-🤖 <b>AI Teacher:</b>
-Hello! 😊 Ask me your question.
-</div>
-</div>
-<input
-id="message"
-type="text"
-placeholder="Type your question..."
->
-<button onclick="sendMessage()">📤 Send</button>
-<div class="featureBox">
-<button onclick="teacherMode()">
-👨‍🏫 AI Teacher
-</button>
-<button onclick="studyPlanner()">
-📅 Study Planner
-</button>
-<button onclick="progressTracker()">
-📊 Progress
-</button>
-</div>
-<div class="homeBtn">
-<a href="index.html">
-<button>🏠 Home</button>
-</a>
-</div>
-<div class="status">
-Vision AI Pro • Chat ready
-</div>
-<script>
+
+let isSending = false;
+
 /* =========================
-   SAVE CHAT MESSAGE
+   MESSAGE DISPLAY
 ========================= */
-async function saveChatMessage(sender, message) {
- const { data: { session } } =
-    await supabaseClient.auth.getSession();
-if (!session || !session.user) {
-    console.log("User is not logged in.");
-    return;
-}
-const user = session.user;
-  const { error } = await supabaseClient
-    .from("chat_history")
-    .insert({
-      user_id: user.id,
-      sender: sender,
-      message: message
-    });
-if (error) {
-    console.error(
-      "Chat history save error:",
-      error
-    );
+
+function addMessage(sender, message, scroll = true) {
+
+  const box = document.getElementById("chatBox");
+
+  document.getElementById("welcome").style.display = "none";
+
+  const row = document.createElement("div");
+  row.className =
+    sender === "user" ? "message userMsg" : "message aiMsg";
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+
+  const label = document.createElement("span");
+  label.className = "sender";
+  label.textContent =
+    sender === "user" ? "👤 You" : "🤖 AI Teacher";
+
+  const content = document.createElement("div");
+  content.textContent = String(message);
+
+  bubble.appendChild(label);
+  bubble.appendChild(content);
+  row.appendChild(bubble);
+  box.appendChild(row);
+
+  if (scroll) {
+    box.scrollTop = box.scrollHeight;
   }
 }
+
+function addUserMessage(text, scroll = true) {
+  addMessage("user", text, scroll);
+}
+
+function addAIMessage(text, scroll = true) {
+  addMessage("ai", text, scroll);
+}
+
+/* =========================
+   SAVE CHAT HISTORY
+========================= */
+
+async function saveChatMessage(sender, message) {
+
+  try {
+
+    const { data: { session }, error: sessionError } =
+      await supabaseClient.auth.getSession();
+
+    if (sessionError) {
+      console.error("Session error:", sessionError);
+      return false;
+    }
+
+    if (!session || !session.user) {
+      console.log("User is not logged in.");
+      return false;
+    }
+
+    const { error } = await supabaseClient
+      .from("chat_history")
+      .insert({
+        user_id: session.user.id,
+        sender: sender,
+        message: message
+      });
+
+    if (error) {
+      console.error("History save error:", error);
+      return false;
+    }
+
+    return true;
+
+  } catch (error) {
+    console.error("History error:", error);
+    return false;
+  }
+}
+
 /* =========================
    LOAD CHAT HISTORY
 ========================= */
+
 async function loadChatHistory() {
- const { data: { session } } =
-    await supabaseClient.auth.getSession();
-if (!session || !session.user) {
-    console.log("User is not logged in.");
-    return;
-}
-const user = session.user;
-const { data, error } = await supabaseClient
-    .from("chat_history")
-    .select("sender, message, created_at")
-    .eq("user_id", user.id)
-    .order("created_at", {
-      ascending: true
-    });
-if (error) {
-    console.error(
-      "Chat history load error:",
-      error
-    );
-    return;
+
+  const status = document.getElementById("status");
+
+  try {
+
+    const { data: { session }, error: sessionError } =
+      await supabaseClient.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    if (!session || !session.user) {
+      status.textContent = "Please log in to save your chat history.";
+      return;
+    }
+
+    const { data, error } = await supabaseClient
+      .from("chat_history")
+      .select("sender, message, created_at")
+      .eq("user_id", session.user.id)
+      .order("created_at", { ascending: true });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+
+      document.getElementById("chatBox").innerHTML = "";
+
+      data.forEach(function(item) {
+
+        if (item.sender === "user") {
+          addUserMessage(item.message, false);
+        } else {
+          addAIMessage(item.message, false);
+        }
+
+      });
+
+      document.getElementById("chatBox").scrollTop =
+        document.getElementById("chatBox").scrollHeight;
+    }
+
+    status.textContent = "Vision AI Pro • Chat ready";
+
+  } catch (error) {
+    console.error("History loading error:", error);
+    status.textContent = "Chat loaded with history warning.";
   }
-const box = document.getElementById("chatBox");
- if (data && data.length > 0) {
-    box.innerHTML = "";
-data.forEach(function(item) {
-      if (item.sender === "user") {
-        addUserMessage(
-          item.message,
-          false
-        );
-      } else {
-        addAIMessage(
-          item.message,
-          false
-        );
-      }
-    });
-  }
- box.scrollTop = box.scrollHeight;
 }
+
 /* =========================
    SEND MESSAGE
 ========================= */
+
 async function sendMessage() {
+
+  if (isSending) return;
+
   const input = document.getElementById("message");
-  const text = input.value.trim();
+  const sendBtn = document.getElementById("sendBtn");
+  const status = document.getElementById("status");
 
-  if (!text) {
-    return;
-  }
+  const messageText = input.value.trim();
 
-  addUserMessage(text);
+  if (!messageText) return;
+
+  isSending = true;
+  sendBtn.disabled = true;
+  sendBtn.textContent = "Sending...";
+  status.textContent = "Vision AI Pro is processing your question...";
+
+  addUserMessage(messageText);
   input.value = "";
 
-  await saveChatMessage("user", text);
+  await saveChatMessage("user", messageText);
 
   try {
+
     const { data, error } =
       await supabaseClient.functions.invoke(
         "vap-api",
         {
           body: {
-            message: text,
+            message: messageText,
             request_type: "chat"
           }
         }
       );
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (!data || !data.success) {
       throw new Error(
@@ -273,239 +544,165 @@ async function sendMessage() {
       );
     }
 
-    console.log("Vision-AI-Pro Request:", {
+    console.log("Vision AI Pro Request:", {
       request_id: data.request_id,
       request_type: data.request_type,
       status: data.status
     });
 
-    const answer =
-      data.message + "\n" + data.received_message;
+    const answer = [
+      data.message,
+      data.received_message
+    ].filter(Boolean).join("\n");
+
+    if (!answer) {
+      throw new Error("Backend returned an empty response.");
+    }
 
     addAIMessage(answer);
     await saveChatMessage("ai", answer);
 
+    status.textContent = "Vision AI Pro • Response received";
+
   } catch (error) {
-    console.error("Vision-AI-Pro Chat Error:", error);
+
+    console.error("Vision AI Pro Chat Error:", error);
 
     const errorMessage =
       "I couldn't connect to the backend. Please try again.";
 
     addAIMessage(errorMessage);
     await saveChatMessage("ai", errorMessage);
+
+    status.textContent = "Backend connection error.";
+
+  } finally {
+
+    isSending = false;
+    sendBtn.disabled = false;
+    sendBtn.textContent = "➤ Send";
+    input.focus();
+
   }
 }
-  addUserMessage(text);
-  input.value = "";
 
-  await saveChatMessage("user", text);
-
-  try {
-    const { data, error } = await supabaseClient.functions.invoke(
-      "vap-api",
-      {
-        body: {
-          message: text
-        }
-      }
-    );
-
-    if (error) {
-      throw error;
-    }
-
-    if (!data || !data.success) {
-      throw new Error(data?.error || "Backend request failed.");
-    }
-
-    const answer =
-      data.message + "\n" + data.received_message;
-
-    addAIMessage(answer);
-    await saveChatMessage("ai", answer);
-
-  } catch (error) {
-    console.error("AI backend error:", error);
-
-    const errorMessage =
-      "I couldn't connect to the backend. Please try again.";
-
-    addAIMessage(errorMessage);
-    await saveChatMessage("ai", errorMessage);
-  }
-}
 /* =========================
-   USER MESSAGE
+   VOICE INPUT
 ========================= */
-function addUserMessage(
-  text,
-  scroll = true
-) {
-  let box = document.getElementById("chatBox");
- box.innerHTML +=
-    "<div class='userMsg'>" +
-    "👤 <b>You:</b> " +
-    escapeHTML(text) +
-    "</div>";
-if (scroll) {
-    box.scrollTop = box.scrollHeight;
-  }
-}
-/* =========================
-   AI MESSAGE
-========================= */
-function addAIMessage(
-  text,
-  scroll = true
-) {
-  let box = document.getElementById("chatBox");
- box.innerHTML +=
-    "<div class='aiMsg'>" +
-    "🤖 <b>AI Teacher:</b> " +
-    escapeHTML(text) +
-    "</div>";
- if (scroll) {
-    box.scrollTop = box.scrollHeight;
-  }
-}
-/* =========================
-   SAFE TEXT
-========================= */
-function escapeHTML(text) {
-  return String(text)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-/* =========================
-   DEMO AI
-========================= */
-function getDemoAnswer(text) {
-  let lower = text.toLowerCase();
-if (
-    lower.includes("hello") ||
-    lower.includes("hi")
-  ) {
-    return "Hello bhai! 😊 I am your Vision AI Pro teacher.";
-  }
- if (lower.includes("math")) {
-    return "Sure! 📚 Send me the Maths question and I will help you step by step.";
-  }
- if (lower.includes("science")) {
-    return "Sure! 🔬 Send me the Science question and I will explain it simply.";
-  }
- if (lower.includes("english")) {
-    return "Sure! 📖 Send me your English question and I will help you.";
-  }
-  if (lower.includes("sst")) {
-    return "Sure! 🌍 Send me your SST question and I will explain it.";
-  }
-  return "I received your question. 🤖 Real AI answers will be connected in a later stage.";
-}
-/* =========================
-   VOICE
-========================= */
+
 function startVoice() {
-  if (
-    !("webkitSpeechRecognition" in window)
-  ) {
-    alert(
-      "Voice input is not supported in this browser."
-    );
+
+  const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!Recognition) {
+    alert("Voice input is not supported in this browser.");
     return;
   }
-  let recognition = new webkitSpeechRecognition();
-  recognition.lang = "en-IN";
-  recognition.start();
+
+  const recognition = new Recognition();
+
+  const language =
+    document.getElementById("language").value;
+
+  recognition.lang =
+    language === "Hindi" ? "hi-IN" : "en-IN";
 
   recognition.onresult = function(event) {
-    document.getElementById(
-      "message"
-    ).value =
+
+    document.getElementById("message").value =
       event.results[0][0].transcript;
+
   };
-}
-  function startvoice(){
-if (
-    !("webkitSpeechRecognition" in window)
-) {
-    alert(
-        "Voice input is not supported in this browser."
-    );
-    return;
-}
-let recognition = new webkitSpeechRecognition();
-recognition.lang = "en-IN";
-recognition.start();
 
-recognition.onresult = function(event) {
-    document.getElementById(
-        "message"
-    ).value =
-        event.results[0][0].transcript;
-};
+  recognition.onerror = function(event) {
+    console.error("Voice error:", event.error);
+    alert("Voice input failed. Please try again.");
+  };
+
+  recognition.start();
 }
-/* ===============================
-    CLEAR CHAT SCREEN
-=============================== */
+
+/* =========================
+   CLEAR CHAT SCREEN
+========================= */
+
 function clearChat() {
-    document.getElementById(
-        "chatBox"
-    ).innerHTML =
-        "<div class='aiMsg'>" +
-        "<b>AI Teacher:</b> " +
-        "Chat cleared. Ask me something new! 💻" +
-        "</div>";
-}
-/* ===============================
-    AI TEACHER
-=============================== */
-function teacherMode() {
-    addAIMessage(
-        "💻 AI Teacher Mode is ready. Ask your school question and I will explain it step by step."
-    );
-}
-/* ===============================
-    STUDY PLANNER
-=============================== */
-function studyPlanner() {
-    addAIMessage(
-        "💻 Study Planner: In the next step we can add subjects, study time, daily targets and a simple timetable."
-    );
-}
-/* ===============================
-    PROGRESS TRACKER
-=============================== */
-function progressTracker() {
-    addAIMessage(
-        "💻 Progress Tracker: In the next step we can save completed quizzes, questions solved and study progress."
-    );
-}
-/* ===============================
-    ENTER KEY
-=============================== */
-document.getElementById(
-    "message"
-).addEventListener(
-    "keydown",
-    function(event) {
-        if (event.key === "Enter") {
-            sendMessage();
-        }
-    }
-);
-/* ===============================
-    LOAD HISTORY
-=============================== */
 
-window.addEventListener(
-    "load",
-    function() {
-        loadChatHistory();
+  if (!confirm("Clear the messages from this screen?")) {
+    return;
+  }
+
+  document.getElementById("chatBox").innerHTML = "";
+
+  document.getElementById("welcome").style.display = "block";
+
+  document.getElementById("status").textContent =
+    "Screen cleared. Saved history remains unchanged.";
+}
+
+/* =========================
+   AI TEACHER
+========================= */
+
+function teacherMode() {
+
+  addAIMessage(
+    "👨‍🏫 AI Teacher Mode is ready. Ask your school question and I will help explain it step by step."
+  );
+
+}
+
+/* =========================
+   STUDY PLANNER
+========================= */
+
+function studyPlanner() {
+
+  addAIMessage(
+    "📅 Study Planner: We can add subjects, study time, daily targets and a timetable in the next development step."
+  );
+
+}
+
+/* =========================
+   PROGRESS TRACKER
+========================= */
+
+function progressTracker() {
+
+  addAIMessage(
+    "📊 Progress Tracker: We can track completed quizzes, questions solved and study progress in the next development step."
+  );
+
+}
+
+/* =========================
+   ENTER KEY
+========================= */
+
+document.getElementById("message").addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
     }
+
+  }
 );
+
+/* =========================
+   PAGE INITIALIZATION
+========================= */
+
+window.addEventListener("load", function() {
+  loadChatHistory();
+});
+
 </script>
+
 </body>
 </html>
