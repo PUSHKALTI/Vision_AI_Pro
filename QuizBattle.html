@@ -100,311 +100,484 @@ header h1{font-size:25px}
 <br>
 <a href="index.html"><button class="home-btn">🏠 Home</button></a>
 <div id="saveStatus" class="status"></div>
+  <div id="backendStatus" class="status"></div>
 </div>
 </div>
 
 <footer>Vision-AI-Pro ❤️</footer>
-
 <script>
-/* SUPABASE CONFIG */
-const SUPABASE_URL="https://swyvrgpapuralxngfoxd.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY="sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
-let supabaseClient=null;
+/* =========================================
+   VISION-AI-PRO — QUIZ BATTLE
+   PHASE 8 BACKEND INTEGRATION
+========================================= */
 
-try{
-if(window.supabase){
-supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-console.log("✅ Quiz Battle Supabase connected.");
-}
-}catch(error){
-console.error("Supabase connection error:",error);
+/* SUPABASE CONFIG */
+const SUPABASE_URL = "https://swyvrgpapuralxngfoxd.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
+
+const VAP_API_URL = SUPABASE_URL + "/functions/v1/vap-api";
+
+let supabaseClient = null;
+
+try {
+    if (window.supabase && SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY) {
+        supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+        );
+
+        console.log("Quiz Battle: Supabase connected.");
+    }
+} catch (error) {
+    console.error("Supabase connection error:", error);
 }
 
 /* QUIZ DATA */
-const quizzes={
-Maths:[
-{q:"5 + 3 = ?",o:["6","7","8","9"],a:"8"},
-{q:"12 - 5 = ?",o:["5","6","7","8"],a:"7"},
-{q:"6 × 4 = ?",o:["20","22","24","26"],a:"24"},
-{q:"36 ÷ 6 = ?",o:["4","5","6","7"],a:"6"},
-{q:"10² = ?",o:["20","50","100","200"],a:"100"}
-],
-Science:[
-{q:"Which organ pumps blood in our body?",o:["Lungs","Heart","Brain","Kidney"],a:"Heart"},
-{q:"What is the basic unit of life?",o:["Tissue","Organ","Cell","Atom"],a:"Cell"},
-{q:"Which gas do plants use for photosynthesis?",o:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],a:"Carbon dioxide"},
-{q:"What force pulls objects towards Earth?",o:["Friction","Gravity","Magnetism","Pressure"],a:"Gravity"},
-{q:"Which planet is known as the Red Planet?",o:["Earth","Mars","Jupiter","Venus"],a:"Mars"}
-],
-English:[
-{q:"What is the opposite of 'hot'?",o:["Warm","Cold","Big","Fast"],a:"Cold"},
-{q:"What is the plural of 'child'?",o:["Childs","Childes","Children","Childrens"],a:"Children"},
-{q:"Which word is a noun?",o:["Run","Beautiful","School","Quickly"],a:"School"},
-{q:"What is the past tense of 'go'?",o:["Goed","Gone","Went","Going"],a:"Went"},
-{q:"Choose the correct article: ___ apple",o:["A","An","The","No article"],a:"An"}
-],
-SST:[
-{q:"What is the capital of India?",o:["Mumbai","Kolkata","New Delhi","Chennai"],a:"New Delhi"},
-{q:"How many states are there in India?",o:["26","27","28","29"],a:"28"},
-{q:"Which is the largest continent?",o:["Africa","Asia","Europe","Australia"],a:"Asia"},
-{q:"India is located in which continent?",o:["Asia","Europe","Africa","South America"],a:"Asia"},
-{q:"What is the national currency of India?",o:["Dollar","Rupee","Pound","Euro"],a:"Rupee"}
-]
+const quizzes = {
+    Maths: [
+        {q:"5 + 3 = ?",o:["6","7","8","9"],a:"8"},
+        {q:"12 - 5 = ?",o:["5","6","7","8"],a:"7"},
+        {q:"6 × 4 = ?",o:["20","22","24","26"],a:"24"},
+        {q:"36 ÷ 6 = ?",o:["4","5","6","7"],a:"6"},
+        {q:"10² = ?",o:["20","50","100","200"],a:"100"}
+    ],
+
+    Science: [
+        {q:"Which organ pumps blood in our body?",o:["Lungs","Heart","Brain","Kidney"],a:"Heart"},
+        {q:"What is the basic unit of life?",o:["Tissue","Organ","Cell","Atom"],a:"Cell"},
+        {q:"Which gas do plants use for photosynthesis?",o:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],a:"Carbon dioxide"},
+        {q:"What force pulls objects towards Earth?",o:["Friction","Gravity","Magnetism","Pressure"],a:"Gravity"},
+        {q:"Which planet is known as the Red Planet?",o:["Earth","Mars","Jupiter","Venus"],a:"Mars"}
+    ],
+
+    English: [
+        {q:"What is the opposite of 'hot'?",o:["Warm","Cold","Big","Fast"],a:"Cold"},
+        {q:"What is the plural of 'child'?",o:["Childs","Childes","Children","Childrens"],a:"Children"},
+        {q:"Which word is a noun?",o:["Run","Beautiful","School","Quickly"],a:"School"},
+        {q:"What is the past tense of 'go'?",o:["Goed","Gone","Went","Going"],a:"Went"},
+        {q:"Choose the correct article: ___ apple",o:["A","An","The","No article"],a:"An"}
+    ],
+
+    SST: [
+        {q:"What is the capital of India?",o:["Mumbai","Kolkata","New Delhi","Chennai"],a:"New Delhi"},
+        {q:"How many states are there in India?",o:["26","27","28","29"],a:"28"},
+        {q:"Which is the largest continent?",o:["Africa","Asia","Europe","Australia"],a:"Asia"},
+        {q:"India is located in which continent?",o:["Asia","Europe","Africa","South America"],a:"Asia"},
+        {q:"What is the national currency of India?",o:["Dollar","Rupee","Pound","Euro"],a:"Rupee"}
+    ]
 };
 
 /* QUIZ VARIABLES */
-let subject="";
-let questionIndex=0;
-let score=0;
-let timer=null;
-let timeLeft=15;
-let answered=false;
-let quizRequestId=null;
+let subject = "";
+let questionIndex = 0;
+let score = 0;
+let timer = null;
+let timeLeft = 15;
+let answered = false;
+let quizFinishing = false;
 
 /* START QUIZ */
-function startQuiz(selectedSubject){
-subject=selectedSubject;
-questionIndex=0;
-score=0;
-quizRequestId=null;
-document.getElementById("subjectScreen").classList.add("hidden");
-document.getElementById("resultScreen").classList.add("hidden");
-document.getElementById("quizScreen").classList.remove("hidden");
-showQuestion();
+function startQuiz(selectedSubject) {
+    if (!quizzes[selectedSubject]) {
+        alert("Please select a valid subject.");
+        return;
+    }
+
+    clearInterval(timer);
+
+    subject = selectedSubject;
+    questionIndex = 0;
+    score = 0;
+    answered = false;
+    quizFinishing = false;
+
+    document.getElementById("subjectScreen").classList.add("hidden");
+    document.getElementById("resultScreen").classList.add("hidden");
+    document.getElementById("quizScreen").classList.remove("hidden");
+
+    document.getElementById("saveStatus").textContent = "";
+
+    showQuestion();
 }
 
 /* SHOW QUESTION */
-function showQuestion(){
-clearInterval(timer);
-answered=false;
-const quiz=quizzes[subject][questionIndex];
-const total=quizzes[subject].length;
+function showQuestion() {
+    clearInterval(timer);
+    answered = false;
 
-document.getElementById("subjectBadge").textContent="🏆 "+subject;
-document.getElementById("scoreBadge").textContent="Score: "+score;
-document.getElementById("questionNumber").textContent="Question "+(questionIndex+1)+" of "+total;
-document.getElementById("questionText").textContent=quiz.q;
-document.getElementById("progress").style.width=((questionIndex+1)/total*100)+"%";
+    const quiz = quizzes[subject][questionIndex];
+    const total = quizzes[subject].length;
 
-const options=document.getElementById("options");
-options.innerHTML="";
+    document.getElementById("subjectBadge").textContent = "🏆 " + subject;
+    document.getElementById("scoreBadge").textContent = "Score: " + score;
 
-quiz.o.forEach(function(option,index){
-const button=document.createElement("button");
-button.className="option";
-button.textContent=option;
-button.onclick=function(){checkAnswer(index,button)};
-options.appendChild(button);
-});
+    document.getElementById("questionNumber").textContent =
+        "Question " + (questionIndex + 1) + " of " + total;
 
-const feedback=document.getElementById("feedback");
-feedback.className="feedback";
-feedback.textContent="";
-document.getElementById("nextBtn").style.display="none";
-startTimer();
+    document.getElementById("questionText").textContent = quiz.q;
+
+    document.getElementById("progress").style.width =
+        ((questionIndex + 1) / total * 100) + "%";
+
+    const options = document.getElementById("options");
+    options.innerHTML = "";
+
+    quiz.o.forEach(function(option, index) {
+        const button = document.createElement("button");
+
+        button.className = "option";
+        button.textContent = option;
+
+        button.onclick = function() {
+            checkAnswer(index, button);
+        };
+
+        options.appendChild(button);
+    });
+
+    const feedback = document.getElementById("feedback");
+    feedback.className = "feedback";
+    feedback.textContent = "";
+
+    document.getElementById("nextBtn").style.display = "none";
+
+    startTimer();
 }
 
 /* CHECK ANSWER */
-function checkAnswer(index,clickedButton){
-if(answered)return;
-answered=true;
-clearInterval(timer);
+function checkAnswer(index, clickedButton) {
+    if (answered || quizFinishing) return;
 
-const quiz=quizzes[subject][questionIndex];
-const buttons=document.querySelectorAll(".option");
-buttons.forEach(button=>button.disabled=true);
+    answered = true;
+    clearInterval(timer);
 
-const selected=quiz.o[index];
-const feedback=document.getElementById("feedback");
+    const quiz = quizzes[subject][questionIndex];
+    const buttons = document.querySelectorAll(".option");
+    const selected = quiz.o[index];
 
-if(selected===quiz.a){
-score++;
-clickedButton.classList.add("correct");
-feedback.textContent="Correct! 🎉 Keep going!";
-feedback.classList.add("correct-box");
-}else{
-clickedButton.classList.add("wrong");
-buttons.forEach(button=>{
-if(button.textContent===quiz.a)button.classList.add("correct");
-});
-feedback.textContent="Not quite! 😊 Correct answer: "+quiz.a;
-feedback.classList.add("wrong-box");
-}
+    buttons.forEach(function(button) {
+        button.disabled = true;
+    });
 
-document.getElementById("scoreBadge").textContent="Score: "+score;
-document.getElementById("nextBtn").style.display="block";
+    const feedback = document.getElementById("feedback");
+
+    if (selected === quiz.a) {
+        score++;
+
+        clickedButton.classList.add("correct");
+        feedback.textContent = "Correct! 🎉 Keep going!";
+        feedback.classList.add("correct-box");
+    } else {
+        clickedButton.classList.add("wrong");
+
+        buttons.forEach(function(button) {
+            if (button.textContent === quiz.a) {
+                button.classList.add("correct");
+            }
+        });
+
+        feedback.textContent =
+            "Not quite! 😊 Correct answer: " + quiz.a;
+
+        feedback.classList.add("wrong-box");
+    }
+
+    document.getElementById("scoreBadge").textContent =
+        "Score: " + score;
+
+    document.getElementById("nextBtn").style.display = "block";
 }
 
 /* TIMER */
-function startTimer(){
-timeLeft=15;
-document.getElementById("timer").textContent="⏱️ "+timeLeft;
-timer=setInterval(function(){
-timeLeft--;
-document.getElementById("timer").textContent="⏱️ "+timeLeft;
-if(timeLeft<=0){
-clearInterval(timer);
-timeUp();
-}
-},1000);
+function startTimer() {
+    timeLeft = 15;
+
+    document.getElementById("timer").textContent = "⏱️ " + timeLeft;
+
+    timer = setInterval(function() {
+        timeLeft--;
+
+        document.getElementById("timer").textContent =
+            "⏱️ " + timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            timeUp();
+        }
+    }, 1000);
 }
 
 /* TIME UP */
-function timeUp(){
-if(answered)return;
-answered=true;
-const quiz=quizzes[subject][questionIndex];
-const buttons=document.querySelectorAll(".option");
+function timeUp() {
+    if (answered || quizFinishing) return;
 
-buttons.forEach(button=>{
-button.disabled=true;
-if(button.textContent===quiz.a)button.classList.add("correct");
-});
+    answered = true;
 
-const feedback=document.getElementById("feedback");
-feedback.textContent="⏰ Time's up! Correct answer: "+quiz.a;
-feedback.classList.add("wrong-box");
-document.getElementById("nextBtn").style.display="block";
+    const quiz = quizzes[subject][questionIndex];
+    const buttons = document.querySelectorAll(".option");
+
+    buttons.forEach(function(button) {
+        button.disabled = true;
+
+        if (button.textContent === quiz.a) {
+            button.classList.add("correct");
+        }
+    });
+
+    const feedback = document.getElementById("feedback");
+
+    feedback.textContent =
+        "⏰ Time's up! Correct answer: " + quiz.a;
+
+    feedback.classList.add("wrong-box");
+
+    document.getElementById("nextBtn").style.display = "block";
 }
 
 /* NEXT QUESTION */
-function nextQuestion(){
-questionIndex++;
-if(questionIndex<quizzes[subject].length){
-showQuestion();
-}else{
-finishQuiz();
-}
-}
+function nextQuestion() {
+    if (quizFinishing) return;
 
-/* FINISH QUIZ */
-async function finishQuiz(){
-clearInterval(timer);
-const total=quizzes[subject].length;
-const percentage=Math.round((score/total)*100);
+    questionIndex++;
 
-document.getElementById("quizScreen").classList.add("hidden");
-document.getElementById("resultScreen").classList.remove("hidden");
-document.getElementById("finalScore").textContent=score+" / "+total;
-document.getElementById("finalPercentage").textContent=percentage+"%";
-
-let message="";
-if(percentage===100)message="🏆 Perfect! Amazing work!";
-else if(percentage>=80)message="🌟 Excellent! Keep it up!";
-else if(percentage>=50)message="👍 Good job! You can improve even more!";
-else message="💪 Keep practicing. You will get better!";
-
-document.getElementById("resultMessage").textContent=message;
-
-/* Send quiz result to backend, then save existing history */
-await sendQuizToBackend(subject,score,total,percentage);
-await saveQuizHistory(subject,score,total,percentage);
+    if (questionIndex < quizzes[subject].length) {
+        showQuestion();
+    } else {
+        finishQuiz();
+    }
 }
 
-/* PHASE 8: QUIZ BACKEND REQUEST */
-async function sendQuizToBackend(selectedSubject,finalScore,totalQuestions,percentage){
-const status=document.getElementById("saveStatus");
+/* =========================================
+   PHASE 8 — BACKEND REQUEST
+========================================= */
 
-if(!supabaseClient){
-status.textContent="⚠️ Supabase connection unavailable. Quiz result is still shown.";
-return false;
+async function sendQuizBackendRequest(
+    selectedSubject,
+    finalScore,
+    totalQuestions,
+    percentage
+) {
+    if (!supabaseClient) {
+        throw new Error("Supabase connection is not available.");
+    }
+
+    /* GET CURRENT LOGIN SESSION */
+    const {
+        data: { session },
+        error: sessionError
+    } = await supabaseClient.auth.getSession();
+
+    if (sessionError) {
+        throw new Error("Could not verify login session.");
+    }
+
+    if (!session || !session.access_token) {
+        throw new Error("Please login first to use Quiz Battle.");
+    }
+
+    /* PREPARE BACKEND MESSAGE */
+    const message =
+        "Quiz completed. Subject: " + selectedSubject +
+        ". Score: " + finalScore + "/" + totalQuestions +
+        ". Percentage: " + percentage + "%.";
+
+    /* SEND AUTHENTICATED REQUEST */
+    const response = await fetch(VAP_API_URL, {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_PUBLISHABLE_KEY,
+            "Authorization": "Bearer " + session.access_token
+        },
+
+        body: JSON.stringify({
+            message: message,
+            request_type: "quiz"
+        })
+    });
+
+    let result;
+
+    try {
+        result = await response.json();
+    } catch (error) {
+        throw new Error("Backend returned an invalid response.");
+    }
+
+    if (!response.ok || !result || result.success !== true) {
+        throw new Error(
+            result && result.error
+                ? result.error
+                : "Quiz backend request failed."
+        );
+    }
+
+    console.log("Quiz backend response:", result);
+
+    return result;
 }
 
-try{
-const {data,error}=await supabaseClient.auth.getSession();
+/* =========================================
+   FINISH QUIZ
+========================================= */
 
-if(error)throw error;
-if(!data.session || !data.session.access_token){
-status.textContent="🔐 Please login to connect your quiz to the backend.";
-return false;
+async function finishQuiz() {
+    if (quizFinishing) return;
+
+    quizFinishing = true;
+    clearInterval(timer);
+
+    const total = quizzes[subject].length;
+    const percentage = Math.round((score / total) * 100);
+
+    document.getElementById("quizScreen").classList.add("hidden");
+    document.getElementById("resultScreen").classList.remove("hidden");
+
+    document.getElementById("finalScore").textContent =
+        score + " / " + total;
+
+    document.getElementById("finalPercentage").textContent =
+        percentage + "%";
+
+    let message = "";
+
+    if (percentage === 100) {
+        message = "🏆 Perfect! Amazing work!";
+    } else if (percentage >= 80) {
+        message = "🌟 Excellent! Keep it up!";
+    } else if (percentage >= 50) {
+        message = "👍 Good job! You can improve even more!";
+    } else {
+        message = "💪 Keep practicing. You will get better!";
+    }
+
+    document.getElementById("resultMessage").textContent = message;
+
+    const backendStatus = document.getElementById("backendStatus");
+
+    if (backendStatus) {
+        backendStatus.textContent = "⏳ Sending quiz request to backend...";
+    }
+
+    /* BACKEND REQUEST */
+    try {
+        const backendResult = await sendQuizBackendRequest(
+            subject,
+            score,
+            total,
+            percentage
+        );
+
+        if (backendStatus) {
+            const usage = backendResult.usage;
+
+            if (usage && usage.success) {
+                backendStatus.textContent =
+                    "✅ Backend verified! Quiz usage tracked. Used today: " +
+                    usage.used_today;
+            } else {
+                backendStatus.textContent =
+                    "✅ Backend request successful.";
+            }
+        }
+
+    } catch (error) {
+        console.error("Quiz backend error:", error);
+
+        if (backendStatus) {
+            backendStatus.textContent =
+                "⚠️ Backend request failed: " + error.message;
+        }
+    }
+
+    /* SAVE HISTORY EVEN IF BACKEND REQUEST FAILS */
+    await saveQuizHistory(subject, score, total, percentage);
 }
 
-quizRequestId=(window.crypto && crypto.randomUUID)
-?crypto.randomUUID()
-:"quiz-"+Date.now()+"-"+Math.random().toString(36).slice(2);
+/* =========================================
+   SAVE QUIZ HISTORY
+========================================= */
 
-const response=await fetch(
-SUPABASE_URL+"/functions/v1/vap-api",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"apikey":SUPABASE_PUBLISHABLE_KEY,
-"Authorization":"Bearer "+data.session.access_token
-},
-body:JSON.stringify({
-message:
-"Quiz completed. Subject: "+selectedSubject+
-". Score: "+finalScore+" out of "+totalQuestions+
-". Percentage: "+percentage+"%.",
-request_type:"quiz"
-})
-}
-);
+async function saveQuizHistory(
+    selectedSubject,
+    finalScore,
+    totalQuestions,
+    percentage
+) {
+    const status = document.getElementById("saveStatus");
 
-let apiData={};
-try{apiData=await response.json()}catch(error){}
+    if (!supabaseClient) {
+        status.textContent = "⚠️ Supabase is not configured.";
+        return;
+    }
 
-if(!response.ok || !apiData.success){
-throw new Error(apiData.error || "Quiz backend request failed.");
-}
+    try {
+        const {
+            data: { user },
+            error
+        } = await supabaseClient.auth.getUser();
 
-console.log("✅ Quiz backend request successful:",apiData);
-status.textContent="✅ Quiz request received by backend. Saving your result...";
-return true;
+        if (error || !user) {
+            status.textContent =
+                "🔐 Login required to save quiz history.";
+            return;
+        }
 
-}catch(error){
-console.error("Quiz backend error:",error);
-status.textContent="⚠️ Backend request failed. Your quiz result is still available.";
-return false;
-}
-}
+        const { error: insertError } =
+            await supabaseClient
+                .from("quiz_history")
+                .insert({
+                    user_id: user.id,
+                    subject: selectedSubject,
+                    score: finalScore,
+                    total_questions: totalQuestions,
+                    percentage: percentage
+                });
 
-/* SAVE QUIZ HISTORY */
-async function saveQuizHistory(selectedSubject,finalScore,totalQuestions,percentage){
-const status=document.getElementById("saveStatus");
+        if (insertError) {
+            console.error("Quiz history save error:", insertError);
 
-if(!supabaseClient){
-status.textContent+=" History could not be saved: Supabase unavailable.";
-return;
-}
+            status.textContent =
+                "⚠️ Quiz completed, but History could not be saved.";
 
-try{
-const {data,error}=await supabaseClient.auth.getUser();
-if(error)throw error;
+            return;
+        }
 
-if(!data.user){
-status.textContent+=" 🔐 Login required to save quiz history.";
-return;
-}
+        status.textContent =
+            "✅ Quiz result saved to your History!";
 
-const {error:insertError}=await supabaseClient
-.from("quiz_history")
-.insert({
-user_id:data.user.id,
-subject:selectedSubject,
-score:finalScore,
-total_questions:totalQuestions,
-percentage:percentage
-});
+        console.log("Quiz History saved successfully.");
 
-if(insertError)throw insertError;
+    } catch (error) {
+        console.error("Quiz History error:", error);
 
-console.log("✅ Quiz history saved.");
-status.textContent+=" 📚 Quiz result saved to your History!";
-
-}catch(error){
-console.error("Quiz history save error:",error);
-status.textContent+=" ⚠️ Quiz completed, but history could not be saved.";
-}
+        status.textContent =
+            "⚠️ Quiz completed, but History could not be saved.";
+    }
 }
 
 /* PLAY AGAIN */
-function playAgain(){
-clearInterval(timer);
-document.getElementById("resultScreen").classList.add("hidden");
-document.getElementById("subjectScreen").classList.remove("hidden");
+function playAgain() {
+    clearInterval(timer);
+
+    quizFinishing = false;
+    answered = false;
+
+    document.getElementById("resultScreen").classList.add("hidden");
+    document.getElementById("quizScreen").classList.add("hidden");
+    document.getElementById("subjectScreen").classList.remove("hidden");
+
+    document.getElementById("saveStatus").textContent = "";
+
+    const backendStatus = document.getElementById("backendStatus");
+
+    if (backendStatus) {
+        backendStatus.textContent = "";
+    }
 }
 </script>
-</body>
-</html>
+
+
+
+
