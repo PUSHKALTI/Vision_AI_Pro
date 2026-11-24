@@ -6,254 +6,51 @@
 <title>Vision-AI-Pro • Quiz Battle</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{
-    box-sizing:border-box;
-}
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:linear-gradient(135deg,#eef7ff,#f5f3ff);
-    color:#17324d;
-    min-height:100vh;
-}
-header{
-    background:linear-gradient(135deg,#2563eb,#6366f1);
-    color:white;
-    text-align:center;
-    padding:28px 15px;
-}
-header h1{
-    margin:0;
-    font-size:30px;
-}
-header p{
-    margin:8px 0 0;
-    font-size:15px;
-}
-.container{
-    width:92%;
-    max-width:850px;
-    margin:25px auto;
-}
-.card{
-    background:white;
-    border-radius:20px;
-    padding:22px;
-    margin-bottom:20px;
-    box-shadow:0 6px 20px rgba(0,0,0,.10);
-}
-.card h2{
-    margin-top:0;
-}
-.subject-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:14px;
-}
-.subject-btn{
-    border:0;
-    border-radius:16px;
-    padding:18px 10px;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
-    color:white;
-    transition:.2s;
-}
-.subject-btn:hover{
-    transform:translateY(-2px);
-    opacity:.93;
-}
-.math{
-    background:#2563eb;
-}
-.science{
-    background:#16a34a;
-}
-.english{
-    background:#9333ea;
-}
-.sst{
-    background:#ea580c;
-}
-.home-btn,
-.history-btn{
-    display:inline-block;
-    text-decoration:none;
-    border:0;
-    border-radius:12px;
-    padding:12px 18px;
-    margin:5px;
-    font-weight:bold;
-    cursor:pointer;
-}
-.home-btn{
-    background:#e2e8f0;
-    color:#17324d;
-}
-.history-btn{
-    background:#7c3aed;
-    color:white;
-}
-.top-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-}
-.badge{
-    background:#eef2ff;
-    color:#4338ca;
-    padding:8px 12px;
-    border-radius:20px;
-    font-weight:bold;
-}
-.progress-box{
-    background:#e5e7eb;
-    height:10px;
-    border-radius:20px;
-    overflow:hidden;
-    margin:18px 0;
-}
-.progress{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,#2563eb,#7c3aed);
-    transition:.3s;
-}
-.timer{
-    color:#dc2626;
-    font-weight:bold;
-}
-.question{
-    font-size:22px;
-    font-weight:bold;
-    line-height:1.4;
-    margin:25px 0;
-}
-.options{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-}
-.option{
-    border:2px solid #dbeafe;
-    background:#f8fbff;
-    border-radius:14px;
-    padding:15px;
-    font-size:16px;
-    cursor:pointer;
-    text-align:left;
-    transition:.2s;
-}
-.option:hover{
-    background:#eff6ff;
-    border-color:#60a5fa;
-}
-.option.correct{
-    background:#dcfce7;
-    border-color:#22c55e;
-}
-.option.wrong{
-    background:#fee2e2;
-    border-color:#ef4444;
-}
-.option:disabled{
-    cursor:not-allowed;
-}
-.feedback{
-    margin-top:18px;
-    padding:14px;
-    border-radius:12px;
-    font-weight:bold;
-    display:none;
-}
-.feedback.correct-box{
-    display:block;
-    background:#dcfce7;
-    color:#166534;
-}
-.feedback.wrong-box{
-    display:block;
-    background:#fee2e2;
-    color:#991b1b;
-}
-.next-btn{
-    display:none;
-    width:100%;
-    margin-top:18px;
-    border:0;
-    border-radius:13px;
-    padding:14px;
-    background:#2563eb;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-.result-card{
-    text-align:center;
-}
-.score-big{
-    font-size:38px;
-    font-weight:bold;
-    color:#2563eb;
-    margin:15px 0;
-}
-.percentage{
-    font-size:20px;
-    font-weight:bold;
-    color:#7c3aed;
-}
-.result-message{
-    font-size:18px;
-    margin:15px 0 22px;
-}
-.result-btn{
-    border:0;
-    border-radius:12px;
-    padding:13px 18px;
-    margin:5px;
-    font-weight:bold;
-    cursor:pointer;
-}
-.play-again{
-    background:#2563eb;
-    color:white;
-}
-.back-history{
-    background:#7c3aed;
-    color:white;
-}
-.status{
-    text-align:center;
-    margin-top:12px;
-    font-size:14px;
-    color:#64748b;
-}
-.hidden{
-    display:none;
-}
-footer{
-    text-align:center;
-    padding:25px;
-    color:#64748b;
-    font-size:13px;
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#eef7ff,#f5f3ff);color:#17324d;min-height:100vh}
+header{background:linear-gradient(135deg,#2563eb,#6366f1);color:white;text-align:center;padding:28px 15px}
+header h1{margin:0;font-size:30px}
+header p{margin:8px 0 0;font-size:15px}
+.container{width:92%;max-width:850px;margin:25px auto}
+.card{background:white;border-radius:20px;padding:22px;margin-bottom:20px;box-shadow:0 6px 20px rgba(0,0,0,.10)}
+.card h2{margin-top:0}
+.subject-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.subject-btn{border:0;border-radius:16px;padding:18px 10px;font-size:17px;font-weight:bold;cursor:pointer;color:white;transition:.2s}
+.subject-btn:hover{transform:translateY(-2px);opacity:.93}
+.math{background:#2563eb}.science{background:#16a34a}.english{background:#9333ea}.sst{background:#ea580c}
+.home-btn,.history-btn{display:inline-block;text-decoration:none;border:0;border-radius:12px;padding:12px 18px;margin:5px;font-weight:bold;cursor:pointer}
+.home-btn{background:#e2e8f0;color:#17324d}
+.history-btn{background:#7c3aed;color:white}
+.top-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.badge{background:#eef2ff;color:#4338ca;padding:8px 12px;border-radius:20px;font-weight:bold}
+.progress-box{background:#e5e7eb;height:10px;border-radius:20px;overflow:hidden;margin:18px 0}
+.progress{height:100%;width:0%;background:linear-gradient(90deg,#2563eb,#7c3aed);transition:.3s}
+.timer{color:#dc2626;font-weight:bold}
+.question{font-size:22px;font-weight:bold;line-height:1.4;margin:25px 0}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.option{border:2px solid #dbeafe;background:#f8fbff;border-radius:14px;padding:15px;font-size:16px;cursor:pointer;text-align:left;transition:.2s}
+.option:hover{background:#eff6ff;border-color:#60a5fa}
+.option.correct{background:#dcfce7;border-color:#22c55e}
+.option.wrong{background:#fee2e2;border-color:#ef4444}
+.option:disabled{cursor:not-allowed}
+.feedback{margin-top:18px;padding:14px;border-radius:12px;font-weight:bold;display:none}
+.feedback.correct-box{display:block;background:#dcfce7;color:#166534}
+.feedback.wrong-box{display:block;background:#fee2e2;color:#991b1b}
+.next-btn{display:none;width:100%;margin-top:18px;border:0;border-radius:13px;padding:14px;background:#2563eb;color:white;font-size:16px;font-weight:bold;cursor:pointer}
+.result-card{text-align:center}
+.score-big{font-size:38px;font-weight:bold;color:#2563eb;margin:15px 0}
+.percentage{font-size:20px;font-weight:bold;color:#7c3aed}
+.result-message{font-size:18px;margin:15px 0 22px}
+.result-btn{border:0;border-radius:12px;padding:13px 18px;margin:5px;font-weight:bold;cursor:pointer}
+.play-again{background:#2563eb;color:white}
+.back-history{background:#7c3aed;color:white}
+.status{text-align:center;margin-top:12px;font-size:14px;color:#64748b}
+.hidden{display:none}
+footer{text-align:center;padding:25px;color:#64748b;font-size:13px}
 @media(max-width:600px){
-    header h1{
-        font-size:25px;
-    }
-    .subject-grid{
-        grid-template-columns:1fr;
-    }
-    .options{
-        grid-template-columns:1fr;
-    }
-    .question{
-        font-size:19px;
-    }
+header h1{font-size:25px}
+.subject-grid,.options{grid-template-columns:1fr}
+.question{font-size:19px}
 }
 </style>
 </head>
@@ -262,8 +59,8 @@ footer{
 <h1>🏆 Quiz Battle</h1>
 <p>Learn • Play • Challenge Yourself</p>
 </header>
+
 <div class="container">
-<!-- SUBJECT SCREEN -->
 <div id="subjectScreen" class="card">
 <h2>🎯 Choose Your Subject</h2>
 <p>Pick a subject and start your quiz.</p>
@@ -273,28 +70,26 @@ footer{
 <button class="subject-btn english" onclick="startQuiz('English')">📚 English</button>
 <button class="subject-btn sst" onclick="startQuiz('SST')">🌍 SST</button>
 </div>
-<div style="text-align:center;margin-top:20px;">
+<div style="text-align:center;margin-top:20px">
 <a href="index.html"><button class="home-btn">🏠 Home</button></a>
 <a href="History.html"><button class="history-btn">📚 History</button></a>
 </div>
 </div>
-<!-- QUIZ SCREEN -->
+
 <div id="quizScreen" class="card hidden">
 <div class="top-row">
 <div id="subjectBadge" class="badge">🏆 Quiz</div>
 <div id="scoreBadge" class="badge">Score: 0</div>
 <div class="timer" id="timer">⏱️ 15</div>
 </div>
-<div class="progress-box">
-<div id="progress" class="progress"></div>
-</div>
+<div class="progress-box"><div id="progress" class="progress"></div></div>
 <div id="questionNumber">Question 1 of 5</div>
 <div id="questionText" class="question">Question</div>
 <div id="options" class="options"></div>
 <div id="feedback" class="feedback"></div>
 <button id="nextBtn" class="next-btn" onclick="nextQuestion()">➡️ Next Question</button>
 </div>
-<!-- RESULT SCREEN -->
+
 <div id="resultScreen" class="card result-card hidden">
 <h2>🎉 Quiz Completed!</h2>
 <div id="finalScore" class="score-big">0 / 5</div>
@@ -307,24 +102,26 @@ footer{
 <div id="saveStatus" class="status"></div>
 </div>
 </div>
+
 <footer>Vision-AI-Pro ❤️</footer>
+
 <script>
 /* SUPABASE CONFIG */
-const SUPABASE_URL = "https://swyvrgpapuralxngfoxd.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
-let supabaseClient = null;
+const SUPABASE_URL="https://swyvrgpapuralxngfoxd.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
+let supabaseClient=null;
 
 try{
-    if(SUPABASE_URL !== "" && SUPABASE_PUBLISHABLE_KEY !== "PASTE_YOUR_EXISTING_PUBLISHABLE_KEY_HERE"){
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-        console.log("✅ Quiz Battle Supabase connected.");
-    }
+if(window.supabase){
+supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+console.log("✅ Quiz Battle Supabase connected.");
+}
 }catch(error){
-    console.error("Supabase connection error:", error);
+console.error("Supabase connection error:",error);
 }
 
 /* QUIZ DATA */
-const quizzes = {
+const quizzes={
 Maths:[
 {q:"5 + 3 = ?",o:["6","7","8","9"],a:"8"},
 {q:"12 - 5 = ?",o:["5","6","7","8"],a:"7"},
@@ -356,204 +153,257 @@ SST:[
 };
 
 /* QUIZ VARIABLES */
-let subject = "";
-let questionIndex = 0;
-let score = 0;
-let timer = null;
-let timeLeft = 15;
-let answered = false;
+let subject="";
+let questionIndex=0;
+let score=0;
+let timer=null;
+let timeLeft=15;
+let answered=false;
+let quizRequestId=null;
 
 /* START QUIZ */
 function startQuiz(selectedSubject){
-    subject = selectedSubject;
-    questionIndex = 0;
-    score = 0;
-    document.getElementById("subjectScreen").classList.add("hidden");
-    document.getElementById("resultScreen").classList.add("hidden");
-    document.getElementById("quizScreen").classList.remove("hidden");
-    showQuestion();
+subject=selectedSubject;
+questionIndex=0;
+score=0;
+quizRequestId=null;
+document.getElementById("subjectScreen").classList.add("hidden");
+document.getElementById("resultScreen").classList.add("hidden");
+document.getElementById("quizScreen").classList.remove("hidden");
+showQuestion();
 }
 
 /* SHOW QUESTION */
 function showQuestion(){
-    clearInterval(timer);
-    answered = false;
-    const quiz = quizzes[subject][questionIndex];
-    const total = quizzes[subject].length;
+clearInterval(timer);
+answered=false;
+const quiz=quizzes[subject][questionIndex];
+const total=quizzes[subject].length;
 
-    document.getElementById("subjectBadge").textContent = "🏆 " + subject;
-    document.getElementById("scoreBadge").textContent = "Score: " + score;
-    document.getElementById("questionNumber").textContent = "Question " + (questionIndex + 1) + " of " + total;
-    document.getElementById("questionText").textContent = quiz.q;
-    document.getElementById("progress").style.width = ((questionIndex + 1) / total * 100) + "%";
+document.getElementById("subjectBadge").textContent="🏆 "+subject;
+document.getElementById("scoreBadge").textContent="Score: "+score;
+document.getElementById("questionNumber").textContent="Question "+(questionIndex+1)+" of "+total;
+document.getElementById("questionText").textContent=quiz.q;
+document.getElementById("progress").style.width=((questionIndex+1)/total*100)+"%";
 
-    const options = document.getElementById("options");
-    options.innerHTML = "";
+const options=document.getElementById("options");
+options.innerHTML="";
 
-    quiz.o.forEach(function(option,index){
-        const button = document.createElement("button");
-        button.className = "option";
-        button.textContent = option;
-        button.onclick = function(){ checkAnswer(index, button); };
-        options.appendChild(button);
-    });
+quiz.o.forEach(function(option,index){
+const button=document.createElement("button");
+button.className="option";
+button.textContent=option;
+button.onclick=function(){checkAnswer(index,button)};
+options.appendChild(button);
+});
 
-    const feedback = document.getElementById("feedback");
-    feedback.className = "feedback";
-    feedback.textContent = "";
-
-    document.getElementById("nextBtn").style.display = "none";
-    startTimer();
+const feedback=document.getElementById("feedback");
+feedback.className="feedback";
+feedback.textContent="";
+document.getElementById("nextBtn").style.display="none";
+startTimer();
 }
 
 /* CHECK ANSWER */
 function checkAnswer(index,clickedButton){
-    if(answered){ return; }
-    answered = true;
-    clearInterval(timer);
+if(answered)return;
+answered=true;
+clearInterval(timer);
 
-    const quiz = quizzes[subject][questionIndex];
-    const buttons = document.querySelectorAll(".option");
+const quiz=quizzes[subject][questionIndex];
+const buttons=document.querySelectorAll(".option");
+buttons.forEach(button=>button.disabled=true);
 
-    buttons.forEach(function(button){ button.disabled = true; });
+const selected=quiz.o[index];
+const feedback=document.getElementById("feedback");
 
-    const selected = quiz.o[index];
-    const feedback = document.getElementById("feedback");
+if(selected===quiz.a){
+score++;
+clickedButton.classList.add("correct");
+feedback.textContent="Correct! 🎉 Keep going!";
+feedback.classList.add("correct-box");
+}else{
+clickedButton.classList.add("wrong");
+buttons.forEach(button=>{
+if(button.textContent===quiz.a)button.classList.add("correct");
+});
+feedback.textContent="Not quite! 😊 Correct answer: "+quiz.a;
+feedback.classList.add("wrong-box");
+}
 
-    if(selected === quiz.a){
-        score++;
-        clickedButton.classList.add("correct");
-        feedback.textContent = "Correct! 🎉 Keep going!";
-        feedback.classList.add("correct-box");
-    }else{
-        clickedButton.classList.add("wrong");
-        buttons.forEach(function(button){
-            if(button.textContent === quiz.a){
-                button.classList.add("correct");
-            }
-        });
-        feedback.textContent = "Not quite! 😊 Correct answer: " + quiz.a;
-        feedback.classList.add("wrong-box");
-    }
-
-    document.getElementById("scoreBadge").textContent = "Score: " + score;
-    document.getElementById("nextBtn").style.display = "block";
+document.getElementById("scoreBadge").textContent="Score: "+score;
+document.getElementById("nextBtn").style.display="block";
 }
 
 /* TIMER */
 function startTimer(){
-    timeLeft = 15;
-    document.getElementById("timer").textContent = "⏱️ " + timeLeft;
-    timer = setInterval(function(){
-        timeLeft--;
-        document.getElementById("timer").textContent = "⏱️ " + timeLeft;
-        if(timeLeft <= 0){
-            clearInterval(timer);
-            timeUp();
-        }
-    },1000);
+timeLeft=15;
+document.getElementById("timer").textContent="⏱️ "+timeLeft;
+timer=setInterval(function(){
+timeLeft--;
+document.getElementById("timer").textContent="⏱️ "+timeLeft;
+if(timeLeft<=0){
+clearInterval(timer);
+timeUp();
+}
+},1000);
 }
 
 /* TIME UP */
 function timeUp(){
-    if(answered){ return; }
-    answered = true;
+if(answered)return;
+answered=true;
+const quiz=quizzes[subject][questionIndex];
+const buttons=document.querySelectorAll(".option");
 
-    const quiz = quizzes[subject][questionIndex];
-    const buttons = document.querySelectorAll(".option");
+buttons.forEach(button=>{
+button.disabled=true;
+if(button.textContent===quiz.a)button.classList.add("correct");
+});
 
-    buttons.forEach(function(button){
-        button.disabled = true;
-        if(button.textContent === quiz.a){
-            button.classList.add("correct");
-        }
-    });
-
-    const feedback = document.getElementById("feedback");
-    feedback.textContent = "⏰ Time's up! Correct answer: " + quiz.a;
-    feedback.classList.add("wrong-box");
-    document.getElementById("nextBtn").style.display = "block";
+const feedback=document.getElementById("feedback");
+feedback.textContent="⏰ Time's up! Correct answer: "+quiz.a;
+feedback.classList.add("wrong-box");
+document.getElementById("nextBtn").style.display="block";
 }
 
 /* NEXT QUESTION */
 function nextQuestion(){
-    questionIndex++;
-    if(questionIndex < quizzes[subject].length){
-        showQuestion();
-    }else{
-        finishQuiz();
-    }
+questionIndex++;
+if(questionIndex<quizzes[subject].length){
+showQuestion();
+}else{
+finishQuiz();
+}
 }
 
 /* FINISH QUIZ */
 async function finishQuiz(){
-    clearInterval(timer);
-    const total = quizzes[subject].length;
-    const percentage = Math.round((score / total) * 100);
+clearInterval(timer);
+const total=quizzes[subject].length;
+const percentage=Math.round((score/total)*100);
 
-    document.getElementById("quizScreen").classList.add("hidden");
-    document.getElementById("resultScreen").classList.remove("hidden");
+document.getElementById("quizScreen").classList.add("hidden");
+document.getElementById("resultScreen").classList.remove("hidden");
+document.getElementById("finalScore").textContent=score+" / "+total;
+document.getElementById("finalPercentage").textContent=percentage+"%";
 
-    document.getElementById("finalScore").textContent = score + " / " + total;
-    document.getElementById("finalPercentage").textContent = percentage + "%";
+let message="";
+if(percentage===100)message="🏆 Perfect! Amazing work!";
+else if(percentage>=80)message="🌟 Excellent! Keep it up!";
+else if(percentage>=50)message="👍 Good job! You can improve even more!";
+else message="💪 Keep practicing. You will get better!";
 
-    let message = "";
-    if(percentage === 100){
-        message = "🏆 Perfect! Amazing work!";
-    }else if(percentage >= 80){
-        message = "🌟 Excellent! Keep it up!";
-    }else if(percentage >= 50){
-        message = "👍 Good job! You can improve even more!";
-    }else{
-        message = "💪 Keep practicing. You will get better!";
-    }
+document.getElementById("resultMessage").textContent=message;
 
-    document.getElementById("resultMessage").textContent = message;
-    await saveQuizHistory(subject, score, total, percentage);
+/* Send quiz result to backend, then save existing history */
+await sendQuizToBackend(subject,score,total,percentage);
+await saveQuizHistory(subject,score,total,percentage);
+}
+
+/* PHASE 8: QUIZ BACKEND REQUEST */
+async function sendQuizToBackend(selectedSubject,finalScore,totalQuestions,percentage){
+const status=document.getElementById("saveStatus");
+
+if(!supabaseClient){
+status.textContent="⚠️ Supabase connection unavailable. Quiz result is still shown.";
+return false;
+}
+
+try{
+const {data,error}=await supabaseClient.auth.getSession();
+
+if(error)throw error;
+if(!data.session || !data.session.access_token){
+status.textContent="🔐 Please login to connect your quiz to the backend.";
+return false;
+}
+
+quizRequestId=(window.crypto && crypto.randomUUID)
+?crypto.randomUUID()
+:"quiz-"+Date.now()+"-"+Math.random().toString(36).slice(2);
+
+const response=await fetch(
+SUPABASE_URL+"/functions/v1/vap-api",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"apikey":SUPABASE_PUBLISHABLE_KEY,
+"Authorization":"Bearer "+data.session.access_token
+},
+body:JSON.stringify({
+message:
+"Quiz completed. Subject: "+selectedSubject+
+". Score: "+finalScore+" out of "+totalQuestions+
+". Percentage: "+percentage+"%.",
+request_type:"quiz"
+})
+}
+);
+
+let apiData={};
+try{apiData=await response.json()}catch(error){}
+
+if(!response.ok || !apiData.success){
+throw new Error(apiData.error || "Quiz backend request failed.");
+}
+
+console.log("✅ Quiz backend request successful:",apiData);
+status.textContent="✅ Quiz request received by backend. Saving your result...";
+return true;
+
+}catch(error){
+console.error("Quiz backend error:",error);
+status.textContent="⚠️ Backend request failed. Your quiz result is still available.";
+return false;
+}
 }
 
 /* SAVE QUIZ HISTORY */
-async function saveQuizHistory(selectedSubject, finalScore, totalQuestions, percentage){
-    const status = document.getElementById("saveStatus");
+async function saveQuizHistory(selectedSubject,finalScore,totalQuestions,percentage){
+const status=document.getElementById("saveStatus");
 
-    if(!supabaseClient){
-        status.textContent = "⚠️ Supabase is not configured.";
-        return;
-    }
+if(!supabaseClient){
+status.textContent+=" History could not be saved: Supabase unavailable.";
+return;
+}
 
-    try{
-        const {data,error} = await supabaseClient.auth.getUser();
-        if(error || !data || !data.user){
-            status.textContent = "🔐 Login required to save quiz history.";
-            return;
-        }
+try{
+const {data,error}=await supabaseClient.auth.getUser();
+if(error)throw error;
 
-        const {error:insertError} = await supabaseClient.from("quiz_history").insert({
-            user_id:data.user.id,
-            subject:selectedSubject,
-            score:finalScore,
-            total_questions:totalQuestions,
-            percentage:percentage
-        });
+if(!data.user){
+status.textContent+=" 🔐 Login required to save quiz history.";
+return;
+}
 
-        if(insertError){
-            console.error("Quiz history save error:", insertError);
-            status.textContent = "⚠️ Quiz completed, but history could not be saved.";
-            return;
-        }
+const {error:insertError}=await supabaseClient
+.from("quiz_history")
+.insert({
+user_id:data.user.id,
+subject:selectedSubject,
+score:finalScore,
+total_questions:totalQuestions,
+percentage:percentage
+});
 
-        status.textContent = "✅ Quiz result saved to your History!";
-        console.log("✅ Quiz history saved.");
-    }catch(error){
-        console.error("Quiz history error:", error);
-        status.textContent = "⚠️ Quiz completed, but history could not be saved.";
-    }
+if(insertError)throw insertError;
+
+console.log("✅ Quiz history saved.");
+status.textContent+=" 📚 Quiz result saved to your History!";
+
+}catch(error){
+console.error("Quiz history save error:",error);
+status.textContent+=" ⚠️ Quiz completed, but history could not be saved.";
+}
 }
 
 /* PLAY AGAIN */
 function playAgain(){
-    document.getElementById("resultScreen").classList.add("hidden");
-    document.getElementById("subjectScreen").classList.remove("hidden");
+clearInterval(timer);
+document.getElementById("resultScreen").classList.add("hidden");
+document.getElementById("subjectScreen").classList.remove("hidden");
 }
 </script>
 </body>
