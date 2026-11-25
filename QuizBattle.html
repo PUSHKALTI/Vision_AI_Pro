@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vision-AI-Pro • Quiz Battle</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#eef7ff,#f5f3ff);color:#17324d;min-height:100vh}
@@ -47,13 +48,29 @@ header p{margin:8px 0 0;font-size:15px}
 .status{text-align:center;margin-top:12px;font-size:14px;color:#64748b}
 .hidden{display:none}
 footer{text-align:center;padding:25px;color:#64748b;font-size:13px}
+
+/* FRIEND BATTLE */
+.battle-title{color:#4338ca}
+.battle-input,.battle-select{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:11px;font-size:16px;margin:8px 0 14px}
+.battle-btn{width:100%;padding:14px;border:0;border-radius:12px;background:#4f46e5;color:white;font-size:16px;font-weight:bold;cursor:pointer;margin:7px 0}
+.battle-btn.green{background:#15803d}
+.battle-btn.orange{background:#ea580c}
+.battle-btn.gray{background:#475569}
+.battle-btn:disabled{opacity:.55;cursor:not-allowed}
+.battle-divider{border:0;border-top:1px solid #e2e8f0;margin:20px 0}
+.battle-code{font-size:27px;font-weight:bold;letter-spacing:4px;color:#4338ca;text-align:center;padding:15px;background:#eef2ff;border-radius:12px;margin:12px 0}
+.battle-info{background:#f8fafc;padding:13px;border-radius:12px;line-height:1.8;margin:12px 0}
+.battle-result-row{padding:12px;margin:8px 0;background:#f1f5f9;border-radius:10px;overflow-wrap:anywhere}
+.notice{font-size:13px;color:#64748b;line-height:1.5}
 @media(max-width:600px){
 header h1{font-size:25px}
 .subject-grid,.options{grid-template-columns:1fr}
 .question{font-size:19px}
+.card{padding:17px}
 }
 </style>
 </head>
+
 <body>
 <header>
 <h1>🏆 Quiz Battle</h1>
@@ -61,27 +78,102 @@ header h1{font-size:25px}
 </header>
 
 <div class="container">
+
+<!-- FRIEND BATTLE HOME -->
+<div id="friendBattleCard" class="card">
+<h2 class="battle-title">⚔️ Friend Battle</h2>
+<p>Create a battle and invite your friend using a Battle Code.</p>
+
+<h3>🎮 Create New Battle</h3>
+
+<label for="createSubject"><b>Select Subject</b></label>
+<select id="createSubject" class="battle-select">
+<option value="Maths">Maths</option>
+<option value="Science">Science</option>
+<option value="English">English</option>
+<option value="SST">SST</option>
+</select>
+
+<p class="notice">Current quiz contains 5 questions. Both players should choose the same subject.</p>
+
+<button id="createBattleBtn" class="battle-btn" onclick="createBattle()">
+➕ Create Battle
+</button>
+
+<hr class="battle-divider">
+
+<h3>🔑 Join Friend's Battle</h3>
+<input
+id="joinCodeInput"
+class="battle-input"
+type="text"
+maxlength="8"
+placeholder="Enter 8-character Battle Code"
+autocomplete="off"
+>
+
+<button id="joinBattleBtn" class="battle-btn green" onclick="joinBattle()">
+🤝 Join Battle
+</button>
+
+<div id="battleMessage" class="status" aria-live="polite"></div>
+</div>
+
+<!-- BATTLE LOBBY -->
+<div id="battleLobby" class="card hidden">
+<h2>🏆 Battle Lobby</h2>
+<div id="battleCodeDisplay" class="battle-code">--------</div>
+
+<div class="battle-info">
+<div><b>Subject:</b> <span id="lobbySubject">-</span></div>
+<div><b>Questions:</b> <span id="lobbyQuestions">-</span></div>
+<div><b>Status:</b> <span id="lobbyStatus">Waiting</span></div>
+<div><b>Your Role:</b> <span id="lobbyRole">Player</span></div>
+</div>
+
+<button class="battle-btn gray" onclick="copyBattleCode()">📋 Copy Battle Code</button>
+<button id="startBattleBtn" class="battle-btn green hidden" onclick="startBattle()">🚀 Start Battle</button>
+<button id="playBattleBtn" class="battle-btn hidden" onclick="playBattleQuiz()">🎯 Play Battle Quiz</button>
+<button id="submitBattleScoreBtn" class="battle-btn orange hidden" onclick="submitCurrentBattleScore()">📤 Submit My Score</button>
+<button id="finishBattleBtn" class="battle-btn orange hidden" onclick="finishBattle()">🏁 Finish Battle</button>
+<button id="refreshResultsBtn" class="battle-btn gray" onclick="refreshBattleResults()">🔄 Refresh Battle Results</button>
+
+<div id="battleLobbyMessage" class="status" aria-live="polite"></div>
+<div id="battleResults"></div>
+
+<p class="notice">
+Note: Battle management is connected to the backend. Shared question synchronization and server-verified answers are not implemented yet.
+</p>
+
+<button class="home-btn" onclick="leaveBattleScreen()">⬅️ Back</button>
+</div>
+
+<!-- SOLO QUIZ SUBJECT SCREEN -->
 <div id="subjectScreen" class="card">
 <h2>🎯 Choose Your Subject</h2>
-<p>Pick a subject and start your quiz.</p>
+<p>Pick a subject and start your solo quiz.</p>
+
 <div class="subject-grid">
 <button class="subject-btn math" onclick="startQuiz('Maths')">🧮 Maths</button>
 <button class="subject-btn science" onclick="startQuiz('Science')">🔬 Science</button>
 <button class="subject-btn english" onclick="startQuiz('English')">📚 English</button>
 <button class="subject-btn sst" onclick="startQuiz('SST')">🌍 SST</button>
 </div>
+
 <div style="text-align:center;margin-top:20px">
 <a href="index.html"><button class="home-btn">🏠 Home</button></a>
 <a href="History.html"><button class="history-btn">📚 History</button></a>
 </div>
 </div>
 
+<!-- QUIZ SCREEN -->
 <div id="quizScreen" class="card hidden">
 <div class="top-row">
 <div id="subjectBadge" class="badge">🏆 Quiz</div>
 <div id="scoreBadge" class="badge">Score: 0</div>
 <div class="timer" id="timer">⏱️ 15</div>
 </div>
+
 <div class="progress-box"><div id="progress" class="progress"></div></div>
 <div id="questionNumber">Question 1 of 5</div>
 <div id="questionText" class="question">Question</div>
@@ -90,31 +182,36 @@ header h1{font-size:25px}
 <button id="nextBtn" class="next-btn" onclick="nextQuestion()">➡️ Next Question</button>
 </div>
 
+<!-- RESULT SCREEN -->
 <div id="resultScreen" class="card result-card hidden">
 <h2>🎉 Quiz Completed!</h2>
 <div id="finalScore" class="score-big">0 / 5</div>
 <div id="finalPercentage" class="percentage">0%</div>
 <div id="resultMessage" class="result-message">Great job!</div>
+
 <button class="result-btn play-again" onclick="playAgain()">🔄 Play Again</button>
 <a href="History.html"><button class="result-btn back-history">📚 View History</button></a>
 <br>
 <a href="index.html"><button class="home-btn">🏠 Home</button></a>
+
 <div id="saveStatus" class="status"></div>
-  <div id="backendStatus" class="status"></div>
+<div id="backendStatus" class="status"></div>
+<div id="battleScoreStatus" class="status"></div>
 </div>
+
 </div>
 
 <footer>Vision-AI-Pro ❤️</footer>
+
 <script>
 /* =========================================
    VISION-AI-PRO — QUIZ BATTLE
-   PHASE 8 BACKEND INTEGRATION
+   PHASE 8 — FRIEND BATTLE RPC INTEGRATION
 ========================================= */
 
 /* SUPABASE CONFIG */
 const SUPABASE_URL = "https://swyvrgpapuralxngfoxd.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3BE4yCQ_mcVmKDGIvG4mNQ_Etl_7JQr";
-
 const VAP_API_URL = SUPABASE_URL + "/functions/v1/vap-api";
 
 let supabaseClient = null;
@@ -125,7 +222,6 @@ try {
             SUPABASE_URL,
             SUPABASE_PUBLISHABLE_KEY
         );
-
         console.log("Quiz Battle: Supabase connected.");
     }
 } catch (error) {
@@ -141,7 +237,6 @@ const quizzes = {
         {q:"36 ÷ 6 = ?",o:["4","5","6","7"],a:"6"},
         {q:"10² = ?",o:["20","50","100","200"],a:"100"}
     ],
-
     Science: [
         {q:"Which organ pumps blood in our body?",o:["Lungs","Heart","Brain","Kidney"],a:"Heart"},
         {q:"What is the basic unit of life?",o:["Tissue","Organ","Cell","Atom"],a:"Cell"},
@@ -149,7 +244,6 @@ const quizzes = {
         {q:"What force pulls objects towards Earth?",o:["Friction","Gravity","Magnetism","Pressure"],a:"Gravity"},
         {q:"Which planet is known as the Red Planet?",o:["Earth","Mars","Jupiter","Venus"],a:"Mars"}
     ],
-
     English: [
         {q:"What is the opposite of 'hot'?",o:["Warm","Cold","Big","Fast"],a:"Cold"},
         {q:"What is the plural of 'child'?",o:["Childs","Childes","Children","Childrens"],a:"Children"},
@@ -157,7 +251,6 @@ const quizzes = {
         {q:"What is the past tense of 'go'?",o:["Goed","Gone","Went","Going"],a:"Went"},
         {q:"Choose the correct article: ___ apple",o:["A","An","The","No article"],a:"An"}
     ],
-
     SST: [
         {q:"What is the capital of India?",o:["Mumbai","Kolkata","New Delhi","Chennai"],a:"New Delhi"},
         {q:"How many states are there in India?",o:["26","27","28","29"],a:"28"},
@@ -175,9 +268,486 @@ let timer = null;
 let timeLeft = 15;
 let answered = false;
 let quizFinishing = false;
+let isBattleGame = false;
+let battleScoreSubmitted = false;
 
-/* START QUIZ */
-function startQuiz(selectedSubject) {
+/* FRIEND BATTLE VARIABLES */
+let currentBattle = null;
+let currentUserId = null;
+let battleIsHost = false;
+
+/* GENERAL HELPERS */
+function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+}
+
+function showElement(id) {
+    const element = document.getElementById(id);
+    if (element) element.classList.remove("hidden");
+}
+
+function hideElement(id) {
+    const element = document.getElementById(id);
+    if (element) element.classList.add("hidden");
+}
+
+function normalizeRpcData(data) {
+    if (Array.isArray(data) && data.length === 1) return data[0];
+    return data;
+}
+
+async function getLoggedInUser() {
+    if (!supabaseClient) {
+        throw new Error("Supabase connection is not available.");
+    }
+
+    const { data, error } = await supabaseClient.auth.getUser();
+
+    if (error) throw new Error("Could not verify your login.");
+
+    if (!data || !data.user) {
+        throw new Error("Please login first.");
+    }
+
+    currentUserId = data.user.id;
+    return data.user;
+}
+
+async function callBattleRPC(functionName, parameters) {
+    await getLoggedInUser();
+
+    const { data, error } = await supabaseClient.rpc(
+        functionName,
+        parameters
+    );
+
+    if (error) {
+        console.error("Battle RPC error:", functionName, error);
+        throw new Error(error.message || "Battle backend request failed.");
+    }
+
+    const result = normalizeRpcData(data);
+
+    if (!result || result.success !== true) {
+        throw new Error(
+            result && result.error
+                ? result.error
+                : "Battle request was not successful."
+        );
+    }
+
+    return result;
+}
+
+/* =========================================
+   FRIEND BATTLE — CREATE
+========================================= */
+async function createBattle() {
+    const button = document.getElementById("createBattleBtn");
+    const message = document.getElementById("battleMessage");
+    const selectedSubject = document.getElementById("createSubject").value;
+
+    if (!quizzes[selectedSubject]) {
+        message.textContent = "Please select a valid subject.";
+        return;
+    }
+
+    button.disabled = true;
+    message.textContent = "⏳ Creating your battle...";
+
+    try {
+        const result = await callBattleRPC(
+            "vap_create_quiz_battle",
+            {
+                p_subject: selectedSubject,
+                p_total_questions: quizzes[selectedSubject].length
+            }
+        );
+
+        currentBattle = {
+            battle_id: result.battle_id,
+            join_code: result.join_code,
+            subject: result.subject || selectedSubject,
+            total_questions: result.total_questions || 5,
+            status: result.status || "waiting"
+        };
+
+        battleIsHost = true;
+        renderBattleLobby();
+
+        message.textContent = "✅ Battle created successfully!";
+
+    } catch (error) {
+        console.error(error);
+        message.textContent = "⚠️ " + error.message;
+    } finally {
+        button.disabled = false;
+    }
+}
+
+/* =========================================
+   FRIEND BATTLE — JOIN
+========================================= */
+async function joinBattle() {
+    const button = document.getElementById("joinBattleBtn");
+    const message = document.getElementById("battleMessage");
+
+    const joinCode = document.getElementById("joinCodeInput")
+        .value.trim().toUpperCase();
+
+    if (!joinCode || joinCode.length !== 8) {
+        message.textContent = "Please enter a valid 8-character Battle Code.";
+        return;
+    }
+
+    button.disabled = true;
+    message.textContent = "⏳ Joining battle...";
+
+    try {
+        const result = await callBattleRPC(
+            "vap_join_quiz_battle",
+            {
+                p_join_code: joinCode
+            }
+        );
+
+        currentBattle = {
+            battle_id: result.battle_id,
+            join_code: result.join_code || joinCode,
+            subject: result.subject,
+            total_questions: result.total_questions || 5,
+            status: "waiting"
+        };
+
+        battleIsHost = false;
+        renderBattleLobby();
+
+        message.textContent = "✅ You joined the battle!";
+
+    } catch (error) {
+        console.error(error);
+        message.textContent = "⚠️ " + error.message;
+    } finally {
+        button.disabled = false;
+    }
+}
+
+/* =========================================
+   RENDER BATTLE LOBBY
+========================================= */
+function renderBattleLobby() {
+    if (!currentBattle) return;
+
+    hideElement("friendBattleCard");
+    hideElement("subjectScreen");
+    hideElement("quizScreen");
+    hideElement("resultScreen");
+    showElement("battleLobby");
+
+    setText("battleCodeDisplay", currentBattle.join_code || "--------");
+    setText("lobbySubject", currentBattle.subject || "-");
+    setText("lobbyQuestions", currentBattle.total_questions || "-");
+    setText("lobbyStatus", currentBattle.status || "waiting");
+    setText("lobbyRole", battleIsHost ? "Host" : "Player");
+
+    hideElement("startBattleBtn");
+    hideElement("playBattleBtn");
+    hideElement("submitBattleScoreBtn");
+    hideElement("finishBattleBtn");
+
+    if (currentBattle.status === "waiting" && battleIsHost) {
+        showElement("startBattleBtn");
+    }
+
+    if (currentBattle.status === "active") {
+        showElement("playBattleBtn");
+
+        if (battleScoreSubmitted) {
+            hideElement("playBattleBtn");
+            showElement("submitBattleScoreBtn");
+            document.getElementById("submitBattleScoreBtn").disabled = true;
+            setText("submitBattleScoreBtn", "✅ Score Submitted");
+        }
+
+        if (battleIsHost) {
+            showElement("finishBattleBtn");
+        }
+    }
+
+    setText("battleLobbyMessage", "");
+}
+
+async function copyBattleCode() {
+    if (!currentBattle || !currentBattle.join_code) return;
+
+    try {
+        await navigator.clipboard.writeText(currentBattle.join_code);
+        setText("battleLobbyMessage", "✅ Battle Code copied!");
+    } catch (error) {
+        setText(
+            "battleLobbyMessage",
+            "Copy not available. Please copy the code manually."
+        );
+    }
+}
+
+/* =========================================
+   FRIEND BATTLE — START
+========================================= */
+async function startBattle() {
+    if (!currentBattle) return;
+
+    const button = document.getElementById("startBattleBtn");
+    button.disabled = true;
+    setText("battleLobbyMessage", "⏳ Starting battle...");
+
+    try {
+        const result = await callBattleRPC(
+            "vap_start_quiz_battle",
+            {
+                p_battle_id: currentBattle.battle_id
+            }
+        );
+
+        currentBattle.status = result.status || "active";
+        renderBattleLobby();
+
+        setText("battleLobbyMessage", "✅ Battle started!");
+
+    } catch (error) {
+        console.error(error);
+        setText("battleLobbyMessage", "⚠️ " + error.message);
+    } finally {
+        button.disabled = false;
+    }
+}
+
+/* =========================================
+   PLAY BATTLE QUIZ
+========================================= */
+function playBattleQuiz() {
+    if (!currentBattle) return;
+
+    if (currentBattle.status !== "active") {
+        setText("battleLobbyMessage", "Battle has not started yet.");
+        return;
+    }
+
+    const battleSubject = currentBattle.subject;
+
+    if (!quizzes[battleSubject]) {
+        setText(
+            "battleLobbyMessage",
+            "This subject is not available in the current quiz version."
+        );
+        return;
+    }
+
+    if (currentBattle.total_questions !== quizzes[battleSubject].length) {
+        setText(
+            "battleLobbyMessage",
+            "Question count does not match this quiz version."
+        );
+        return;
+    }
+
+    startQuiz(battleSubject, true);
+}
+
+/* =========================================
+   SUBMIT BATTLE SCORE
+========================================= */
+async function submitCurrentBattleScore() {
+    if (!currentBattle) return;
+    if (battleScoreSubmitted) {
+        setText("battleLobbyMessage", "Your score has already been submitted.");
+        return;
+    }
+
+    const button = document.getElementById("submitBattleScoreBtn");
+    button.disabled = true;
+    setText("battleLobbyMessage", "⏳ Submitting your score...");
+
+    try {
+        const result = await callBattleRPC(
+            "vap_submit_quiz_battle_score",
+            {
+                p_battle_id: currentBattle.battle_id,
+                p_score: score
+            }
+        );
+
+        battleScoreSubmitted = true;
+
+        setText(
+            "battleLobbyMessage",
+            "✅ Your score was submitted: " + result.score
+        );
+
+        renderBattleLobby();
+        showElement("submitBattleScoreBtn");
+        document.getElementById("submitBattleScoreBtn").disabled = true;
+        setText("submitBattleScoreBtn", "✅ Score Submitted");
+
+    } catch (error) {
+        console.error(error);
+        setText("battleLobbyMessage", "⚠️ " + error.message);
+        button.disabled = false;
+    }
+}
+
+/* =========================================
+   FRIEND BATTLE — FINISH
+========================================= */
+async function finishBattle() {
+    if (!currentBattle || !battleIsHost) return;
+
+    const confirmed = confirm(
+        "Finish this battle now? Make sure both players have submitted their scores."
+    );
+
+    if (!confirmed) return;
+
+    const button = document.getElementById("finishBattleBtn");
+    button.disabled = true;
+    setText("battleLobbyMessage", "⏳ Finishing battle...");
+
+    try {
+        const result = await callBattleRPC(
+            "vap_finish_quiz_battle",
+            {
+                p_battle_id: currentBattle.battle_id
+            }
+        );
+
+        currentBattle.status = result.status || "completed";
+        renderBattleLobby();
+
+        setText("battleLobbyMessage", "🏁 Battle completed!");
+        await refreshBattleResults();
+
+    } catch (error) {
+        console.error(error);
+        setText("battleLobbyMessage", "⚠️ " + error.message);
+    } finally {
+        button.disabled = false;
+    }
+}
+
+/* =========================================
+   FRIEND BATTLE — RESULTS
+========================================= */
+async function refreshBattleResults() {
+    if (!currentBattle) return;
+
+    setText("battleLobbyMessage", "⏳ Loading battle results...");
+
+    try {
+        const result = await callBattleRPC(
+            "vap_get_quiz_battle_results",
+            {
+                p_battle_id: currentBattle.battle_id
+            }
+        );
+
+        const battleResult = result.result;
+
+        if (!battleResult) {
+            throw new Error("No battle result was returned.");
+        }
+
+        currentBattle.status = battleResult.status || currentBattle.status;
+        setText("lobbyStatus", currentBattle.status);
+
+        const resultsBox = document.getElementById("battleResults");
+        resultsBox.innerHTML = "";
+
+        const heading = document.createElement("h3");
+        heading.textContent = "🏆 Battle Results";
+        resultsBox.appendChild(heading);
+
+        const players = Array.isArray(battleResult.players)
+            ? battleResult.players
+            : [];
+
+        if (players.length === 0) {
+            const empty = document.createElement("p");
+            empty.textContent = "No player scores are available yet.";
+            resultsBox.appendChild(empty);
+        } else {
+            players.forEach(function(player, index) {
+                const row = document.createElement("div");
+                row.className = "battle-result-row";
+
+                const playerName = player.user_id
+                    ? "Player " + (index + 1) + " (" +
+                      player.user_id.substring(0, 8) + "...)"
+                    : "Player " + (index + 1);
+
+                row.textContent =
+                    playerName + " — Score: " + player.score;
+
+                resultsBox.appendChild(row);
+            });
+        }
+
+        if (currentBattle.status === "completed" && players.length >= 2) {
+            const winner = document.createElement("p");
+            winner.style.fontWeight = "bold";
+
+            const highestScore = Math.max.apply(
+                null,
+                players.map(function(player) {
+                    return Number(player.score) || 0;
+                })
+            );
+
+            const winners = players.filter(function(player) {
+                return Number(player.score) === highestScore;
+            });
+
+            winner.textContent = winners.length > 1
+                ? "🤝 The battle is a tie!"
+                : "🏆 Winner: " +
+                  "Player " + (players.indexOf(winners[0]) + 1);
+
+            resultsBox.appendChild(winner);
+        }
+
+        setText("battleLobbyMessage", "✅ Battle results loaded.");
+
+    } catch (error) {
+        console.error(error);
+        setText(
+            "battleLobbyMessage",
+            "⚠️ Could not load results: " + error.message
+        );
+    }
+}
+
+/* LEAVE BATTLE SCREEN */
+function leaveBattleScreen() {
+    clearInterval(timer);
+
+    currentBattle = null;
+    battleIsHost = false;
+    battleScoreSubmitted = false;
+    isBattleGame = false;
+
+    hideElement("battleLobby");
+    showElement("friendBattleCard");
+    showElement("subjectScreen");
+
+    setText("battleMessage", "");
+    setText("battleLobbyMessage", "");
+    document.getElementById("battleResults").innerHTML = "";
+}
+
+/* =========================================
+   SOLO QUIZ — START
+========================================= */
+function startQuiz(selectedSubject, battleMode) {
     if (!quizzes[selectedSubject]) {
         alert("Please select a valid subject.");
         return;
@@ -190,12 +760,22 @@ function startQuiz(selectedSubject) {
     score = 0;
     answered = false;
     quizFinishing = false;
+    isBattleGame = battleMode === true;
 
-    document.getElementById("subjectScreen").classList.add("hidden");
-    document.getElementById("resultScreen").classList.add("hidden");
-    document.getElementById("quizScreen").classList.remove("hidden");
+    if (isBattleGame && battleScoreSubmitted) {
+        alert("Your score has already been submitted for this battle.");
+        return;
+    }
 
-    document.getElementById("saveStatus").textContent = "";
+    hideElement("subjectScreen");
+    hideElement("resultScreen");
+    hideElement("friendBattleCard");
+    hideElement("battleLobby");
+    showElement("quizScreen");
+
+    setText("saveStatus", "");
+    setText("backendStatus", "");
+    setText("battleScoreStatus", "");
 
     showQuestion();
 }
@@ -208,13 +788,15 @@ function showQuestion() {
     const quiz = quizzes[subject][questionIndex];
     const total = quizzes[subject].length;
 
-    document.getElementById("subjectBadge").textContent = "🏆 " + subject;
-    document.getElementById("scoreBadge").textContent = "Score: " + score;
+    setText("subjectBadge", (isBattleGame ? "⚔️ Battle: " : "🏆 ") + subject);
+    setText("scoreBadge", "Score: " + score);
 
-    document.getElementById("questionNumber").textContent =
-        "Question " + (questionIndex + 1) + " of " + total;
+    setText(
+        "questionNumber",
+        "Question " + (questionIndex + 1) + " of " + total
+    );
 
-    document.getElementById("questionText").textContent = quiz.q;
+    setText("questionText", quiz.q);
 
     document.getElementById("progress").style.width =
         ((questionIndex + 1) / total * 100) + "%";
@@ -263,7 +845,6 @@ function checkAnswer(index, clickedButton) {
 
     if (selected === quiz.a) {
         score++;
-
         clickedButton.classList.add("correct");
         feedback.textContent = "Correct! 🎉 Keep going!";
         feedback.classList.add("correct-box");
@@ -282,23 +863,18 @@ function checkAnswer(index, clickedButton) {
         feedback.classList.add("wrong-box");
     }
 
-    document.getElementById("scoreBadge").textContent =
-        "Score: " + score;
-
+    setText("scoreBadge", "Score: " + score);
     document.getElementById("nextBtn").style.display = "block";
 }
 
 /* TIMER */
 function startTimer() {
     timeLeft = 15;
-
-    document.getElementById("timer").textContent = "⏱️ " + timeLeft;
+    setText("timer", "⏱️ " + timeLeft);
 
     timer = setInterval(function() {
         timeLeft--;
-
-        document.getElementById("timer").textContent =
-            "⏱️ " + timeLeft;
+        setText("timer", "⏱️ " + timeLeft);
 
         if (timeLeft <= 0) {
             clearInterval(timer);
@@ -330,7 +906,6 @@ function timeUp() {
         "⏰ Time's up! Correct answer: " + quiz.a;
 
     feedback.classList.add("wrong-box");
-
     document.getElementById("nextBtn").style.display = "block";
 }
 
@@ -350,7 +925,6 @@ function nextQuestion() {
 /* =========================================
    PHASE 8 — BACKEND REQUEST
 ========================================= */
-
 async function sendQuizBackendRequest(
     selectedSubject,
     finalScore,
@@ -361,7 +935,6 @@ async function sendQuizBackendRequest(
         throw new Error("Supabase connection is not available.");
     }
 
-    /* GET CURRENT LOGIN SESSION */
     const {
         data: { session },
         error: sessionError
@@ -375,22 +948,18 @@ async function sendQuizBackendRequest(
         throw new Error("Please login first to use Quiz Battle.");
     }
 
-    /* PREPARE BACKEND MESSAGE */
     const message =
         "Quiz completed. Subject: " + selectedSubject +
         ". Score: " + finalScore + "/" + totalQuestions +
         ". Percentage: " + percentage + "%.";
 
-    /* SEND AUTHENTICATED REQUEST */
     const response = await fetch(VAP_API_URL, {
         method: "POST",
-
         headers: {
             "Content-Type": "application/json",
             "apikey": SUPABASE_PUBLISHABLE_KEY,
             "Authorization": "Bearer " + session.access_token
         },
-
         body: JSON.stringify({
             message: message,
             request_type: "quiz"
@@ -414,14 +983,12 @@ async function sendQuizBackendRequest(
     }
 
     console.log("Quiz backend response:", result);
-
     return result;
 }
 
 /* =========================================
    FINISH QUIZ
 ========================================= */
-
 async function finishQuiz() {
     if (quizFinishing) return;
 
@@ -431,14 +998,11 @@ async function finishQuiz() {
     const total = quizzes[subject].length;
     const percentage = Math.round((score / total) * 100);
 
-    document.getElementById("quizScreen").classList.add("hidden");
-    document.getElementById("resultScreen").classList.remove("hidden");
+    hideElement("quizScreen");
+    showElement("resultScreen");
 
-    document.getElementById("finalScore").textContent =
-        score + " / " + total;
-
-    document.getElementById("finalPercentage").textContent =
-        percentage + "%";
+    setText("finalScore", score + " / " + total);
+    setText("finalPercentage", percentage + "%");
 
     let message = "";
 
@@ -452,15 +1016,9 @@ async function finishQuiz() {
         message = "💪 Keep practicing. You will get better!";
     }
 
-    document.getElementById("resultMessage").textContent = message;
+    setText("resultMessage", message);
+    setText("backendStatus", "⏳ Sending quiz request to backend...");
 
-    const backendStatus = document.getElementById("backendStatus");
-
-    if (backendStatus) {
-        backendStatus.textContent = "⏳ Sending quiz request to backend...";
-    }
-
-    /* BACKEND REQUEST */
     try {
         const backendResult = await sendQuizBackendRequest(
             subject,
@@ -469,36 +1027,38 @@ async function finishQuiz() {
             percentage
         );
 
-        if (backendStatus) {
-            const usage = backendResult.usage;
+        const usage = backendResult.usage;
 
-            if (usage && usage.success) {
-                backendStatus.textContent =
-                    "✅ Backend verified! Quiz usage tracked. Used today: " +
-                    usage.used_today;
-            } else {
-                backendStatus.textContent =
-                    "✅ Backend request successful.";
-            }
+        if (usage && usage.success) {
+            setText(
+                "backendStatus",
+                "✅ Backend verified! Quiz usage tracked. Used today: " +
+                usage.used_today
+            );
+        } else {
+            setText("backendStatus", "✅ Backend request successful.");
         }
 
     } catch (error) {
         console.error("Quiz backend error:", error);
-
-        if (backendStatus) {
-            backendStatus.textContent =
-                "⚠️ Backend request failed: " + error.message;
-        }
+        setText("backendStatus", "⚠️ Backend request failed: " + error.message);
     }
 
-    /* SAVE HISTORY EVEN IF BACKEND REQUEST FAILS */
+    /* SAVE QUIZ HISTORY */
     await saveQuizHistory(subject, score, total, percentage);
+
+    /* BATTLE SCORE IS SUBMITTED SEPARATELY */
+    if (isBattleGame) {
+        setText(
+            "battleScoreStatus",
+            "Your quiz is complete. Submit your score to the Battle Lobby."
+        );
+    }
 }
 
 /* =========================================
    SAVE QUIZ HISTORY
 ========================================= */
-
 async function saveQuizHistory(
     selectedSubject,
     finalScore,
@@ -519,8 +1079,7 @@ async function saveQuizHistory(
         } = await supabaseClient.auth.getUser();
 
         if (error || !user) {
-            status.textContent =
-                "🔐 Login required to save quiz history.";
+            status.textContent = "🔐 Login required to save quiz history.";
             return;
         }
 
@@ -537,47 +1096,49 @@ async function saveQuizHistory(
 
         if (insertError) {
             console.error("Quiz history save error:", insertError);
-
             status.textContent =
                 "⚠️ Quiz completed, but History could not be saved.";
-
             return;
         }
 
-        status.textContent =
-            "✅ Quiz result saved to your History!";
-
+        status.textContent = "✅ Quiz result saved to your History!";
         console.log("Quiz History saved successfully.");
 
     } catch (error) {
         console.error("Quiz History error:", error);
-
         status.textContent =
             "⚠️ Quiz completed, but History could not be saved.";
     }
 }
 
-/* PLAY AGAIN */
+/* =========================================
+   PLAY AGAIN
+========================================= */
 function playAgain() {
     clearInterval(timer);
 
     quizFinishing = false;
     answered = false;
 
-    document.getElementById("resultScreen").classList.add("hidden");
-    document.getElementById("quizScreen").classList.add("hidden");
-    document.getElementById("subjectScreen").classList.remove("hidden");
+    hideElement("resultScreen");
 
-    document.getElementById("saveStatus").textContent = "";
-
-    const backendStatus = document.getElementById("backendStatus");
-
-    if (backendStatus) {
-        backendStatus.textContent = "";
+    if (isBattleGame && currentBattle) {
+        showElement("battleLobby");
+        setText(
+            "battleLobbyMessage",
+            "Your Battle Quiz is complete. Submit your score from the lobby."
+        );
+        return;
     }
+
+    isBattleGame = false;
+    showElement("subjectScreen");
+    showElement("friendBattleCard");
+
+    setText("saveStatus", "");
+    setText("backendStatus", "");
+    setText("battleScoreStatus", "");
 }
 </script>
-
-
-
-
+</body>
+</html>
