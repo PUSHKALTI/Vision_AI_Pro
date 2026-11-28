@@ -228,6 +228,7 @@ let battleIsHost = false;
 /* NEW: these two flags fix the score submission flow */
 let battleQuizCompleted = false;
 let battleScoreSubmitted = false;
+    let battleQuizCompleted = false;
 let battleFinalScore = null;
 
 function setText(id,value) {
@@ -376,23 +377,21 @@ function renderBattleLobby() {
         showElement("startBattleBtn");
     }
 
-    if(currentBattle.status === "active") {
-        if(battleScoreSubmitted) {
-            showElement("submitBattleScoreBtn");
-            const submitButton = document.getElementById("submitBattleScoreBtn");
-            submitButton.disabled = true;
-            submitButton.textContent = "✅ Score Submitted";
-        } else if(battleQuizCompleted) {
-            showElement("submitBattleScoreBtn");
-            const submitButton = document.getElementById("submitBattleScoreBtn");
-            submitButton.disabled = false;
-            submitButton.textContent = "📤 Submit My Score";
-        } else {
-            showElement("playBattleBtn");
-        }
-
-        if(battleIsHost) showElement("finishBattleBtn");
+  if (currentBattle.status === "active") {
+    if (battleScoreSubmitted) {
+        showElement("submitBattleScoreBtn");
+        document.getElementById("submitBattleScoreBtn").disabled = true;
+        setText("submitBattleScoreBtn", "✅ Score Submitted");
+    } else if (battleQuizCompleted) {
+        showElement("submitBattleScoreBtn");
+    } else {
+        showElement("playBattleBtn");
     }
+
+    if (battleIsHost) {
+        showElement("finishBattleBtn");
+    }
+}
 
     if(currentBattle.status === "completed") {
         hideElement("playBattleBtn");
@@ -766,11 +765,13 @@ async function finishQuiz() {
     setText("resultMessage",message);
 
     /* Save battle score locally for the Submit button */
-    if(isBattleGame) {
-        battleQuizCompleted = true;
-        battleFinalScore = score;
-        setText("battleScoreStatus","Your quiz is complete. Return to the Battle Lobby to submit your score.");
-    }
+  if (isBattleGame) {
+    battleQuizCompleted = true;
+    setText(
+        "battleScoreStatus",
+        "Your quiz is complete. Submit your score to the Battle Lobby."
+    );
+}
 
     setText("backendStatus","⏳ Sending quiz request to backend...");
     try {
@@ -824,28 +825,40 @@ async function saveQuizHistory(selectedSubject,finalScore,totalQuestions,percent
 /* PLAY AGAIN / RETURN TO LOBBY */
 function playAgain() {
     clearInterval(timer);
+
     quizFinishing = false;
     answered = false;
+
     hideElement("resultScreen");
 
-    if(isBattleGame && currentBattle) {
+    if (isBattleGame && currentBattle) {
         showElement("battleLobby");
         renderBattleLobby();
-        if(battleQuizCompleted && !battleScoreSubmitted) {
-            setText("battleLobbyMessage","✅ Quiz complete! Now tap Submit My Score.");
-        } else if(battleScoreSubmitted) {
-            setText("battleLobbyMessage","✅ Your score has already been submitted.");
+
+        if (battleQuizCompleted && !battleScoreSubmitted) {
+            setText(
+                "battleLobbyMessage",
+                "✅ Quiz complete! Now tap Submit My Score."
+            );
+        } else if (battleScoreSubmitted) {
+            setText(
+                "battleLobbyMessage",
+                "✅ Your score has already been submitted."
+            );
         }
+
         return;
     }
 
     isBattleGame = false;
     showElement("subjectScreen");
     showElement("friendBattleCard");
-    setText("saveStatus","");
-    setText("backendStatus","");
-    setText("battleScoreStatus","");
+
+    setText("saveStatus", "");
+    setText("backendStatus", "");
+    setText("battleScoreStatus", "");
 }
+   
 </script>
 </body>
 </html>
